@@ -32,9 +32,9 @@ gradlePlugin {
             id = "revolt.android.library.compose"
             implementationClass = "AndroidLibraryComposeConventionPlugin"
         }
-        register("androidFeature") {
-            id = "revolt.android.feature"
-            implementationClass = "AndroidFeatureConventionPlugin"
+        register("androidLibrary") {
+            id = "revolt.android.library"
+            implementationClass = "AndroidLibraryConventionPlugin"
         }
     }
 }

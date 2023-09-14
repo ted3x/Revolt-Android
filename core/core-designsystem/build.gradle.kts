@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "ge.ted3x.revolt.feature.dashboard"
+    namespace = "ge.ted3x.revolt.core.designsystem"
 }
 
 dependencies {
@@ -13,4 +13,5 @@ dependencies {
     implementation(libs.ui)
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
+    implementation(libs.coil)
 }
