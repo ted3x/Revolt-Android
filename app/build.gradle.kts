@@ -1,7 +1,7 @@
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     id("revolt.android.application")
-    id("revolt.android.compose")
+    id("revolt.android.application.compose")
 }
 
 android {
@@ -35,6 +35,8 @@ android {
 }
 
 dependencies {
+
+    implementation(project(":features:feature-dashboard"))
 
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)

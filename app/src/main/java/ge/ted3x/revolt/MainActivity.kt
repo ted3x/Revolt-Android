@@ -8,7 +8,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import com.bumble.appyx.navigation.integration.ActivityIntegrationPoint
 import com.bumble.appyx.navigation.integration.NodeHost
 import com.bumble.appyx.navigation.platform.AndroidLifecycle
-import ge.ted3x.revolt.ui.node.DashboardNode
+import ge.ted3x.revolt.feature.dashboard.ui.DashboardRootNode
 import ge.ted3x.revolt.ui.theme.RevoltTheme
 
 class MainActivity : ComponentActivity() {
@@ -25,7 +25,7 @@ class MainActivity : ComponentActivity() {
                     lifecycle = AndroidLifecycle(LocalLifecycleOwner.current.lifecycle),
                     integrationPoint = appyxV2IntegrationPoint,
                 ) {
-                    DashboardNode(it)
+                    DashboardRootNode(it)
                 }
             }
         }

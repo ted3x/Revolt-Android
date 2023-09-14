@@ -24,9 +24,13 @@ gradlePlugin {
             id = "revolt.android.application"
             implementationClass = "AndroidApplicationConventionPlugin"
         }
-        register("androidCompose") {
-            id = "revolt.android.compose"
-            implementationClass = "AndroidComposeConventionPlugin"
+        register("androidApplicationCompose") {
+            id = "revolt.android.application.compose"
+            implementationClass = "AndroidApplicationComposeConventionPlugin"
+        }
+        register("androidLibraryCompose") {
+            id = "revolt.android.library.compose"
+            implementationClass = "AndroidLibraryComposeConventionPlugin"
         }
         register("androidFeature") {
             id = "revolt.android.feature"
