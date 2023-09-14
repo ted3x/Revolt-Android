@@ -32,10 +32,16 @@ import coil.compose.AsyncImage
 import com.bumble.appyx.navigation.modality.BuildContext
 import com.bumble.appyx.navigation.node.Node
 import ge.ted3x.revolt.feature.settings.R
+import ge.ted3x.revolt.feature.settings.ui.SettingsRootNode
 
-class SettingsMainNode(buildContext: BuildContext) : Node(buildContext) {
+class SettingsMainNode(
+    buildContext: BuildContext,
+    private val onClick: (SettingsRootNode.SettingsTarget) -> Unit
+) : Node(buildContext) {
 
-    val image = "https://i.kym-cdn.com/entries/icons/original/000/013/564/doge.jpg"
+    companion object {
+        val image = "https://i.kym-cdn.com/entries/icons/original/000/013/564/doge.jpg"
+    }
 
     @Composable
     override fun View(modifier: Modifier) {
@@ -50,7 +56,7 @@ class SettingsMainNode(buildContext: BuildContext) : Node(buildContext) {
                 itemsWithTitle = mapOf(
                     stringResource(id = R.string.settings_user_settings) to listOf(
                         SettingItem.Account {
-
+                            onClick.invoke(SettingsRootNode.SettingsTarget.Account)
                         },
                         SettingItem.Profile {
 

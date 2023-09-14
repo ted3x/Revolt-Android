@@ -14,6 +14,7 @@ import com.bumble.appyx.navigation.composable.AppyxComponent
 import com.bumble.appyx.navigation.modality.BuildContext
 import com.bumble.appyx.navigation.node.Node
 import com.bumble.appyx.navigation.node.ParentNode
+import ge.ted3x.revolt.feature.settings.ui.screens.SettingsAccountNode
 import ge.ted3x.revolt.feature.settings.ui.screens.SettingsMainNode
 
 class SettingsRootNode(
@@ -39,8 +40,8 @@ class SettingsRootNode(
 
     override fun resolve(interactionTarget: SettingsTarget, buildContext: BuildContext): Node {
         return when (interactionTarget) {
-            SettingsTarget.Main -> SettingsMainNode(buildContext)
-            SettingsTarget.Account -> TODO()
+            SettingsTarget.Main -> SettingsMainNode(buildContext) { backStack.push(SettingsTarget.Account) }
+            SettingsTarget.Account -> SettingsAccountNode(buildContext)
             SettingsTarget.Appearance -> TODO()
             SettingsTarget.Bots -> TODO()
             SettingsTarget.Experiments -> TODO()
