@@ -14,6 +14,7 @@ appcompat = "1.6.1"
 material = "1.9.0"
 ksp = "1.9.10-1.0.13"
 androidDesugarJdkLibs = "2.0.3"
+coil = "2.4.0"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -40,6 +41,8 @@ appyx-backstack = { group = "com.bumble.appyx", name = "backstack-android", vers
 appyx-spotlight = { group = "com.bumble.appyx", name = "spotlight-android", version.ref = "appyx" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
+coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }

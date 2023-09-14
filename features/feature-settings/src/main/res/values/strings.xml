@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_user_settings">User Settings</string>
+    <string name="settings_client_settings">Client Settings</string>
+    <string name="settings_revolt">Revolt</string>
+    <string name="settings_profile">Profile</string>
+    <string name="settings_my_account">My Account</string>
+    <string name="settings_sessions">Sessions</string>
+    <string name="settings_voice_settings">Voice Settings</string>
+    <string name="settings_appearance">Appearance</string>
+    <string name="settings_notifications">Notifications</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_sync">Sync</string>
+    <string name="settings_experiments">Experiments</string>
+    <string name="settings_my_bots">My Bots</string>
+    <string name="settings_feedback">Feedback</string>
+    <string name="settings_changelogs">Changelogs</string>
+    <string name="settings_source_code">Source Code</string>
+    <string name="settings_donate">Donate</string>
+    <string name="settings_log_out">Log Out</string>
+</resources>

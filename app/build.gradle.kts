@@ -37,6 +37,7 @@ android {
 dependencies {
 
     implementation(project(":features:feature-dashboard"))
+    implementation(project(":features:feature-settings"))
 
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
