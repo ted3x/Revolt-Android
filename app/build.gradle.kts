@@ -2,6 +2,8 @@
 plugins {
     id("revolt.android.application")
     id("revolt.android.application.compose")
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -48,6 +50,8 @@ dependencies {
     implementation(libs.material3)
     implementation(libs.revolt.api)
     implementation(libs.bundles.appyx)
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
