@@ -9,6 +9,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:core-designsystem"))
     implementation(libs.bundles.appyx)
     implementation(libs.ui)
     implementation(libs.ui.graphics)

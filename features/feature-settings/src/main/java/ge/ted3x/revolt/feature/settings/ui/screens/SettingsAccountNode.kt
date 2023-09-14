@@ -31,6 +31,8 @@ import androidx.compose.ui.window.Dialog
 import coil.compose.AsyncImage
 import com.bumble.appyx.navigation.modality.BuildContext
 import com.bumble.appyx.navigation.node.Node
+import ge.ted3x.revolt.core.designsystem.dialog.RevoltDialog
+import ge.ted3x.revolt.core.designsystem.textfield.RevoltTextField
 import ge.ted3x.revolt.feature.settings.R
 import ge.ted3x.revolt.feature.settings.ui.screens.SettingsMainNode.Companion.image
 
@@ -38,16 +40,28 @@ class SettingsAccountNode(buildContext: BuildContext) : Node(buildContext) {
 
     @Composable
     override fun View(modifier: Modifier) {
-
         val openChangeUsernameDialog = remember { mutableStateOf(false) }
+        val openChangeEmailDialog = remember { mutableStateOf(false) }
+        val openChangePasswordDialog = remember { mutableStateOf(false) }
 
         when {
             openChangeUsernameDialog.value -> {
                 ChangeUsernameDialog(
                     onDismissRequest = { openChangeUsernameDialog.value = false },
-                    onConfirmation = {
-
-                    })
+                    onConfirmation = {}
+                )
+            }
+            openChangeEmailDialog.value -> {
+                ChangeEmailDialog(
+                    onDismissRequest = { openChangeEmailDialog.value = false },
+                    onConfirmation = {}
+                )
+            }
+            openChangePasswordDialog.value -> {
+                ChangePasswordDialog(
+                    onDismissRequest = { openChangePasswordDialog.value = false },
+                    onConfirmation = {}
+                )
             }
         }
         Column {
@@ -76,14 +90,14 @@ class SettingsAccountNode(buildContext: BuildContext) : Node(buildContext) {
                 value = "ted3x",
                 icon = painterResource(id = R.drawable.ic_email)
             ) {
-
+                openChangeEmailDialog.value = true
             }
             ActionButton(
                 title = "password",
                 value = "********",
                 icon = painterResource(id = R.drawable.ic_password)
             ) {
-
+                openChangePasswordDialog.value = true
             }
         }
     }
@@ -115,59 +129,89 @@ class SettingsAccountNode(buildContext: BuildContext) : Node(buildContext) {
     }
 
     @Composable
-    fun ChangeUsernameDialog(
-        onDismissRequest: () -> Unit,
-        onConfirmation: () -> Unit,
-    ) {
-        Dialog(onDismissRequest = { onDismissRequest() }) {
-            // Draw a rectangle shape with rounded corners inside the dialog
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(375.dp)
-                    .padding(16.dp),
-                shape = RoundedCornerShape(16.dp),
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Text(text = "Change your username")
-                    val usernameValue = remember { mutableStateOf("") }
-                    val passwordValue = remember { mutableStateOf("") }
-                    TextField(
-                        value = usernameValue.value,
-                        onValueChange = { usernameValue.value = it },
-                        singleLine = true
-                    )
-                    TextField(
-                        value = passwordValue.value,
-                        onValueChange = { passwordValue.value = it },
-                        singleLine = true
-                    )
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center,
-                    ) {
-                        TextButton(
-                            onClick = { onDismissRequest() },
-                            modifier = Modifier.padding(8.dp),
-                        ) {
-                            Text("Dismiss")
-                        }
-                        TextButton(
-                            onClick = { onConfirmation() },
-                            modifier = Modifier.padding(8.dp),
-                        ) {
-                            Text("Confirm")
-                        }
-                    }
+    fun ChangeUsernameDialog(onDismissRequest: () -> Unit, onConfirmation: () -> Unit) {
+        RevoltDialog(
+            onDismissRequest = onDismissRequest,
+            onConfirmation = onConfirmation,
+            content = {
+                val usernameValue = remember { mutableStateOf("") }
+                val passwordValue = remember { mutableStateOf("") }
+                RevoltTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    onValueChange = { usernameValue.value = it },
+                    value = usernameValue.value,
+                    hint = "Enter your preferred username",
+                    title = "Username"
+                )
+                RevoltTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    onValueChange = { passwordValue.value = it },
+                    value = passwordValue.value,
+                    hint = "Enter your current password",
+                    title = "Current Password"
+                )
+            },
+            title = "Change your username",
+            negativeText = "Cancel",
+            positiveText = "Update"
+        )
+    }
 
-                }
-            }
-        }
+    @Composable
+    fun ChangeEmailDialog(onDismissRequest: () -> Unit, onConfirmation: () -> Unit) {
+        RevoltDialog(
+            onDismissRequest = onDismissRequest,
+            onConfirmation = onConfirmation,
+            content = {
+                val emailValue = remember { mutableStateOf("") }
+                val passwordValue = remember { mutableStateOf("") }
+                RevoltTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    onValueChange = { emailValue.value = it },
+                    value = emailValue.value,
+                    hint = "Please enter your email",
+                    title = "Email"
+                )
+                RevoltTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    onValueChange = { passwordValue.value = it },
+                    value = passwordValue.value,
+                    hint = "Enter your current password",
+                    title = "Current Password"
+                )
+            },
+            title = "Change your email",
+            negativeText = "Cancel",
+            positiveText = "Send Email"
+        )
+    }
+
+    @Composable
+    fun ChangePasswordDialog(onDismissRequest: () -> Unit, onConfirmation: () -> Unit) {
+        RevoltDialog(
+            onDismissRequest = onDismissRequest,
+            onConfirmation = onConfirmation,
+            content = {
+                val currentPasswordValue = remember { mutableStateOf("") }
+                val passwordValue = remember { mutableStateOf("") }
+                RevoltTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    onValueChange = { currentPasswordValue.value = it },
+                    value = currentPasswordValue.value,
+                    hint = "Please enter your password",
+                    title = "Password"
+                )
+                RevoltTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    onValueChange = { passwordValue.value = it },
+                    value = passwordValue.value,
+                    hint = "Enter your current password",
+                    title = "Current Password"
+                )
+            },
+            title = "Change your password",
+            negativeText = "Cancel",
+            positiveText = "Update"
+        )
     }
 }
