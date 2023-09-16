@@ -19,3 +19,6 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Removing this causes crash on minified release builds
+-keep class androidx.lifecycle.** { *; }
