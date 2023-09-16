@@ -1,4 +1,4 @@
-package ge.ted3x.revolt.feature.settings.ui.screens
+package ge.ted3x.revolt.feature.settings.ui.screens.main
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -59,7 +59,7 @@ class SettingsMainNode(
                             onClick.invoke(SettingsRootNode.SettingsTarget.Account)
                         },
                         SettingItem.Profile {
-
+                            onClick.invoke(SettingsRootNode.SettingsTarget.Profile)
                         },
                         SettingItem.Sessions {
 

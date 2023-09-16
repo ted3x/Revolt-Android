@@ -1,6 +1,7 @@
 package ge.ted3x.revolt.feature.settings.ui
 
-import androidx.compose.foundation.layout.Column
+import android.annotation.SuppressLint
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
@@ -14,8 +15,9 @@ import com.bumble.appyx.navigation.modality.BuildContext
 import com.bumble.appyx.navigation.node.Node
 import com.bumble.appyx.navigation.node.ParentNode
 import ge.ted3x.revolt.core.designsystem.appbar.RevoltAppBar
-import ge.ted3x.revolt.feature.settings.ui.screens.SettingsAccountNode
-import ge.ted3x.revolt.feature.settings.ui.screens.SettingsMainNode
+import ge.ted3x.revolt.feature.settings.ui.screens.account.SettingsAccountNode
+import ge.ted3x.revolt.feature.settings.ui.screens.main.SettingsMainNode
+import ge.ted3x.revolt.feature.settings.ui.screens.profile.SettingsProfileNode
 
 class SettingsRootNode(
     buildContext: BuildContext,
@@ -85,23 +87,24 @@ class SettingsRootNode(
 
     override fun resolve(interactionTarget: SettingsTarget, buildContext: BuildContext): Node {
         return when (interactionTarget) {
-            SettingsTarget.Main -> SettingsMainNode(buildContext) { backStack.push(SettingsTarget.Account) }
+            SettingsTarget.Main -> SettingsMainNode(buildContext) { target -> backStack.push(target) }
             SettingsTarget.Account -> SettingsAccountNode(buildContext)
+            SettingsTarget.Profile -> SettingsProfileNode(buildContext)
             SettingsTarget.Appearance -> TODO()
             SettingsTarget.Bots -> TODO()
             SettingsTarget.Feedback -> TODO()
             SettingsTarget.Language -> TODO()
             SettingsTarget.Notifications -> TODO()
-            SettingsTarget.Profile -> TODO()
             SettingsTarget.Sessions -> TODO()
             SettingsTarget.Sync -> TODO()
             SettingsTarget.Voice -> TODO()
         }
     }
 
+    @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     @Composable
     override fun View(modifier: Modifier) {
-        Column {
+        Scaffold(topBar = {
             val backstackState = backStack.model.elements.collectAsState()
             val currentElementTitle =
                 backStack.model.activeElement.asElement().interactionTarget.interactionTarget.title
@@ -110,6 +113,7 @@ class SettingsRootNode(
                 isBackVisible = backstackState.value.size > 1,
                 title = currentElementTitle
             )
+        }) {
             AppyxComponent(appyxComponent = backStack)
         }
     }
