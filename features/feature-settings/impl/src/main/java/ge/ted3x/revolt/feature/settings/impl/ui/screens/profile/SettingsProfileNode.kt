@@ -1,4 +1,4 @@
-package ge.ted3x.revolt.feature.settings.ui.screens.profile
+package ge.ted3x.revolt.feature.settings.impl.ui.screens.profile
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Text

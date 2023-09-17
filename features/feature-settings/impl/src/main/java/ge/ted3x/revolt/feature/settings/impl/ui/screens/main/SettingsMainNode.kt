@@ -1,6 +1,5 @@
-package ge.ted3x.revolt.feature.settings.ui.screens.main
+package ge.ted3x.revolt.feature.settings.impl.ui.screens.main
 
-import android.content.Context
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
@@ -34,14 +33,12 @@ import com.bumble.appyx.navigation.modality.BuildContext
 import com.bumble.appyx.navigation.node.Node
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
-import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.components.SingletonComponent
 import ge.ted3x.core.database.RevoltUserQueries
 import ge.ted3x.revolt.feature.settings.R
-import ge.ted3x.revolt.feature.settings.ui.SettingsRootNode
+import ge.ted3x.revolt.feature.settings.impl.ui.SettingsRootNode
 
 class SettingsMainNode(
-    private val appContext: Context,
     buildContext: BuildContext,
     private val onClick: (SettingsRootNode.SettingsTarget) -> Unit,
 ) : Node(buildContext) {
@@ -52,10 +49,6 @@ class SettingsMainNode(
 
     @Composable
     override fun View(modifier: Modifier) {
-        val hiltEntryPoint =
-            EntryPointAccessors.fromApplication(appContext, SettingsMainNodeEntryPoint::class.java)
-
-        val userQueries = hiltEntryPoint.userQueries()
 
         Column(
             modifier = modifier
@@ -67,37 +60,30 @@ class SettingsMainNode(
             SettingOptions(
                 itemsWithTitle = mapOf(
                     stringResource(id = R.string.settings_user_settings) to listOf(
-                        SettingItem.Account {
-                            userQueries.insertUser()
+                        SettingItem(SettingType.ACCOUNT) {
+                            //userQueries.insertUser()
                             onClick.invoke(SettingsRootNode.SettingsTarget.Account)
                         },
-                        SettingItem.Profile {
+                        SettingItem(SettingType.PROFILE) {
                             onClick.invoke(SettingsRootNode.SettingsTarget.Profile)
                         },
-                        SettingItem.Sessions {
-
+                        SettingItem(SettingType.SESSIONS) {
                         }
                     ),
                     stringResource(id = R.string.settings_client_settings) to listOf(
-                        SettingItem.VoiceSettings {
-
+                        SettingItem(SettingType.VOICE_SETTINGS) {
                         },
-                        SettingItem.Appearance {
-
+                        SettingItem(SettingType.APPEARANCE) {
                         },
-                        SettingItem.Notifications {
-
+                        SettingItem(SettingType.NOTIFICATIONS) {
                         },
-                        SettingItem.Language {
-
+                        SettingItem(SettingType.LANGUAGE) {
                         },
-                        SettingItem.Sync {
-
+                        SettingItem(SettingType.SYNC) {
                         }
                     ),
                     stringResource(id = R.string.settings_revolt) to listOf(
-                        SettingItem.Bots {
-
+                        SettingItem(SettingType.BOTS) {
                         }
                     )
                 )
@@ -157,27 +143,26 @@ class SettingsMainNode(
     @Composable
     private fun GeneralSettingOptions() {
         val generalOptions = listOf(
-            SettingItem.Feedback {
+            SettingItem(SettingType.FEEDBACK) {
 
             },
-            SettingItem.Changelog {
+            SettingItem(SettingType.CHANGELOG) {
 
             },
-            SettingItem.SourceCode {
+            SettingItem(SettingType.SOURCE_CODE) {
 
             },
-            SettingItem.Donate {
+            SettingItem(SettingType.DONATE) {
 
             }
         )
         generalOptions.forEach { item ->
             SettingItemButton(item)
         }
-        val logoutItem = SettingItem.Logout {
+        val logoutItem = SettingItem(SettingType.LOGOUT) {
 
         }
         SettingItemButton(item = logoutItem)
-
     }
 
     @Composable
@@ -191,109 +176,39 @@ class SettingsMainNode(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
-                    painter = painterResource(id = item.image),
+                    painter = painterResource(id = item.type.imageRes),
                     contentDescription = item.javaClass.simpleName
                 )
                 Spacer(modifier = Modifier.width(8.dp)) // Optional: For some spacing between image and text.
-                Text(text = stringResource(id = item.text), textAlign = TextAlign.Start)
+                Text(text = stringResource(id = item.type.textRes), textAlign = TextAlign.Start)
             }
         }
     }
 
-    sealed class SettingItem {
-
-        @get:StringRes
-        abstract val text: Int
-
-        @get:DrawableRes
-        abstract val image: Int
-
-        abstract val onClick: () -> Unit
-
-        data class Account(
-            override val text: Int = R.string.settings_my_account,
-            override val image: Int = R.drawable.ic_account,
-            override val onClick: () -> Unit
-        ) : SettingItem()
-
-        data class Profile(
-            override val text: Int = R.string.settings_profile,
-            override val image: Int = R.drawable.ic_profile,
-            override val onClick: () -> Unit
-        ) : SettingItem()
-
-        data class Sessions(
-            override val text: Int = R.string.settings_sessions,
-            override val image: Int = R.drawable.ic_sessions,
-            override val onClick: () -> Unit
-        ) : SettingItem()
-
-        data class VoiceSettings(
-            override val text: Int = R.string.settings_voice_settings,
-            override val image: Int = R.drawable.ic_voice_settings,
-            override val onClick: () -> Unit
-        ) : SettingItem()
-
-        data class Appearance(
-            override val text: Int = R.string.settings_appearance,
-            override val image: Int = R.drawable.ic_appearance,
-            override val onClick: () -> Unit
-        ) : SettingItem()
-
-        data class Notifications(
-            override val text: Int = R.string.settings_notifications,
-            override val image: Int = R.drawable.ic_notifications,
-            override val onClick: () -> Unit
-        ) : SettingItem()
-
-        data class Language(
-            override val text: Int = R.string.settings_language,
-            override val image: Int = R.drawable.ic_language,
-            override val onClick: () -> Unit
-        ) : SettingItem()
-
-        data class Sync(
-            override val text: Int = R.string.settings_sync,
-            override val image: Int = R.drawable.ic_sync,
-            override val onClick: () -> Unit
-        ) : SettingItem()
-
-        data class Bots(
-            override val text: Int = R.string.settings_my_bots,
-            override val image: Int = R.drawable.ic_bots,
-            override val onClick: () -> Unit
-        ) : SettingItem()
-
-        data class Feedback(
-            override val text: Int = R.string.settings_feedback,
-            override val image: Int = R.drawable.ic_feedback,
-            override val onClick: () -> Unit
-        ) : SettingItem()
-
-        data class Changelog(
-            override val text: Int = R.string.settings_changelogs,
-            override val image: Int = R.drawable.ic_changelogs,
-            override val onClick: () -> Unit
-        ) : SettingItem()
-
-        data class SourceCode(
-            override val text: Int = R.string.settings_source_code,
-            override val image: Int = R.drawable.ic_source_code,
-            override val onClick: () -> Unit
-        ) : SettingItem()
-
-        data class Donate(
-            override val text: Int = R.string.settings_donate,
-            override val image: Int = R.drawable.ic_donate,
-            override val onClick: () -> Unit
-        ) : SettingItem()
-
-        data class Logout(
-            override val text: Int = R.string.settings_log_out,
-            override val image: Int = R.drawable.ic_logout,
-            override val onClick: () -> Unit
-        ) : SettingItem()
+    enum class SettingType(
+        @StringRes val textRes: Int,
+        @DrawableRes val imageRes: Int
+    ) {
+        ACCOUNT(R.string.settings_my_account, R.drawable.ic_account),
+        PROFILE(R.string.settings_profile, R.drawable.ic_profile),
+        SESSIONS(R.string.settings_sessions, R.drawable.ic_sessions),
+        VOICE_SETTINGS(R.string.settings_voice_settings, R.drawable.ic_voice_settings),
+        APPEARANCE(R.string.settings_appearance, R.drawable.ic_appearance),
+        NOTIFICATIONS(R.string.settings_notifications, R.drawable.ic_notifications),
+        LANGUAGE(R.string.settings_language, R.drawable.ic_language),
+        SYNC(R.string.settings_sync, R.drawable.ic_sync),
+        BOTS(R.string.settings_my_bots, R.drawable.ic_bots),
+        FEEDBACK(R.string.settings_feedback, R.drawable.ic_feedback),
+        CHANGELOG(R.string.settings_changelogs, R.drawable.ic_changelogs),
+        SOURCE_CODE(R.string.settings_source_code, R.drawable.ic_source_code),
+        DONATE(R.string.settings_donate, R.drawable.ic_donate),
+        LOGOUT(R.string.settings_log_out, R.drawable.ic_logout)
     }
+
+    data class SettingItem(
+        val type: SettingType,
+        val onClick: () -> Unit
+    )
 
     @EntryPoint
     @InstallIn(SingletonComponent::class)

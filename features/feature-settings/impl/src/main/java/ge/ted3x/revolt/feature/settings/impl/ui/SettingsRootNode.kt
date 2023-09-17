@@ -1,12 +1,10 @@
-package ge.ted3x.revolt.feature.settings.ui
+package ge.ted3x.revolt.feature.settings.impl.ui
 
 import android.annotation.SuppressLint
-import android.content.Context
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import com.bumble.appyx.components.backstack.BackStack
 import com.bumble.appyx.components.backstack.activeElement
 import com.bumble.appyx.components.backstack.operation.pop
 import com.bumble.appyx.components.backstack.operation.push
@@ -14,18 +12,14 @@ import com.bumble.appyx.interactions.core.asElement
 import com.bumble.appyx.navigation.composable.AppyxComponent
 import com.bumble.appyx.navigation.modality.BuildContext
 import com.bumble.appyx.navigation.node.Node
-import com.bumble.appyx.navigation.node.ParentNode
+import ge.ted3x.revolt.core.arch.RevoltBackstackRootNode
 import ge.ted3x.revolt.core.designsystem.appbar.RevoltAppBar
-import ge.ted3x.revolt.feature.settings.ui.screens.account.SettingsAccountNode
-import ge.ted3x.revolt.feature.settings.ui.screens.main.SettingsMainNode
-import ge.ted3x.revolt.feature.settings.ui.screens.profile.SettingsProfileNode
+import ge.ted3x.revolt.feature.settings.impl.ui.screens.account.SettingsAccountNode
+import ge.ted3x.revolt.feature.settings.impl.ui.screens.main.SettingsMainNode
+import ge.ted3x.revolt.feature.settings.impl.ui.screens.profile.SettingsProfileNode
 
-class SettingsRootNode(
-    private val appContext: Context,
-    buildContext: BuildContext,
-    private val backStack: BackStack<SettingsTarget>
-) :
-    ParentNode<SettingsRootNode.SettingsTarget>(backStack, buildContext) {
+class SettingsRootNode(buildContext: BuildContext) :
+    RevoltBackstackRootNode<SettingsRootNode.SettingsTarget>(buildContext, SettingsTarget.Main) {
 
     sealed class SettingsTarget {
 
@@ -89,7 +83,7 @@ class SettingsRootNode(
 
     override fun resolve(interactionTarget: SettingsTarget, buildContext: BuildContext): Node {
         return when (interactionTarget) {
-            SettingsTarget.Main -> SettingsMainNode(appContext, buildContext) { target -> backStack.push(target) }
+            SettingsTarget.Main -> SettingsMainNode(buildContext) { target -> backstack.push(target) }
             SettingsTarget.Account -> SettingsAccountNode(buildContext)
             SettingsTarget.Profile -> SettingsProfileNode(buildContext)
             SettingsTarget.Appearance -> TODO()
@@ -107,16 +101,16 @@ class SettingsRootNode(
     @Composable
     override fun View(modifier: Modifier) {
         Scaffold(topBar = {
-            val backstackState = backStack.model.elements.collectAsState()
+            val backstackState = backstack.model.elements.collectAsState()
             val currentElementTitle =
-                backStack.model.activeElement.asElement().interactionTarget.interactionTarget.title
+                backstack.model.activeElement.asElement().interactionTarget.interactionTarget.title
             RevoltAppBar(
-                onBackClick = { backStack.pop() },
+                onBackClick = { backstack.pop() },
                 isBackVisible = backstackState.value.size > 1,
                 title = currentElementTitle
             )
         }) {
-            AppyxComponent(appyxComponent = backStack)
+            AppyxComponent(appyxComponent = backstack)
         }
     }
 }

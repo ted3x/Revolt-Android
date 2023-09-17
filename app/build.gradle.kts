@@ -40,8 +40,10 @@ android {
 dependencies {
     implementation(project(":core:core-database"))
     implementation(project(":core:core-designsystem"))
+    implementation(project(":core:core-arch"))
     implementation(project(":features:feature-dashboard"))
-    implementation(project(":features:feature-settings"))
+    implementation(project(":features:feature-settings:api"))
+    implementation(project(":features:feature-settings:impl"))
 
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
