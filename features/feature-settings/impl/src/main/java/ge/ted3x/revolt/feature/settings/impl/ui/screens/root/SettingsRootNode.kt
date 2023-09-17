@@ -1,10 +1,12 @@
-package ge.ted3x.revolt.feature.settings.impl.ui
+package ge.ted3x.revolt.feature.settings.impl.ui.screens.root
 
 import android.annotation.SuppressLint
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.core.os.bundleOf
 import com.bumble.appyx.components.backstack.activeElement
 import com.bumble.appyx.components.backstack.operation.pop
 import com.bumble.appyx.components.backstack.operation.push
@@ -12,6 +14,7 @@ import com.bumble.appyx.interactions.core.asElement
 import com.bumble.appyx.navigation.composable.AppyxComponent
 import com.bumble.appyx.navigation.modality.BuildContext
 import com.bumble.appyx.navigation.node.Node
+import com.sebaslogen.resaca.hilt.hiltViewModelScoped
 import ge.ted3x.revolt.core.arch.RevoltBackstackRootNode
 import ge.ted3x.revolt.core.designsystem.appbar.RevoltAppBar
 import ge.ted3x.revolt.feature.settings.impl.ui.screens.account.SettingsAccountNode
@@ -100,14 +103,14 @@ class SettingsRootNode(buildContext: BuildContext) :
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     @Composable
     override fun View(modifier: Modifier) {
+        val viewModel = hiltViewModelScoped<SettingsRootViewModel>()
+        val uiState = viewModel.state.collectAsState()
+        viewModel.listenBackstack(backstack)
         Scaffold(topBar = {
-            val backstackState = backstack.model.elements.collectAsState()
-            val currentElementTitle =
-                backstack.model.activeElement.asElement().interactionTarget.interactionTarget.title
             RevoltAppBar(
-                onBackClick = { backstack.pop() },
-                isBackVisible = backstackState.value.size > 1,
-                title = currentElementTitle
+                onBackClick = { viewModel.onBackClick(backstack) },
+                isBackVisible = uiState.value.isBackArrowVisible,
+                title = uiState.value.title
             )
         }) {
             AppyxComponent(appyxComponent = backstack)

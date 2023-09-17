@@ -11,6 +11,7 @@ android {
 
 dependencies {
     api(libs.bundles.appyx)
+    implementation(libs.resaca)
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
 }

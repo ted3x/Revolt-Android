@@ -17,6 +17,7 @@ androidDesugarJdkLibs = "2.0.3"
 coil = "2.4.0"
 hilt = "2.48"
 sqldelight = "2.0.0"
+resaca = "2.4.8"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -55,6 +56,10 @@ kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-pl
 ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 
 sqldelight-driver = { group = "app.cash.sqldelight", name = "android-driver", version.ref = "sqldelight" }
+
+resaca = { module = "com.github.sebaslogen.resaca:resaca", version.ref = "resaca" }
+resaca-hilt = { module = "com.github.sebaslogen.resaca:resacahilt", version.ref = "resaca" }
+
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "org-jetbrains-kotlin-android" }

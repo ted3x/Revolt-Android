@@ -9,7 +9,6 @@ import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.bumble.appyx.components.backstack.operation.push
 import com.bumble.appyx.components.backstack.operation.replace
 import com.bumble.appyx.interactions.core.plugin.Plugin
 import com.bumble.appyx.navigation.composable.AppyxComponent
@@ -18,7 +17,7 @@ import com.bumble.appyx.navigation.node.Node
 import ge.ted3x.revolt.core.arch.RevoltBackstackRootNode
 import ge.ted3x.revolt.core.arch.RevoltNavigator
 import ge.ted3x.revolt.feature.dashboard.ui.DashboardRootNode
-import ge.ted3x.revolt.feature.settings.impl.ui.SettingsRootNode
+import ge.ted3x.revolt.feature.settings.impl.ui.screens.root.SettingsRootNode
 
 class RootNode(
     buildContext: BuildContext,

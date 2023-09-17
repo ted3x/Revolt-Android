@@ -20,6 +20,7 @@ dependencies {
     implementation(libs.ui.tooling.preview)
     implementation(libs.coil)
     implementation(libs.hilt.android)
+    implementation(libs.resaca.hilt)
     implementation(project(mapOf("path" to ":core:core-arch")))
     ksp(libs.hilt.compiler)
 }
