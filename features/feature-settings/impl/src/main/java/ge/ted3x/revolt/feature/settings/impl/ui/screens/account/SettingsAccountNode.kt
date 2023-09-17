@@ -23,7 +23,7 @@ import com.bumble.appyx.navigation.modality.BuildContext
 import com.bumble.appyx.navigation.node.Node
 import ge.ted3x.revolt.core.designsystem.dialog.RevoltDialog
 import ge.ted3x.revolt.core.designsystem.textfield.RevoltTextField
-import ge.ted3x.revolt.feature.settings.R
+import ge.ted3x.revolt.feature.settings.impl.R
 import ge.ted3x.revolt.feature.settings.impl.ui.screens.main.SettingsMainNode.Companion.image
 
 class SettingsAccountNode(buildContext: BuildContext) : Node(buildContext) {

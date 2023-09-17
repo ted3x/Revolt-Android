@@ -5,15 +5,20 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.navigation.integration.ActivityIntegrationPoint
 import com.bumble.appyx.navigation.integration.NodeHost
 import com.bumble.appyx.navigation.platform.AndroidLifecycle
+import com.bumble.appyx.navigation.plugin.NodeReadyObserver
 import dagger.hilt.android.AndroidEntryPoint
+import ge.ted3x.revolt.core.arch.RevoltNavigator
 import ge.ted3x.revolt.ui.theme.RevoltTheme
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : ComponentActivity(), RevoltNavigator {
 
+    private lateinit var rootNode: RootNode
     private lateinit var appyxV2IntegrationPoint: ActivityIntegrationPoint
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,7 +31,12 @@ class MainActivity : ComponentActivity() {
                     lifecycle = AndroidLifecycle(LocalLifecycleOwner.current.lifecycle),
                     integrationPoint = appyxV2IntegrationPoint,
                 ) {
-                    RootNode(it)
+                    RootNode(it, plugins = listOf(object : NodeReadyObserver<RootNode> {
+                        override fun init(node: RootNode) {
+                            super.init(node)
+                            rootNode = node
+                        }
+                    }), navigator = this)
                 }
             }
         }
@@ -55,5 +65,17 @@ class MainActivity : ComponentActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         appyxV2IntegrationPoint.onSaveInstanceState(outState)
+    }
+
+    override fun navigateToSettings() {
+        lifecycleScope.launch {
+            rootNode.attachSettings()
+        }
+    }
+
+    override fun navigateToDashboard() {
+        lifecycleScope.launch {
+            rootNode.attachDashboard()
+        }
     }
 }

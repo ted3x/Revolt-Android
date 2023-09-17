@@ -35,7 +35,7 @@ import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import ge.ted3x.core.database.RevoltUserQueries
-import ge.ted3x.revolt.feature.settings.R
+import ge.ted3x.revolt.feature.settings.impl.R
 import ge.ted3x.revolt.feature.settings.impl.ui.SettingsRootNode
 
 class SettingsMainNode(
