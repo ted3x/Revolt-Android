@@ -2,6 +2,8 @@
 plugins {
     id("revolt.android.library")
     id("revolt.android.library.compose")
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -10,9 +12,12 @@ android {
 
 dependencies {
     implementation(project(":core:core-designsystem"))
+    implementation(project(":core:core-database"))
     implementation(libs.bundles.appyx)
     implementation(libs.ui)
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
     implementation(libs.coil)
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
 }

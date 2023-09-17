@@ -38,7 +38,8 @@ android {
 }
 
 dependencies {
-
+    implementation(project(":core:core-database"))
+    implementation(project(":core:core-designsystem"))
     implementation(project(":features:feature-dashboard"))
     implementation(project(":features:feature-settings"))
 

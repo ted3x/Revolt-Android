@@ -1,0 +1,67 @@
+import kotlin.Boolean;
+
+CREATE TABLE UserEntity (
+    id TEXT PRIMARY KEY NOT NULL,
+    username TEXT NOT NULL,
+    discriminator TEXT NOT NULL,
+    display_name TEXT,
+    badges INTEGER,
+    status_text TEXT,
+    status_presence TEXT,
+    flags INTEGER,
+    privileged INTEGER AS Boolean,
+    relationship TEXT,
+    online INTEGER AS Boolean
+);
+
+CREATE TABLE AvatarEntity (
+    id TEXT PRIMARY KEY NOT NULL ,
+    tag TEXT NOT NULL,
+    filename TEXT NOT NULL,
+    metadata_type TEXT NOT NULL,
+    content_type TEXT NOT NULL,
+    size INTEGER NOT NULL,
+    deleted INTEGER AS Boolean,
+    reported INTEGER AS Boolean,
+    message_id TEXT,
+    user_id TEXT REFERENCES UserEntity(id),
+    server_id TEXT,
+    object_id TEXT
+);
+
+CREATE TABLE RelationEntity (
+    id TEXT PRIMARY KEY NOT NULL,
+    status TEXT NOT NULL,
+    user_id TEXT NOT NULL REFERENCES UserEntity(id)
+);
+
+CREATE TABLE ProfileEntity (
+    content TEXT,
+    background_id TEXT REFERENCES AvatarEntity(id),
+    user_id TEXT NOT NULL REFERENCES UserEntity(id)
+);
+
+CREATE TABLE BotEntity (
+    owner TEXT NOT NULL,
+    user_id TEXT PRIMARY KEY REFERENCES UserEntity(id)
+);
+
+insertUser:
+INSERT OR REPLACE INTO UserEntity (id, username, discriminator, display_name, badges, status_text, status_presence, flags, privileged, relationship, online)
+VALUES ?;
+
+insertAvatar:
+INSERT OR REPLACE INTO AvatarEntity (id, tag, filename, metadata_type, content_type, size, deleted, reported, message_id, user_id, server_id, object_id)
+VALUES ?;
+
+inserRelation:
+INSERT OR REPLACE INTO RelationEntity (id, status, user_id)
+VALUES ?;
+
+insertProfile:
+INSERT OR REPLACE INTO ProfileEntity (content, background_id, user_id)
+VALUES ?;
+
+insertBot:
+INSERT OR REPLACE INTO BotEntity (owner, user_id)
+VALUES ?;

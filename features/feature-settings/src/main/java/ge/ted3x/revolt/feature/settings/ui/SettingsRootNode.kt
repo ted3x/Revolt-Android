@@ -1,6 +1,7 @@
 package ge.ted3x.revolt.feature.settings.ui
 
 import android.annotation.SuppressLint
+import android.content.Context
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -20,6 +21,7 @@ import ge.ted3x.revolt.feature.settings.ui.screens.main.SettingsMainNode
 import ge.ted3x.revolt.feature.settings.ui.screens.profile.SettingsProfileNode
 
 class SettingsRootNode(
+    private val appContext: Context,
     buildContext: BuildContext,
     private val backStack: BackStack<SettingsTarget>
 ) :
@@ -87,7 +89,7 @@ class SettingsRootNode(
 
     override fun resolve(interactionTarget: SettingsTarget, buildContext: BuildContext): Node {
         return when (interactionTarget) {
-            SettingsTarget.Main -> SettingsMainNode(buildContext) { target -> backStack.push(target) }
+            SettingsTarget.Main -> SettingsMainNode(appContext, buildContext) { target -> backStack.push(target) }
             SettingsTarget.Account -> SettingsAccountNode(buildContext)
             SettingsTarget.Profile -> SettingsProfileNode(buildContext)
             SettingsTarget.Appearance -> TODO()

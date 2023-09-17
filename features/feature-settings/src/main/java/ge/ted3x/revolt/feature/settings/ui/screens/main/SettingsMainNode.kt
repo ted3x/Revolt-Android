@@ -1,5 +1,6 @@
 package ge.ted3x.revolt.feature.settings.ui.screens.main
 
+import android.content.Context
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
@@ -31,12 +32,18 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.bumble.appyx.navigation.modality.BuildContext
 import com.bumble.appyx.navigation.node.Node
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.components.SingletonComponent
+import ge.ted3x.core.database.RevoltUserQueries
 import ge.ted3x.revolt.feature.settings.R
 import ge.ted3x.revolt.feature.settings.ui.SettingsRootNode
 
 class SettingsMainNode(
+    private val appContext: Context,
     buildContext: BuildContext,
-    private val onClick: (SettingsRootNode.SettingsTarget) -> Unit
+    private val onClick: (SettingsRootNode.SettingsTarget) -> Unit,
 ) : Node(buildContext) {
 
     companion object {
@@ -45,6 +52,11 @@ class SettingsMainNode(
 
     @Composable
     override fun View(modifier: Modifier) {
+        val hiltEntryPoint =
+            EntryPointAccessors.fromApplication(appContext, SettingsMainNodeEntryPoint::class.java)
+
+        val userQueries = hiltEntryPoint.userQueries()
+
         Column(
             modifier = modifier
                 .verticalScroll(rememberScrollState())
@@ -56,6 +68,7 @@ class SettingsMainNode(
                 itemsWithTitle = mapOf(
                     stringResource(id = R.string.settings_user_settings) to listOf(
                         SettingItem.Account {
+                            userQueries.insertUser()
                             onClick.invoke(SettingsRootNode.SettingsTarget.Account)
                         },
                         SettingItem.Profile {
@@ -281,4 +294,11 @@ class SettingsMainNode(
             override val onClick: () -> Unit
         ) : SettingItem()
     }
+
+    @EntryPoint
+    @InstallIn(SingletonComponent::class)
+    interface SettingsMainNodeEntryPoint {
+        fun userQueries(): RevoltUserQueries
+    }
+
 }

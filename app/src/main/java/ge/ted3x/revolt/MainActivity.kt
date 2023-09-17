@@ -11,10 +11,11 @@ import com.bumble.appyx.components.backstack.ui.slider.BackStackSlider
 import com.bumble.appyx.navigation.integration.ActivityIntegrationPoint
 import com.bumble.appyx.navigation.integration.NodeHost
 import com.bumble.appyx.navigation.platform.AndroidLifecycle
-import ge.ted3x.revolt.feature.dashboard.ui.DashboardRootNode
+import dagger.hilt.android.AndroidEntryPoint
 import ge.ted3x.revolt.feature.settings.ui.SettingsRootNode
 import ge.ted3x.revolt.ui.theme.RevoltTheme
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private lateinit var appyxV2IntegrationPoint: ActivityIntegrationPoint
@@ -30,6 +31,7 @@ class MainActivity : ComponentActivity() {
                     integrationPoint = appyxV2IntegrationPoint,
                 ) {
                     SettingsRootNode(
+                        applicationContext,
                         it,
                         BackStack(
                             model = BackStackModel(
