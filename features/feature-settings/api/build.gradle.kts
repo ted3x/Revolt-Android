@@ -37,7 +37,6 @@ android {
 
 dependencies {
 
-    api(libs.bundles.appyx)
     api(libs.hilt.android)
     ksp(libs.hilt.compiler)
     implementation(libs.core.ktx)

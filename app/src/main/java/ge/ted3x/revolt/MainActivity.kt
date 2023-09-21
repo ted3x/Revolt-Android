@@ -1,81 +1,56 @@
 package ge.ted3x.revolt
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.lifecycle.lifecycleScope
-import com.bumble.appyx.navigation.integration.ActivityIntegrationPoint
-import com.bumble.appyx.navigation.integration.NodeHost
-import com.bumble.appyx.navigation.platform.AndroidLifecycle
-import com.bumble.appyx.navigation.plugin.NodeReadyObserver
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideIn
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOut
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.unit.IntOffset
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.ramcosta.composedestinations.DestinationsNavHost
+import com.ramcosta.composedestinations.animations.defaults.RootNavGraphDefaultAnimations
+import com.ramcosta.composedestinations.rememberNavHostEngine
+import com.ramcosta.composedestinations.utils.composable
 import dagger.hilt.android.AndroidEntryPoint
-import ge.ted3x.revolt.core.arch.RevoltNavigator
+import ge.ted3x.revolt.feature.settings.impl.ui.screens.NavGraphs
+import ge.ted3x.revolt.feature.settings.impl.ui.screens.account.SettingsAccountScreen
+import ge.ted3x.revolt.feature.settings.impl.ui.screens.destinations.SettingsAccountScreenDestination
+import ge.ted3x.revolt.feature.settings.impl.ui.screens.destinations.SettingsMainScreenDestination
+import ge.ted3x.revolt.feature.settings.impl.ui.screens.destinations.SettingsRootScreenDestination
+import ge.ted3x.revolt.feature.settings.impl.ui.screens.main.SettingsMainScreen
+import ge.ted3x.revolt.feature.settings.impl.ui.screens.root.SettingsRootScreen
 import ge.ted3x.revolt.ui.theme.RevoltTheme
-import kotlinx.coroutines.launch
+
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity(), RevoltNavigator {
-
-    private lateinit var rootNode: RootNode
-    private lateinit var appyxV2IntegrationPoint: ActivityIntegrationPoint
+class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        appyxV2IntegrationPoint = createIntegrationPoint(savedInstanceState)
         setContent {
             RevoltTheme {
-                // A surface container using the 'background' color from the theme
-                NodeHost(
-                    lifecycle = AndroidLifecycle(LocalLifecycleOwner.current.lifecycle),
-                    integrationPoint = appyxV2IntegrationPoint,
-                ) {
-                    RootNode(it, plugins = listOf(object : NodeReadyObserver<RootNode> {
-                        override fun init(node: RootNode) {
-                            super.init(node)
-                            rootNode = node
+                CompositionLocalProvider {
+
+                    val mainNavController = rememberNavController()
+                    NavHost(
+                        navController = mainNavController,
+                        startDestination = SettingsRootScreenDestination.route
+                    ) {
+                        composable(SettingsRootScreenDestination.route) {
+                            SettingsRootScreen()
                         }
-                    }), navigator = this)
+                    }
                 }
             }
-        }
-    }
-
-    private fun createIntegrationPoint(savedInstanceState: Bundle?) =
-        ActivityIntegrationPoint(
-            activity = this,
-            savedInstanceState = savedInstanceState
-        )
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        appyxV2IntegrationPoint.onActivityResult(requestCode, resultCode, data)
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        appyxV2IntegrationPoint.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        appyxV2IntegrationPoint.onSaveInstanceState(outState)
-    }
-
-    override fun navigateToSettings() {
-        lifecycleScope.launch {
-            rootNode.attachSettings()
-        }
-    }
-
-    override fun navigateToDashboard() {
-        lifecycleScope.launch {
-            rootNode.attachDashboard()
         }
     }
 }

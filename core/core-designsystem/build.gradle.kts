@@ -9,7 +9,7 @@ android {
 }
 
 dependencies {
-    implementation(libs.bundles.appyx)
+    implementation(libs.material3)
     implementation(libs.ui)
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)

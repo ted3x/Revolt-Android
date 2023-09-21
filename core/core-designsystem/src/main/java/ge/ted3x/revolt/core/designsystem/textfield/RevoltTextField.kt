@@ -1,7 +1,7 @@
 package ge.ted3x.revolt.core.designsystem.textfield
 
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 

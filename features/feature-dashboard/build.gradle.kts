@@ -2,6 +2,7 @@
 plugins {
     id("revolt.android.library")
     id("revolt.android.library.compose")
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -9,7 +10,8 @@ android {
 }
 
 dependencies {
-    implementation(libs.bundles.appyx)
+    implementation(libs.compose.destinations.core)
+    ksp(libs.compose.destinations.ksp)
     implementation(libs.ui)
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)

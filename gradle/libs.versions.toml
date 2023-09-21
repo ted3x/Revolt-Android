@@ -9,21 +9,19 @@ lifecycle-runtime-ktx = "2.6.2"
 activity-compose = "1.7.2"
 compose-bom = "2023.09.00"
 revolt = "1.0-SNAPSHOT"
-appyx = "2.0.0-alpha05"
 appcompat = "1.6.1"
 material = "1.9.0"
 ksp = "1.9.10-1.0.13"
-androidDesugarJdkLibs = "2.0.3"
 coil = "2.4.0"
 hilt = "2.48"
 sqldelight = "2.0.0"
-resaca = "2.4.8"
+compose-destinations = "1.9.53"
+hilt-navigation = "1.0.0"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
-android-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
 lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
 activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
@@ -38,10 +36,6 @@ material3 = { group = "androidx.compose.material3", name = "material3" }
 
 revolt-api = { group = "ge.ted3x", name = "revolt-kotlin", version.ref = "revolt" }
 
-appyx-navigation = { group = "com.bumble.appyx", name = "appyx-navigation-android", version.ref = "appyx" }
-appyx-interactions = { group = "com.bumble.appyx", name = "appyx-interactions-android", version.ref = "appyx" }
-appyx-backstack = { group = "com.bumble.appyx", name = "backstack-android", version.ref = "appyx" }
-appyx-spotlight = { group = "com.bumble.appyx", name = "spotlight-android", version.ref = "appyx" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
@@ -49,6 +43,10 @@ coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
+hilt-navigation = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt-navigation" }
+
+compose-destinations-core = { group = "io.github.raamcosta.compose-destinations", name = "animations-core", version.ref = "compose-destinations" }
+compose-destinations-ksp = { group = "io.github.raamcosta.compose-destinations", name = "ksp", version.ref = "compose-destinations" }
 
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
@@ -56,9 +54,6 @@ kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-pl
 ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 
 sqldelight-driver = { group = "app.cash.sqldelight", name = "android-driver", version.ref = "sqldelight" }
-
-resaca = { module = "com.github.sebaslogen.resaca:resaca", version.ref = "resaca" }
-resaca-hilt = { module = "com.github.sebaslogen.resaca:resacahilt", version.ref = "resaca" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }
@@ -70,4 +65,3 @@ hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 
 [bundles]
-appyx = ["appyx-navigation", "appyx-backstack", "appyx-interactions", "appyx-spotlight"]
