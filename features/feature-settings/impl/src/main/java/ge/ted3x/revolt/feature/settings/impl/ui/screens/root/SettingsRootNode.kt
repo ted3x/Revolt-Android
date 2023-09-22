@@ -17,7 +17,7 @@ import ge.ted3x.revolt.feature.settings.impl.ui.screens.destinations.SettingsMai
 import ge.ted3x.revolt.feature.settings.impl.ui.screens.destinations.SettingsProfileScreenDestination
 import ge.ted3x.revolt.feature.settings.impl.ui.screens.main.SettingsMainScreen
 import ge.ted3x.revolt.feature.settings.impl.ui.screens.profile.SettingsProfileScreen
-import ge.ted3x.revolt.features.settings.api.SETTINGS_ROOT_SCREEN_ROUTE
+import ge.ted3x.revolt.feature.settings.api.SETTINGS_ROOT_SCREEN_ROUTE
 
 sealed class SettingsTarget {
 

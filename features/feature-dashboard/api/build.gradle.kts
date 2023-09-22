@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "ge.ted3x.revolt.feature.settings.api"
+    namespace = "ge.ted3x.revolt.features.dashboard.api"
 }
 
 dependencies {

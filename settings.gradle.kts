@@ -26,10 +26,11 @@ include(":core:core-database")
 include(":core:core-arch")
 
 // Feature
-include(":features:feature-dashboard")
-
 include(":features:feature-settings:api")
 include(":features:feature-settings:impl")
 
 include(":features:feature-splash:api")
 include(":features:feature-splash:impl")
+
+include(":features:feature-dashboard:impl")
+include(":features:feature-dashboard:api")

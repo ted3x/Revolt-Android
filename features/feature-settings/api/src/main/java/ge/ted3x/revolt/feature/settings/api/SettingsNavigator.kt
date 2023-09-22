@@ -1,4 +1,4 @@
-package ge.ted3x.revolt.features.settings.api
+package ge.ted3x.revolt.feature.settings.api
 
 import ge.ted3x.revolt.core.arch.RevoltScreen
 
