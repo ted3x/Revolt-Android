@@ -12,8 +12,8 @@ android {
 
 dependencies {
     implementation(project(":core:core-designsystem"))
-    implementation(project(":core:core-database"))
     implementation(project(":core:core-arch"))
+    implementation(project(":core:core-domain"))
     implementation(project(":features:feature-settings:api"))
     implementation(libs.compose.destinations.core)
     ksp(libs.compose.destinations.ksp)

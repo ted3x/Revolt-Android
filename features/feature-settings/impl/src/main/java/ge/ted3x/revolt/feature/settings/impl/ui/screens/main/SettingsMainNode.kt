@@ -207,9 +207,3 @@ data class SettingItem(
     val type: SettingType,
     val onClick: () -> Unit
 )
-
-@EntryPoint
-@InstallIn(SingletonComponent::class)
-interface SettingsMainNodeEntryPoint {
-    fun userQueries(): RevoltUserQueries
-}

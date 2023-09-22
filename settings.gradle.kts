@@ -34,3 +34,5 @@ include(":features:feature-splash:impl")
 
 include(":features:feature-dashboard:impl")
 include(":features:feature-dashboard:api")
+include(":core:core-domain")
+include(":core:core-data")

@@ -1,14 +1,15 @@
 import kotlin.Boolean;
+import kotlin.Int;
 
 CREATE TABLE UserEntity (
     id TEXT PRIMARY KEY NOT NULL,
     username TEXT NOT NULL,
     discriminator TEXT NOT NULL,
     display_name TEXT,
-    badges INTEGER,
+    badges INTEGER AS Int,
     status_text TEXT,
     status_presence TEXT,
-    flags INTEGER,
+    flags INTEGER AS Int,
     privileged INTEGER AS Boolean,
     relationship TEXT,
     online INTEGER AS Boolean
@@ -20,7 +21,7 @@ CREATE TABLE AvatarEntity (
     filename TEXT NOT NULL,
     metadata_type TEXT NOT NULL,
     content_type TEXT NOT NULL,
-    size INTEGER NOT NULL,
+    size INTEGER AS Int NOT NULL,
     deleted INTEGER AS Boolean,
     reported INTEGER AS Boolean,
     message_id TEXT,

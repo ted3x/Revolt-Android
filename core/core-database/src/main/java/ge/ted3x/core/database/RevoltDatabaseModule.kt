@@ -2,13 +2,16 @@ package ge.ted3x.core.database
 
 import android.content.Context
 import androidx.sqlite.db.SupportSQLiteDatabase
+import app.cash.sqldelight.adapter.primitive.IntColumnAdapter
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import ge.ted3x.revolt.AvatarEntity
 import ge.ted3x.revolt.RevoltDatabase
+import ge.ted3x.revolt.UserEntity
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -37,7 +40,14 @@ object RevoltDatabaseModule {
 
     @Provides
     fun provideRevoltDatabase(driver: AndroidSqliteDriver): RevoltDatabase {
-        return RevoltDatabase(driver)
+        return RevoltDatabase(
+            driver,
+            AvatarEntityAdapter = AvatarEntity.Adapter(sizeAdapter = IntColumnAdapter),
+            UserEntityAdapter = UserEntity.Adapter(
+                badgesAdapter = IntColumnAdapter,
+                flagsAdapter = IntColumnAdapter
+            )
+        )
     }
 
     private const val DATABASE = "revolt.db"
