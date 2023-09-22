@@ -1,4 +1,4 @@
-package ge.ted3x.revolt.core.arch
+package ge.ted3x.revolt.core.arch.navigation
 
 interface RevoltScreen {
 

@@ -9,7 +9,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.utils.composable
-import ge.ted3x.revolt.core.arch.RevoltNavHost
+import ge.ted3x.revolt.core.arch.navigation.RevoltNavHost
 import ge.ted3x.revolt.core.designsystem.appbar.RevoltAppBar
 import ge.ted3x.revolt.feature.settings.impl.ui.screens.account.SettingsAccountScreen
 import ge.ted3x.revolt.feature.settings.impl.ui.screens.destinations.SettingsAccountScreenDestination

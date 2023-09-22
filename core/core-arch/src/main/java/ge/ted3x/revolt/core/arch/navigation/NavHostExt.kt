@@ -1,4 +1,4 @@
-package ge.ted3x.revolt.core.arch
+package ge.ted3x.revolt.core.arch.navigation
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition

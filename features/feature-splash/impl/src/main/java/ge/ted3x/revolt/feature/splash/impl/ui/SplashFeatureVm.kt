@@ -3,7 +3,7 @@ package ge.ted3x.revolt.feature.splash.impl.ui
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import ge.ted3x.revolt.core.arch.RevoltNavigator
+import ge.ted3x.revolt.core.arch.navigation.RevoltNavigator
 import ge.ted3x.revolt.core.arch.RevoltViewModel
 import ge.ted3x.revolt.feature.settings.api.SettingsFeatureScreen
 import kotlinx.coroutines.delay

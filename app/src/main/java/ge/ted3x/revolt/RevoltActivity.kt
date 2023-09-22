@@ -11,11 +11,11 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
-import ge.ted3x.revolt.core.arch.LocalAppNavController
-import ge.ted3x.revolt.core.arch.RevoltNavHost
-import ge.ted3x.revolt.core.arch.RevoltNavigationCommand
-import ge.ted3x.revolt.core.arch.RevoltNavigator
-import ge.ted3x.revolt.core.arch.RevoltScreen
+import ge.ted3x.revolt.core.arch.navigation.LocalAppNavController
+import ge.ted3x.revolt.core.arch.navigation.RevoltNavHost
+import ge.ted3x.revolt.core.arch.navigation.RevoltNavigationCommand
+import ge.ted3x.revolt.core.arch.navigation.RevoltNavigator
+import ge.ted3x.revolt.core.arch.navigation.RevoltScreen
 import ge.ted3x.revolt.core.arch.collectAsEffect
 import ge.ted3x.revolt.feature.settings.impl.ui.screens.destinations.SettingsRootScreenDestination
 import ge.ted3x.revolt.feature.settings.impl.ui.screens.root.SettingsRootScreen

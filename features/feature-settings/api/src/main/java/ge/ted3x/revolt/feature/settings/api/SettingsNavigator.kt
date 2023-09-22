@@ -1,6 +1,6 @@
 package ge.ted3x.revolt.feature.settings.api
 
-import ge.ted3x.revolt.core.arch.RevoltScreen
+import ge.ted3x.revolt.core.arch.navigation.RevoltScreen
 
 const val SETTINGS_ROOT_SCREEN_ROUTE = "SETTINGS_ROOT_SCREEN"
 
