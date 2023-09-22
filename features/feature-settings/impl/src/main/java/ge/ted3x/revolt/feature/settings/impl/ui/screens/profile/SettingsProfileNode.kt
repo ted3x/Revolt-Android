@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 import com.ramcosta.composedestinations.annotation.Destination
 import ge.ted3x.revolt.core.designsystem.profile.RevoltProfileCard
 import ge.ted3x.revolt.core.designsystem.profile.RevoltProfileTab
-import ge.ted3x.revolt.feature.settings.impl.ui.SettingsNavGraph
 
 
 private val tabs = listOf<RevoltProfileTab>(
@@ -19,7 +18,6 @@ private val tabs = listOf<RevoltProfileTab>(
     ProfileTab("Mutual Servers", ProfileTabType.MutualServers),
 )
 
-@SettingsNavGraph
 @Destination
 @Composable
 fun SettingsProfileScreen(modifier: Modifier = Modifier) {

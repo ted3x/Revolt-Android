@@ -14,6 +14,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import com.ramcosta.composedestinations.spec.Route
 
@@ -68,6 +69,13 @@ class RevoltAppNavigator(private val navController: NavController) {
         navController.navigate(route.route)
     }
 
+    fun newRoot(route: String) {
+        navController.navigate(route) {
+            popUpTo(navController.graph.id) {
+                inclusive = true
+            }
+        }
+    }
     fun navigateTo(route: String) {
         navController.navigate(route)
     }

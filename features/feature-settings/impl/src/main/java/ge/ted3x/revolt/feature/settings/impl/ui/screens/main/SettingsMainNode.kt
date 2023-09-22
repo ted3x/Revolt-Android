@@ -35,17 +35,13 @@ import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import ge.ted3x.core.database.RevoltUserQueries
-import ge.ted3x.revolt.core.arch.RevoltAppNavigator
 import ge.ted3x.revolt.feature.settings.impl.R
-import ge.ted3x.revolt.feature.settings.impl.ui.SettingsNavGraph
 import ge.ted3x.revolt.feature.settings.impl.ui.screens.destinations.SettingsAccountScreenDestination
 import ge.ted3x.revolt.feature.settings.impl.ui.screens.destinations.SettingsProfileScreenDestination
-import ge.ted3x.revolt.features.settings.api.SETTINGS_ROOT_SCREEN_ROUTE
 
 val image = "https://i.kym-cdn.com/entries/icons/original/000/013/564/doge.jpg"
 
-@SettingsNavGraph(start = true)
-@Destination
+@Destination(start = true)
 @Composable
 fun SettingsMainScreen(
     navigator: DestinationsNavigator,

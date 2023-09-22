@@ -44,6 +44,7 @@ dependencies {
 //    implementation(project(":features:feature-dashboard"))
     implementation(project(":features:feature-settings:api"))
     implementation(project(":features:feature-settings:impl"))
+    implementation(project(":features:feature-splash"))
 
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)

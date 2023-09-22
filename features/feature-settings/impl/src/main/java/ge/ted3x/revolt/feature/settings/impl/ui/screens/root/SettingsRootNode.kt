@@ -1,5 +1,6 @@
 package ge.ted3x.revolt.feature.settings.impl.ui.screens.root
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -83,7 +84,6 @@ sealed class SettingsTarget {
 }
 
 
-@RootNavGraph(start = true)
 @Composable
 @Destination(route = SETTINGS_ROOT_SCREEN_ROUTE)
 fun SettingsRootScreen(
@@ -91,12 +91,10 @@ fun SettingsRootScreen(
 ) {
     val uiState = viewModel.state.collectAsState()
     val navController = rememberNavController()
-    navController.navigateUp()
     Scaffold(topBar = {
-        val canPop = navController.previousBackStackEntry != null
         RevoltAppBar(
             onBackClick = {
-                if (canPop) {
+                if (navController.previousBackStackEntry != null) {
                     navController.popBackStack()
                 }
             },

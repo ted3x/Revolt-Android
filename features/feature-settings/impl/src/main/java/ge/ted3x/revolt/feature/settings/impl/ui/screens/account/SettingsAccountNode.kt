@@ -24,9 +24,7 @@ import ge.ted3x.revolt.core.designsystem.dialog.RevoltDialog
 import ge.ted3x.revolt.core.designsystem.profile.image
 import ge.ted3x.revolt.core.designsystem.textfield.RevoltTextField
 import ge.ted3x.revolt.feature.settings.impl.R
-import ge.ted3x.revolt.feature.settings.impl.ui.SettingsNavGraph
 
-@SettingsNavGraph
 @Destination
 @Composable
 fun SettingsAccountScreen(modifier: Modifier = Modifier) {
