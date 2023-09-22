@@ -42,7 +42,7 @@ dependencies {
     implementation(project(":core:core-designsystem"))
     implementation(project(":core:core-arch"))
 //    implementation(project(":features:feature-dashboard"))
-//    implementation(project(":features:feature-settings:api"))
+    implementation(project(":features:feature-settings:api"))
     implementation(project(":features:feature-settings:impl"))
 
     implementation(libs.core.ktx)

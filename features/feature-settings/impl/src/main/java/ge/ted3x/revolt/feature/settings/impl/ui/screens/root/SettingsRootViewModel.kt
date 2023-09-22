@@ -14,7 +14,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SettingsRootViewModel @Inject constructor(savedStateHandler: SavedStateHandle) :
+class SettingsRootViewModel @Inject constructor(
+    savedStateHandler: SavedStateHandle
+) :
     RevoltViewModel<SettingsRootUiState>(savedStateHandler) {
 
     private val _state = MutableStateFlow(SettingsRootUiState())
