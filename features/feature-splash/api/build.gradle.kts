@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "ge.ted3x.revolt.features.settings.api"
+    namespace = "ge.ted3x.revolt.features.splash.api"
 }
 
 dependencies {

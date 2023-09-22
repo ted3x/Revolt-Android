@@ -17,12 +17,19 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Revolt"
+
 include(":app")
-include(":core")
-include(":features:feature-dashboard")
+
+// Core
 include(":core:core-designsystem")
 include(":core:core-database")
 include(":core:core-arch")
+
+// Feature
+include(":features:feature-dashboard")
+
 include(":features:feature-settings:api")
 include(":features:feature-settings:impl")
-include(":features:feature-splash")
+
+include(":features:feature-splash:api")
+include(":features:feature-splash:impl")

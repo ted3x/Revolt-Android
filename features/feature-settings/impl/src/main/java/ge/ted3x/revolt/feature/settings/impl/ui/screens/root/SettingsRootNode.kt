@@ -1,18 +1,14 @@
 package ge.ted3x.revolt.feature.settings.impl.ui.screens.root
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.utils.composable
-import ge.ted3x.revolt.core.arch.LocalRevoltNavigator
 import ge.ted3x.revolt.core.arch.RevoltNavHost
 import ge.ted3x.revolt.core.designsystem.appbar.RevoltAppBar
 import ge.ted3x.revolt.feature.settings.impl.ui.screens.account.SettingsAccountScreen
@@ -104,7 +100,7 @@ fun SettingsRootScreen(
     }) {
         RevoltNavHost(
             navController = navController,
-            startDestination = SettingsMainScreenDestination,
+            startDestination = SettingsMainScreenDestination.route,
             modifier = Modifier.padding(it)
         ) {
             viewModel.observeBackstack(navController.currentBackStack)

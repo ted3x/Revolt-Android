@@ -14,14 +14,12 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
-import com.ramcosta.composedestinations.spec.Route
 
 @Composable
 fun RevoltNavHost(
     navController: NavHostController,
-    startDestination: Route,
+    startDestination: String,
     modifier: Modifier = Modifier,
     contentAlignment: Alignment = Alignment.Center,
     route: String? = null,
@@ -47,7 +45,7 @@ fun RevoltNavHost(
 ) {
     NavHost(
         navController,
-        startDestination.route,
+        startDestination,
         modifier,
         contentAlignment,
         route,
@@ -59,24 +57,4 @@ fun RevoltNavHost(
     )
 }
 
-
-val LocalRevoltNavigator =
-    staticCompositionLocalOf<RevoltAppNavigator> { error("No NavController found!") }
-
-
-class RevoltAppNavigator(private val navController: NavController) {
-    fun navigateTo(route: Route) {
-        navController.navigate(route.route)
-    }
-
-    fun newRoot(route: String) {
-        navController.navigate(route) {
-            popUpTo(navController.graph.id) {
-                inclusive = true
-            }
-        }
-    }
-    fun navigateTo(route: String) {
-        navController.navigate(route)
-    }
-}
+val LocalAppNavController = staticCompositionLocalOf<NavController> { error("no default value") }

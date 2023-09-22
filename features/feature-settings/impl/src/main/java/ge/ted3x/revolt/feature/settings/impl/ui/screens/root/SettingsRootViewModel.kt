@@ -16,11 +16,10 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingsRootViewModel @Inject constructor(
     savedStateHandler: SavedStateHandle
-) :
-    RevoltViewModel<SettingsRootUiState>(savedStateHandler) {
+) : RevoltViewModel(savedStateHandler) {
 
+    val state: StateFlow<SettingsRootUiState> get() = _state
     private val _state = MutableStateFlow(SettingsRootUiState())
-    override val state: StateFlow<SettingsRootUiState> get() = _state
 
     fun observeBackstack(backstackEntry: StateFlow<List<NavBackStackEntry>>) {
         CoroutineScope(Dispatchers.Default).launch {
