@@ -26,10 +26,14 @@ class SettingsRootViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            userRepository.getSelf()
+            val user = userRepository.getSelf()
+            _state.update { it.copy(
+                username = user.username,
+                discriminator = user.discriminator,
+                profileImage = user.avatar?.url,
+                status = user.status?.text ?: ""
+            ) }
         }
-        _state.update { it.copy(
-        ) }
     }
 
     fun observeBackstack(backstackEntry: StateFlow<List<NavBackStackEntry>>) {

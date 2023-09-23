@@ -20,6 +20,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,6 +36,8 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import ge.ted3x.revolt.feature.settings.impl.R
 import ge.ted3x.revolt.feature.settings.impl.ui.screens.destinations.SettingsAccountScreenDestination
 import ge.ted3x.revolt.feature.settings.impl.ui.screens.destinations.SettingsProfileScreenDestination
+import ge.ted3x.revolt.feature.settings.impl.ui.screens.root.SettingsRootUiState
+import ge.ted3x.revolt.feature.settings.impl.ui.screens.root.SettingsRootViewModel
 
 val image = "https://i.kym-cdn.com/entries/icons/original/000/013/564/doge.jpg"
 
@@ -41,16 +45,17 @@ val image = "https://i.kym-cdn.com/entries/icons/original/000/013/564/doge.jpg"
 @Composable
 fun SettingsMainScreen(
     navigator: DestinationsNavigator,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: SettingsRootViewModel
 ) {
-
+    val uiState = viewModel.state.collectAsState()
     Column(
         modifier = modifier
             .verticalScroll(rememberScrollState())
             .padding(12.dp),
         horizontalAlignment = Alignment.Start
     ) {
-        Profile()
+        Profile(uiState)
         SettingOptions(
             itemsWithTitle = mapOf(
                 stringResource(id = R.string.settings_user_settings) to listOf(
@@ -87,7 +92,7 @@ fun SettingsMainScreen(
 }
 
 @Composable
-private fun Profile() {
+private fun Profile(uiState: State<SettingsRootUiState>) {
     Column(
         modifier = Modifier
             .clip(RoundedCornerShape(8.dp))
@@ -97,15 +102,15 @@ private fun Profile() {
     ) {
         Row(modifier = Modifier.padding(12.dp)) {
             AsyncImage(
-                model = image,
+                model = uiState.value.profileImage,
                 contentDescription = "profile image",
                 modifier = Modifier
                     .size(64.dp)
                     .clip(CircleShape)
             )
             Column {
-                Text(text = "ted3x")
-                Text(text = "ted3x#7383")
+                Text(text = uiState.value.username)
+                Text(text = "${uiState.value.username}#${uiState.value.discriminator}")
                 Text(text = "Offline")
             }
         }
@@ -116,7 +121,7 @@ private fun Profile() {
                 .background(Color.Gray)
         ) {
             TextButton(onClick = { /*TODO*/ }) {
-                Text(text = "Change your status...")
+                Text(text = uiState.value.status)
             }
         }
     }

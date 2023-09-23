@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ge.ted3x.revolt.core.arch.navigation.RevoltNavigator
 import ge.ted3x.revolt.core.arch.RevoltViewModel
+import ge.ted3x.revolt.core.domain.core.RevoltConfigurationRepository
 import ge.ted3x.revolt.core.domain.user.RevoltUserRepository
 import ge.ted3x.revolt.feature.settings.api.SettingsFeatureScreen
 import kotlinx.coroutines.delay
@@ -15,14 +16,15 @@ import javax.inject.Inject
 class SplashFeatureVm @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val navigator: RevoltNavigator,
+    private val configurationRepository: RevoltConfigurationRepository,
     private val userRepository: RevoltUserRepository
 ) : RevoltViewModel(savedStateHandle) {
 
     init {
         viewModelScope.launch {
+            configurationRepository.fetchConfiguration()
             userRepository.getSelf()
-//            delay(1500L) // for now let's imitate some network work
-//            navigator.newRoot(SettingsFeatureScreen)
+            navigator.newRoot(SettingsFeatureScreen)
         }
     }
 }

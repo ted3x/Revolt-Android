@@ -1,0 +1,54 @@
+import kotlin.Boolean;
+
+CREATE TABLE RevoltConfigurationEntity (
+    revolt TEXT NOT NULL,
+    captcha_enabled INTEGER AS Boolean NOT NULL,
+    captcha_key TEXT NOT NULL,
+    email_verification_enabled INTEGER AS Boolean NOT NULL,
+    invite_only INTEGER AS Boolean NOT NULL,
+    autumn_enabled INTEGER AS Boolean NOT NULL,
+    autumn_url TEXT NOT NULL,
+    january_enabled INTEGER AS Boolean NOT NULL,
+    january_url TEXT NOT NULL,
+    voso_enabled INTEGER AS Boolean NOT NULL,
+    voso_url TEXT NOT NULL,
+    voso_ws TEXT NOT NULL,
+    ws TEXT NOT NULL,
+    app TEXT NOT NULL,
+    vapid TEXT NOT NULL,
+    build_commit_sha TEXT NOT NULL,
+    build_commit_timestamp TEXT NOT NULL,
+    build_semver TEXT NOT NULL,
+    build_origin_url TEXT NOT NULL,
+    build_timestamp TEXT NOT NULL
+);
+
+insertConfiguration:
+INSERT INTO RevoltConfigurationEntity (
+    revolt,
+    captcha_enabled,
+    captcha_key,
+    email_verification_enabled,
+    invite_only,
+    autumn_enabled,
+    autumn_url,
+    january_enabled,
+    january_url,
+    voso_enabled,
+    voso_url,
+    voso_ws,
+    ws,
+    app,
+    vapid,
+    build_commit_sha,
+    build_commit_timestamp,
+    build_semver,
+    build_origin_url,
+    build_timestamp
+) VALUES ?;
+
+nukeConfiguration:
+DELETE FROM RevoltConfigurationEntity;
+
+selectConfiguration:
+SELECT * FROM RevoltConfigurationEntity;

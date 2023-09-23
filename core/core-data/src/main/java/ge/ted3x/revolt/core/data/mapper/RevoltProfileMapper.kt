@@ -18,11 +18,14 @@ class RevoltProfileMapper @Inject constructor(private val fileMapper: RevoltFile
         }
     }
 
-    fun mapEntityToDomain(entityModel: ProfileEntity, backgroundModel: FileEntity): RevoltUserProfile {
+    fun mapEntityToDomain(autumnUrl: String, entityModel: ProfileEntity, backgroundModel: FileEntity): RevoltUserProfile {
         return with(entityModel) {
             RevoltUserProfile(
                 content = content,
-                background = fileMapper.mapEntityToDomain(backgroundModel)
+                background = fileMapper.mapEntityToDomain(
+                    autumnUrl = autumnUrl,
+                    entityModel = backgroundModel
+                )
             )
         }
     }

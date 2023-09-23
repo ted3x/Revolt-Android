@@ -28,6 +28,7 @@ class RevoltUserMapper @Inject constructor(
     }
 
     fun mapEntityToDomain(
+        autumnUrl: String,
         userEntity: UserEntity,
         avatarEntity: FileEntity?,
         profileEntity: ProfileEntity?,
@@ -40,7 +41,7 @@ class RevoltUserMapper @Inject constructor(
             userEntity.username,
             discriminator = userEntity.discriminator,
             displayName = userEntity.display_name,
-            avatar = avatarEntity?.let { fileMapper.mapEntityToDomain(it) },
+            avatar = avatarEntity?.let { fileMapper.mapEntityToDomain(autumnUrl, it) },
             relations = relationsEntity?.map { relation ->
                 RevoltUser.Relationship(
                     relation.id,
@@ -51,7 +52,7 @@ class RevoltUserMapper @Inject constructor(
                 text = userEntity.status_text,
                 presence = RevoltUserPresence.entries.first { it.name == userEntity.status_presence }) else null,
             profile = if (profileEntity != null && backgroundEntity != null) {
-                profileMapper.mapEntityToDomain(profileEntity, backgroundEntity)
+                profileMapper.mapEntityToDomain(autumnUrl, profileEntity, backgroundEntity)
             } else null,
             flags = userEntity.flags,
             privileged = userEntity.privileged,

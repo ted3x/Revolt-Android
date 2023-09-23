@@ -13,4 +13,5 @@ data class RevoltFile(
     val userId: String?,
     val serverId: String?,
     val objectId: String?,
+    val url: String
 )
