@@ -13,7 +13,8 @@ CREATE TABLE UserEntity (
     flags INTEGER AS Int,
     privileged INTEGER AS Boolean,
     relationship TEXT,
-    online INTEGER AS Boolean
+    online INTEGER AS Boolean,
+    is_current_user INTEGER AS Boolean NOT NULL
 );
 
 CREATE TABLE RelationEntity (
@@ -34,11 +35,27 @@ CREATE TABLE BotEntity (
 );
 
 insertUser:
-INSERT OR REPLACE INTO UserEntity (id, username, discriminator, display_name, avatar_id, badges, status_text, status_presence, flags, privileged, relationship, online)
-VALUES ?;
+INSERT OR REPLACE INTO UserEntity (
+    id,
+    username,
+    discriminator,
+    display_name,
+    avatar_id,
+    badges,
+    status_text,
+    status_presence,
+    flags,
+    privileged,
+    relationship,
+    online,
+    is_current_user
+) VALUES ?;
 
 selectUserById:
 SELECT * FROM UserEntity WHERE id = ?;
+
+selectCurrentUser:
+SELECT * FROM UserEntity WHERE is_current_user = 1;
 
 inserRelation:
 INSERT OR REPLACE INTO RelationEntity (id, status, user_id)

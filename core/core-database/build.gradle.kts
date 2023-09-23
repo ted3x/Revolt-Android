@@ -12,6 +12,7 @@ android {
 
 dependencies {
     implementation(libs.sqldelight.driver)
+    implementation(libs.sqldelight.coroutines)
     implementation(libs.sqldelight.primitives.adapter)
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)

@@ -17,9 +17,9 @@ class RevoltUserMapper @Inject constructor(
     private val profileMapper: RevoltProfileMapper
 ) {
 
-    fun mapApiToEntity(apiModel: RevoltUserApiModel): UserEntityCollection {
+    fun mapApiToEntity(apiModel: RevoltUserApiModel, isCurrentUser: Boolean): UserEntityCollection {
         return UserEntityCollection(
-            userEntity = apiModel.toUserEntity(),
+            userEntity = apiModel.toUserEntity(isCurrentUser),
             avatarEntity = apiModel.toFileEntity(),
             profileEntity = apiModel.toProfileEntity(),
             relationsEntity = apiModel.toRelationEntity(),
@@ -62,7 +62,7 @@ class RevoltUserMapper @Inject constructor(
         )
     }
 
-    private fun RevoltUserApiModel.toUserEntity() = UserEntity(
+    private fun RevoltUserApiModel.toUserEntity(isCurrentUser: Boolean) = UserEntity(
         id = id,
         username = username,
         discriminator = discriminator,
@@ -74,7 +74,8 @@ class RevoltUserMapper @Inject constructor(
         flags = flags,
         privileged = privileged,
         relationship = relationship?.name,
-        online = online
+        online = online,
+        is_current_user = isCurrentUser
     )
 
 

@@ -1,11 +1,9 @@
 package ge.ted3x.revolt.feature.settings.impl.ui.screens.root
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavBackStackEntry
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ge.ted3x.revolt.core.arch.RevoltViewModel
-import ge.ted3x.revolt.core.domain.user.RevoltUserRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,24 +15,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingsRootViewModel @Inject constructor(
-    savedStateHandler: SavedStateHandle,
-    private val userRepository: RevoltUserRepository
+    savedStateHandler: SavedStateHandle
 ) : RevoltViewModel(savedStateHandler) {
 
     val state: StateFlow<SettingsRootUiState> get() = _state
     private val _state = MutableStateFlow(SettingsRootUiState())
-
-    init {
-        viewModelScope.launch {
-            val user = userRepository.getSelf()
-            _state.update { it.copy(
-                username = user.username,
-                discriminator = user.discriminator,
-                profileImage = user.avatar?.url,
-                status = user.status?.text ?: ""
-            ) }
-        }
-    }
 
     fun observeBackstack(backstackEntry: StateFlow<List<NavBackStackEntry>>) {
         CoroutineScope(Dispatchers.Default).launch {

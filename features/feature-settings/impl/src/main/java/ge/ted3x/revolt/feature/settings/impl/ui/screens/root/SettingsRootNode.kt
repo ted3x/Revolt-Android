@@ -106,8 +106,7 @@ fun SettingsRootScreen(
             viewModel.observeBackstack(navController.currentBackStack)
             composable(SettingsMainScreenDestination) {
                 SettingsMainScreen(
-                    navigator = destinationsNavigator(navController),
-                    viewModel = viewModel
+                    navigator = destinationsNavigator(navController)
                 )
             }
             composable(SettingsAccountScreenDestination) {
