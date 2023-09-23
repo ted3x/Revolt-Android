@@ -1,51 +1,32 @@
 package ge.ted3x.revolt.core.data
 
 import app.revolt.RevoltApi
+import app.revolt.model.user.RevoltUserApiModel
+import ge.ted3x.core.database.RevoltFileQueries
 import ge.ted3x.core.database.RevoltUserQueries
-import ge.ted3x.revolt.AvatarEntity
 import ge.ted3x.revolt.UserEntity
+import ge.ted3x.revolt.core.data.mapper.RevoltFileMapper
+import ge.ted3x.revolt.core.data.mapper.RevoltUserMapper
+import ge.ted3x.revolt.core.domain.models.RevoltUser
 import ge.ted3x.revolt.core.domain.user.RevoltUserRepository
 import javax.inject.Inject
 
 class RevoltUserRepositoryImpl @Inject constructor(
     private val revoltApi: RevoltApi,
-    private val userQueries: RevoltUserQueries
+    private val userQueries: RevoltUserQueries,
+    private val fileQueries: RevoltFileQueries,
+    private val fileMapper: RevoltFileMapper,
+    private val userMapper: RevoltUserMapper
 ) : RevoltUserRepository {
-    override suspend fun getUser() {
+
+    override suspend fun getSelf(): RevoltUser {
         val user = revoltApi.users.fetchSelf()
-        userQueries.insertUser(with(user) {
-            UserEntity(
-                id = id,
-                username = username,
-                discriminator = discriminator,
-                display_name = displayName,
-                badges = badges,
-                status_text = status?.text,
-                status_presence = status?.presence?.name,
-                flags = flags,
-                privileged = privileged,
-                relationship = relationship?.name,
-                online = online
-            )
-        })
-        user.avatar?.let { avatar ->
-            userQueries.insertAvatar(with(avatar) {
-                AvatarEntity(
-                    id = id,
-                    tag = tag,
-                    filename = filename,
-                    metadata_type = metadata.javaClass.simpleName,
-                    content_type = contentType,
-                    size = size,
-                    deleted = deleted,
-                    reported = reported,
-                    message_id = messageId,
-                    user_id = userId,
-                    server_id = serverId,
-                    object_id = objectId
-                )
-            })
-        }
+        return updateAndGetUser(user)
+    }
+
+    override suspend fun getUser(userId: String): RevoltUser {
+        val user = revoltApi.users.fetchUser(userId)
+        return updateAndGetUser(user)
     }
 
     override suspend fun editUser() {
@@ -66,5 +47,23 @@ class RevoltUserRepositoryImpl @Inject constructor(
 
     override suspend fun fetchUserProfile() {
         TODO("Not yet implemented")
+    }
+
+    private fun updateAndGetUser(user: RevoltUserApiModel): RevoltUser {
+        val userId = user.id
+        userQueries.insertUser(userMapper.mapApiToEntity(user).userEntity)
+        user.avatar?.let { avatar ->
+            val fileEntity = fileMapper.mapApiToEntity(avatar)
+            fileQueries.insertFile(fileEntity)
+        }
+        val userEntity = userQueries.getUser(userId)
+        val profile = userQueries.getProfile(userId)
+        return userMapper.mapEntityToDomain(
+            userEntity = userEntity,
+            avatarEntity = userEntity.avatar_id?.let { fileQueries.getFile(it) },
+            profileEntity = profile,
+            backgroundEntity = profile?.background_id?.let { fileQueries.getFile(it) },
+            relationsEntity = userQueries.getRelations(userId),
+            botEntity = userQueries.getBot(userId))
     }
 }

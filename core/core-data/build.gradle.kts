@@ -12,6 +12,7 @@ dependencies {
     implementation(project(":core:core-domain"))
     implementation(project(":core:core-database"))
     implementation(libs.revolt.api)
+    implementation(libs.androidx.security.crypto)
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     ksp(libs.compose.destinations.ksp)

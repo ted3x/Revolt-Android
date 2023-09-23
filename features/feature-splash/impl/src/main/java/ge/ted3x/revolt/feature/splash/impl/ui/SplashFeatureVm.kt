@@ -20,9 +20,9 @@ class SplashFeatureVm @Inject constructor(
 
     init {
         viewModelScope.launch {
-            userRepository.getUser()
-            delay(1500L) // for now let's imitate some network work
-            navigator.newRoot(SettingsFeatureScreen)
+            userRepository.getSelf()
+//            delay(1500L) // for now let's imitate some network work
+//            navigator.newRoot(SettingsFeatureScreen)
         }
     }
 }

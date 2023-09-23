@@ -1,19 +1,32 @@
 package ge.ted3x.core.database
 
-import ge.ted3x.revolt.AvatarEntity
+import ge.ted3x.revolt.BotEntity
+import ge.ted3x.revolt.ProfileEntity
+import ge.ted3x.revolt.RelationEntity
 import ge.ted3x.revolt.RevoltDatabase
 import ge.ted3x.revolt.UserEntity
 import javax.inject.Inject
-import kotlin.random.Random
 
 class RevoltUserQueries @Inject constructor(private val database: RevoltDatabase) {
 
-    fun insertUser( user: UserEntity) {
+    fun insertUser(user: UserEntity) {
         database.revoltUserQueries.insertUser(user)
     }
 
-    fun insertAvatar(avatarEntity: AvatarEntity) {
-        database.revoltUserQueries.insertAvatar(avatarEntity)
+    fun getUser(userId: String): UserEntity {
+        return database.revoltUserQueries.selectUserById(userId).executeAsOne()
+    }
+
+    fun getProfile(userId: String): ProfileEntity? {
+        return database.revoltUserQueries.selectProfileByUserId(userId).executeAsOneOrNull()
+    }
+
+    fun getBot(userId: String): BotEntity? {
+        return database.revoltUserQueries.selectBotByUserId(userId).executeAsOneOrNull()
+    }
+
+    fun getRelations(userId: String): List<RelationEntity> {
+        return database.revoltUserQueries.selectRelationByUserId(userId).executeAsList()
     }
 //
 //    fun generateRandomUser(): UserEntity {

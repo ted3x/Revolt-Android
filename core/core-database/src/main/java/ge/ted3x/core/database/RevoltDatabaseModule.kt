@@ -9,7 +9,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import ge.ted3x.revolt.AvatarEntity
+import ge.ted3x.revolt.FileEntity
 import ge.ted3x.revolt.RevoltDatabase
 import ge.ted3x.revolt.UserEntity
 
@@ -42,7 +42,11 @@ object RevoltDatabaseModule {
     fun provideRevoltDatabase(driver: AndroidSqliteDriver): RevoltDatabase {
         return RevoltDatabase(
             driver,
-            AvatarEntityAdapter = AvatarEntity.Adapter(sizeAdapter = IntColumnAdapter),
+            FileEntityAdapter = FileEntity.Adapter(
+                sizeAdapter = IntColumnAdapter,
+                metadata_heightAdapter = IntColumnAdapter,
+                metadata_widthAdapter = IntColumnAdapter
+            ),
             UserEntityAdapter = UserEntity.Adapter(
                 badgesAdapter = IntColumnAdapter,
                 flagsAdapter = IntColumnAdapter

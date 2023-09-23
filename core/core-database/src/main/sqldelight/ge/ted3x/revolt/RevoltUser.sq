@@ -6,6 +6,7 @@ CREATE TABLE UserEntity (
     username TEXT NOT NULL,
     discriminator TEXT NOT NULL,
     display_name TEXT,
+    avatar_id TEXT REFERENCES FileEntity(id),
     badges INTEGER AS Int,
     status_text TEXT,
     status_presence TEXT,
@@ -13,21 +14,6 @@ CREATE TABLE UserEntity (
     privileged INTEGER AS Boolean,
     relationship TEXT,
     online INTEGER AS Boolean
-);
-
-CREATE TABLE AvatarEntity (
-    id TEXT PRIMARY KEY NOT NULL ,
-    tag TEXT NOT NULL,
-    filename TEXT NOT NULL,
-    metadata_type TEXT NOT NULL,
-    content_type TEXT NOT NULL,
-    size INTEGER AS Int NOT NULL,
-    deleted INTEGER AS Boolean,
-    reported INTEGER AS Boolean,
-    message_id TEXT,
-    user_id TEXT REFERENCES UserEntity(id),
-    server_id TEXT,
-    object_id TEXT
 );
 
 CREATE TABLE RelationEntity (
@@ -38,7 +24,7 @@ CREATE TABLE RelationEntity (
 
 CREATE TABLE ProfileEntity (
     content TEXT,
-    background_id TEXT REFERENCES AvatarEntity(id),
+    background_id TEXT REFERENCES FileEntity(id),
     user_id TEXT NOT NULL REFERENCES UserEntity(id)
 );
 
@@ -48,21 +34,29 @@ CREATE TABLE BotEntity (
 );
 
 insertUser:
-INSERT OR REPLACE INTO UserEntity (id, username, discriminator, display_name, badges, status_text, status_presence, flags, privileged, relationship, online)
+INSERT OR REPLACE INTO UserEntity (id, username, discriminator, display_name, avatar_id, badges, status_text, status_presence, flags, privileged, relationship, online)
 VALUES ?;
 
-insertAvatar:
-INSERT OR REPLACE INTO AvatarEntity (id, tag, filename, metadata_type, content_type, size, deleted, reported, message_id, user_id, server_id, object_id)
-VALUES ?;
+selectUserById:
+SELECT * FROM UserEntity WHERE id = ?;
 
 inserRelation:
 INSERT OR REPLACE INTO RelationEntity (id, status, user_id)
 VALUES ?;
 
+selectRelationByUserId:
+SELECT * FROM RelationEntity WHERE user_id = ?;
+
 insertProfile:
 INSERT OR REPLACE INTO ProfileEntity (content, background_id, user_id)
 VALUES ?;
 
+selectProfileByUserId:
+SELECT * FROM ProfileEntity WHERE user_id = ?;
+
 insertBot:
 INSERT OR REPLACE INTO BotEntity (owner, user_id)
 VALUES ?;
+
+selectBotByUserId:
+SELECT * FROM BotEntity WHERE user_id = ?;

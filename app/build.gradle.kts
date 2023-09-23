@@ -58,6 +58,7 @@ dependencies {
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
     implementation(libs.revolt.api)
+    implementation(libs.androidx.security.crypto)
     implementation(libs.compose.destinations.core)
     ksp(libs.compose.destinations.ksp)
     implementation(libs.hilt.android)
