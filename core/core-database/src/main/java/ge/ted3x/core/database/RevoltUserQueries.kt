@@ -38,8 +38,8 @@ class RevoltUserQueries @Inject constructor(private val database: RevoltDatabase
         return database.revoltUserQueries.selectRelationByUserId(userId).executeAsList()
     }
 
-    fun updateUsername(userId: String, username: String) {
-        database.revoltUserQueries.updateUsername(username, userId)
+    fun updateUsername(username: String) {
+        database.revoltUserQueries.updateUsername(username)
     }
 
 }

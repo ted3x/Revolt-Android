@@ -4,6 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ge.ted3x.revolt.core.arch.RevoltViewModel
+import ge.ted3x.revolt.core.domain.models.account.request.RevoltChangeEmailRequest
+import ge.ted3x.revolt.core.domain.user.RevoltAccountRepository
 import ge.ted3x.revolt.core.domain.user.RevoltUserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,7 +18,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingsAccountViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val userRepository: RevoltUserRepository
+    private val userRepository: RevoltUserRepository,
+    private val accountRepository: RevoltAccountRepository
 ) : RevoltViewModel(savedStateHandle) {
 
     val state: StateFlow<SettingsAccountUiState> get() = _state
@@ -37,9 +40,15 @@ class SettingsAccountViewModel @Inject constructor(
         }
     }
 
-    fun updateUsername() {
+    fun updateUsername(username: String, password: String) {
         viewModelScope.launch {
-            userRepository.changeUsername(state.value.userId, "gela")
+            userRepository.changeUsername(username, password)
+        }
+    }
+
+    fun changeEmail(email: String, password: String) {
+        viewModelScope.launch {
+            accountRepository.changeEmail(RevoltChangeEmailRequest(email, password))
         }
     }
 }

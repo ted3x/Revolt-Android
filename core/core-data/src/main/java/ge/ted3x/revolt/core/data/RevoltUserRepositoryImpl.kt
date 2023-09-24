@@ -2,6 +2,7 @@ package ge.ted3x.revolt.core.data
 
 import app.revolt.RevoltApi
 import app.revolt.model.user.RevoltUserApiModel
+import app.revolt.model.user.RevoltUserChangeUsernameApiRequest
 import ge.ted3x.core.database.RevoltFileQueries
 import ge.ted3x.core.database.RevoltUserQueries
 import ge.ted3x.revolt.core.data.mapper.RevoltFileMapper
@@ -57,8 +58,9 @@ class RevoltUserRepositoryImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override suspend fun changeUsername(userId: String, username: String) {
-        userQueries.updateUsername(userId = userId, username = username)
+    override suspend fun changeUsername(username: String, password: String) {
+        revoltApi.users.changeUsername(RevoltUserChangeUsernameApiRequest(username, password))
+        userQueries.updateUsername(username)
     }
 
     override suspend fun fetchDefaultAvatar() {

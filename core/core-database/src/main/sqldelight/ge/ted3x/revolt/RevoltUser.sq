@@ -52,7 +52,7 @@ INSERT OR REPLACE INTO UserEntity (
 ) VALUES ?;
 
 updateUsername:
-UPDATE UserEntity SET username = ? WHERE id = ?;
+UPDATE UserEntity SET username = ? WHERE is_current_user = 1;
 
 selectUserById:
 SELECT * FROM UserEntity WHERE id = ?;

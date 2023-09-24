@@ -42,7 +42,12 @@ fun SettingsAccountScreen(
         openChangeUsernameDialog.value -> {
             ChangeUsernameDialog(
                 onDismissRequest = { openChangeUsernameDialog.value = false },
-                onConfirmation = { viewModel.updateUsername() }
+                onConfirmation = { username, password ->
+                    viewModel.updateUsername(
+                        username,
+                        password
+                    )
+                }
             )
         }
 
@@ -63,7 +68,9 @@ fun SettingsAccountScreen(
     Column(modifier = modifier) {
         Row {
             AsyncImage(
-                model = uiState.value.imageUrl, contentDescription = "profile image", modifier = Modifier
+                model = uiState.value.imageUrl,
+                contentDescription = "profile image",
+                modifier = Modifier
                     .clip(
                         CircleShape
                     )
@@ -125,13 +132,16 @@ private fun ActionButton(
 }
 
 @Composable
-fun ChangeUsernameDialog(onDismissRequest: () -> Unit, onConfirmation: () -> Unit) {
+fun ChangeUsernameDialog(
+    onDismissRequest: () -> Unit,
+    onConfirmation: (username: String, password: String) -> Unit
+) {
+    val usernameValue = remember { mutableStateOf("") }
+    val passwordValue = remember { mutableStateOf("") }
     RevoltDialog(
         onDismissRequest = onDismissRequest,
-        onConfirmation = onConfirmation,
+        onConfirmation = { onConfirmation.invoke(usernameValue.value, passwordValue.value) },
         content = {
-            val usernameValue = remember { mutableStateOf("") }
-            val passwordValue = remember { mutableStateOf("") }
             RevoltTextField(
                 modifier = Modifier.fillMaxWidth(),
                 onValueChange = { usernameValue.value = it },
