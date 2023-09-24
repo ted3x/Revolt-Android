@@ -51,6 +51,9 @@ INSERT OR REPLACE INTO UserEntity (
     is_current_user
 ) VALUES ?;
 
+updateUsername:
+UPDATE UserEntity SET username = ? WHERE id = ?;
+
 selectUserById:
 SELECT * FROM UserEntity WHERE id = ?;
 

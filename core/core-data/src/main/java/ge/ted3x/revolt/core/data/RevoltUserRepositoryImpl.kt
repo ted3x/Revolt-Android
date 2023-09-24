@@ -57,8 +57,8 @@ class RevoltUserRepositoryImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override suspend fun changeUsername() {
-        TODO("Not yet implemented")
+    override suspend fun changeUsername(userId: String, username: String) {
+        userQueries.updateUsername(userId = userId, username = username)
     }
 
     override suspend fun fetchDefaultAvatar() {

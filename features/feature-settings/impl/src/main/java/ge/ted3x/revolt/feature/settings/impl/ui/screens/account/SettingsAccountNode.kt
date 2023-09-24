@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -18,16 +19,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.ramcosta.composedestinations.annotation.Destination
 import ge.ted3x.revolt.core.designsystem.dialog.RevoltDialog
-import ge.ted3x.revolt.core.designsystem.profile.image
 import ge.ted3x.revolt.core.designsystem.textfield.RevoltTextField
 import ge.ted3x.revolt.feature.settings.impl.R
 
 @Destination
 @Composable
-fun SettingsAccountScreen(modifier: Modifier = Modifier) {
+fun SettingsAccountScreen(
+    modifier: Modifier = Modifier,
+    viewModel: SettingsAccountViewModel = hiltViewModel()
+) {
+    val uiState = viewModel.state.collectAsState()
+    val usernameWithDiscriminator = "${uiState.value.username}#${uiState.value.discriminator}"
     val openChangeUsernameDialog = remember { mutableStateOf(false) }
     val openChangeEmailDialog = remember { mutableStateOf(false) }
     val openChangePasswordDialog = remember { mutableStateOf(false) }
@@ -36,7 +42,7 @@ fun SettingsAccountScreen(modifier: Modifier = Modifier) {
         openChangeUsernameDialog.value -> {
             ChangeUsernameDialog(
                 onDismissRequest = { openChangeUsernameDialog.value = false },
-                onConfirmation = {}
+                onConfirmation = { viewModel.updateUsername() }
             )
         }
 
@@ -57,20 +63,20 @@ fun SettingsAccountScreen(modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
         Row {
             AsyncImage(
-                model = image, contentDescription = "profile image", modifier = Modifier
+                model = uiState.value.imageUrl, contentDescription = "profile image", modifier = Modifier
                     .clip(
                         CircleShape
                     )
                     .size(128.dp)
             )
             Column {
-                Text(text = "ted3x#7383")
-                Text(text = "Unique identificator")
+                Text(text = usernameWithDiscriminator)
+                Text(text = uiState.value.userId)
             }
         }
         ActionButton(
             title = "username",
-            value = "ted3x",
+            value = usernameWithDiscriminator,
             icon = painterResource(id = R.drawable.ic_tag)
         ) {
             openChangeUsernameDialog.value = true

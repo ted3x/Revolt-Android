@@ -10,7 +10,7 @@ interface RevoltUserRepository {
     suspend fun getUser(userId: String): RevoltUser
     suspend fun editUser()
     suspend fun fetchUserFlags()
-    suspend fun changeUsername()
+    suspend fun changeUsername(userId: String, username: String)
     suspend fun fetchDefaultAvatar()
     suspend fun fetchUserProfile()
 }
