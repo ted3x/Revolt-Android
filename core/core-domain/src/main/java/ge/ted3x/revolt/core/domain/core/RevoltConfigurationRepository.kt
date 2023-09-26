@@ -8,5 +8,5 @@ interface RevoltConfigurationRepository {
 
     suspend fun getConfiguration(): RevoltConfiguration
 
-    suspend fun getAvatarBaseUrl(): String
+    suspend fun getFileUrlWithDomain(domain: RevoltFileDomain): String
 }

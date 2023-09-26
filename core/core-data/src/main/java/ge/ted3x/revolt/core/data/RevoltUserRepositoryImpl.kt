@@ -8,6 +8,7 @@ import ge.ted3x.core.database.RevoltUserQueries
 import ge.ted3x.revolt.core.data.mapper.RevoltFileMapper
 import ge.ted3x.revolt.core.data.mapper.RevoltUserMapper
 import ge.ted3x.revolt.core.domain.core.RevoltConfigurationRepository
+import ge.ted3x.revolt.core.domain.core.RevoltFileDomain
 import ge.ted3x.revolt.core.domain.models.RevoltUser
 import ge.ted3x.revolt.core.domain.user.RevoltUserRepository
 import kotlinx.coroutines.flow.Flow
@@ -24,18 +25,18 @@ class RevoltUserRepositoryImpl @Inject constructor(
 ) : RevoltUserRepository {
 
     override suspend fun observeSelf(): Flow<RevoltUser> {
-        val avatarBaseUrl = configurationRepository.getAvatarBaseUrl()
+        val avatarBaseUrl = configurationRepository.getFileUrlWithDomain(RevoltFileDomain.Avatar)
+        val backgroundBaseUrl =
+            configurationRepository.getFileUrlWithDomain(RevoltFileDomain.Background)
         return userQueries.getUserObservable()
             .mapLatest { userEntity ->
-                val profile = userQueries.getProfile(userEntity.id)
                 userMapper.mapEntityToDomain(
-                    autumnUrl = avatarBaseUrl,
+                    avatarBaseUrl = avatarBaseUrl,
+                    backgroundBaseUrl = backgroundBaseUrl,
                     userEntity = userEntity,
                     avatarEntity = userEntity.avatar_id?.let { fileQueries.getFile(it) },
-                    profileEntity = profile,
-                    backgroundEntity = profile?.background_id?.let { fileQueries.getFile(it) },
+                    backgroundEntity = userEntity.profile_background_id?.let { fileQueries.getFile(it) },
                     relationsEntity = userQueries.getRelations(userEntity.id),
-                    botEntity = userQueries.getBot(userEntity.id)
                 )
             }
     }
@@ -81,16 +82,21 @@ class RevoltUserRepositoryImpl @Inject constructor(
             val fileEntity = fileMapper.mapApiToEntity(avatar)
             fileQueries.insertFile(fileEntity)
         }
+        user.profile?.background?.let { background ->
+            val fileEntity = fileMapper.mapApiToEntity(background)
+            fileQueries.insertFile(fileEntity)
+        }
         val userEntity = userQueries.getUser(userId)
-        val profile = userQueries.getProfile(userId)
+        val avatarBaseUrl = configurationRepository.getFileUrlWithDomain(RevoltFileDomain.Avatar)
+        val backgroundBaseUrl =
+            configurationRepository.getFileUrlWithDomain(RevoltFileDomain.Background)
         return userMapper.mapEntityToDomain(
-            autumnUrl = configurationRepository.getAvatarBaseUrl(),
+            avatarBaseUrl = avatarBaseUrl,
+            backgroundBaseUrl = backgroundBaseUrl,
             userEntity = userEntity,
             avatarEntity = userEntity.avatar_id?.let { fileQueries.getFile(it) },
-            profileEntity = profile,
-            backgroundEntity = profile?.background_id?.let { fileQueries.getFile(it) },
-            relationsEntity = userQueries.getRelations(userId),
-            botEntity = userQueries.getBot(userId)
+            backgroundEntity = userEntity.profile_background_id?.let { fileQueries.getFile(it) },
+            relationsEntity = userQueries.getRelations(userId)
         )
     }
 }

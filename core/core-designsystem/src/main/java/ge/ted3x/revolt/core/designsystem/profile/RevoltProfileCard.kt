@@ -32,12 +32,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 
-val image = "https://i.kym-cdn.com/entries/icons/original/000/013/564/doge.jpg"
-
 @Composable
 fun RevoltProfileCard(
     onAddClick: () -> Unit,
     onTabClick: (RevoltProfileTab) -> Unit,
+    data: RevoltProfileData,
     selectedTab: RevoltProfileTab,
     tabs: List<RevoltProfileTab>,
     modifier: Modifier = Modifier,
@@ -53,7 +52,7 @@ fun RevoltProfileCard(
             ) {
                 AsyncImage(
                     modifier = Modifier.matchParentSize(),
-                    model = image,
+                    model = data.backgroundUrl,
                     contentDescription = "background image",
                     contentScale = ContentScale.Crop
                 )
@@ -72,15 +71,15 @@ fun RevoltProfileCard(
                             modifier = Modifier
                                 .clip(CircleShape)
                                 .size(96.dp),
-                            model = image,
+                            model = data.avatarUrl,
                             contentDescription = "profile image",
                             contentScale = ContentScale.Crop
                         )
                         Spacer(modifier = Modifier.padding(8.dp))
                         Column {
-                            Text(text = "Ted3x")
-                            Text(text = "ted3x#7378")
-                            Text(text = "Custom status message")
+                            Text(text = data.username)
+                            Text(text = data.usernameWithDiscriminator)
+                            Text(text = data.statusMessage)
                         }
                         Spacer(modifier = Modifier.weight(1f))
                         IconButton(onClick = onAddClick) {
@@ -143,6 +142,16 @@ private fun ProfileTabButton(
             )
         }
     }
+}
+
+data class RevoltProfileData(
+    val username: String,
+    val discriminator: String,
+    val statusMessage: String,
+    val avatarUrl: String?,
+    val backgroundUrl: String?
+) {
+    val usernameWithDiscriminator = "$username#$discriminator"
 }
 
 interface RevoltProfileTab {

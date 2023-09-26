@@ -10,8 +10,11 @@ CREATE TABLE UserEntity (
     badges INTEGER AS Int,
     status_text TEXT,
     status_presence TEXT,
+    profile_content TEXT,
+    profile_background_id TEXT REFERENCES FileEntity(id),
     flags INTEGER AS Int,
     privileged INTEGER AS Boolean,
+    owner TEXT,
     relationship TEXT,
     online INTEGER AS Boolean,
     is_current_user INTEGER AS Boolean NOT NULL
@@ -21,17 +24,6 @@ CREATE TABLE RelationEntity (
     id TEXT PRIMARY KEY NOT NULL,
     status TEXT NOT NULL,
     user_id TEXT NOT NULL REFERENCES UserEntity(id)
-);
-
-CREATE TABLE ProfileEntity (
-    content TEXT,
-    background_id TEXT REFERENCES FileEntity(id),
-    user_id TEXT NOT NULL REFERENCES UserEntity(id)
-);
-
-CREATE TABLE BotEntity (
-    owner TEXT NOT NULL,
-    user_id TEXT PRIMARY KEY REFERENCES UserEntity(id)
 );
 
 insertUser:
@@ -44,8 +36,11 @@ INSERT OR REPLACE INTO UserEntity (
     badges,
     status_text,
     status_presence,
+    profile_content,
+    profile_background_id,
     flags,
     privileged,
+    owner,
     relationship,
     online,
     is_current_user
@@ -58,31 +53,15 @@ selectUserById:
 SELECT * FROM UserEntity WHERE id = ?;
 
 selectCurrentUser:
-SELECT * FROM UserEntity WHERE is_current_user = 1;
+SELECT UserEntity.*
+FROM UserEntity
+LEFT JOIN RelationEntity ON UserEntity.id = RelationEntity.user_id
+WHERE UserEntity.is_current_user = 1;
+
 
 inserRelation:
 INSERT OR REPLACE INTO RelationEntity (id, status, user_id)
 VALUES ?;
 
-selectRelationByUserId:
+selectRelationsByUserId:
 SELECT * FROM RelationEntity WHERE user_id = ?;
-
-insertProfile:
-INSERT OR REPLACE INTO ProfileEntity (content, background_id, user_id)
-VALUES ?;
-
-selectProfileByUserId:
-SELECT * FROM ProfileEntity WHERE user_id = ?;
-
-updateProfileByUserId:
-UPDATE ProfileEntity SET content = ?, background_id = ? WHERE user_id = ?;
-
-deleteProfileByUserId:
-DELETE FROM ProfileEntity WHERE user_id = ?;
-
-insertBot:
-INSERT OR REPLACE INTO BotEntity (owner, user_id)
-VALUES ?;
-
-selectBotByUserId:
-SELECT * FROM BotEntity WHERE user_id = ?;

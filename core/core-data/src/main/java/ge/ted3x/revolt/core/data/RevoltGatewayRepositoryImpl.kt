@@ -2,10 +2,16 @@ package ge.ted3x.revolt.core.data
 
 import android.util.Log
 import app.revolt.RevoltApi
+import app.revolt.model.general.RevoltFileApiModel
 import app.revolt.websocket.client.RevoltClientApiEvent
 import app.revolt.websocket.server.RevoltServerApiEvent
+import app.revolt.websocket.server.RevoltServerApiEvent.UserUpdate.Field.Avatar
+import app.revolt.websocket.server.RevoltServerApiEvent.UserUpdate.Field.ProfileBackground
+import app.revolt.websocket.server.RevoltServerApiEvent.UserUpdate.Field.ProfileContent
+import app.revolt.websocket.server.RevoltServerApiEvent.UserUpdate.Field.StatusText
 import ge.ted3x.core.database.RevoltFileQueries
 import ge.ted3x.core.database.RevoltUserQueries
+import ge.ted3x.revolt.core.data.mapper.RevoltFileMapper
 import ge.ted3x.revolt.core.domain.core.RevoltConfigurationRepository
 import ge.ted3x.revolt.core.domain.user.RevoltGatewayRepository
 import ge.ted3x.revolt.core.domain.user.RevoltUserRepository
@@ -24,7 +30,8 @@ class RevoltGatewayRepositoryImpl @Inject constructor(
     private val fileQueries: RevoltFileQueries,
     private val userRepository: RevoltUserRepository,
     private val tokenRepository: RevoltUserTokenRepository,
-    private val configurationRepository: RevoltConfigurationRepository
+    private val configurationRepository: RevoltConfigurationRepository,
+    private val fileMapper: RevoltFileMapper
 ) : RevoltGatewayRepository {
     override suspend fun initialize() {
         revoltApi.ws.initialize(configurationRepository.getConfiguration().ws)
@@ -56,37 +63,44 @@ class RevoltGatewayRepositoryImpl @Inject constructor(
         val userId = event.id
         val updatedUser = event.data
         val userEntity = userQueries.getUserOrNull(userId) ?: return
-        val profileEntity = userQueries.getProfile(userId)
-        var updatedUserEntity = userEntity.copy(
+        val updatedUserEntity = userEntity.copy(
             username = updatedUser.username ?: userEntity.username,
             discriminator = updatedUser.discriminator ?: userEntity.discriminator,
             display_name = updatedUser.displayName ?: userEntity.display_name,
-            avatar_id = updatedUser.avatar?.id ?: userEntity.avatar_id,
+            avatar_id = if (event.clear.contains(Avatar)) {
+                userEntity.avatar_id?.let { fileQueries.deleteFile(it) }
+                null
+            } else updatedUser.avatar?.id ?: userEntity.avatar_id,
             badges = updatedUser.badges ?: userEntity.badges,
-            status_text = updatedUser.status?.text ?: userEntity.status_text,
+            status_text = if (event.clear.contains(StatusText)) null else updatedUser.status?.text
+                ?: userEntity.status_text,
             status_presence = updatedUser.status?.presence?.name ?: userEntity.status_presence,
+            profile_content = if (event.clear.contains(ProfileContent)) {
+                null
+            } else {
+                updatedUser.profile?.content ?: userEntity.profile_content
+            },
+            profile_background_id = if (event.clear.contains(ProfileBackground)) {
+                userEntity.profile_background_id?.let { fileQueries.deleteFile(it) }
+                null
+            } else {
+                updatedUser.profile?.background?.id ?: userEntity.profile_background_id
+            },
             flags = updatedUser.flags ?: userEntity.flags,
             privileged = updatedUser.privileged ?: userEntity.privileged,
             relationship = updatedUser.relationship?.name ?: userEntity.relationship,
             online = updatedUser.online ?: userEntity.online,
         )
-        event.clear.forEach { field ->
-            when (field) {
-                RevoltServerApiEvent.UserUpdate.Field.ProfileContent -> {
-                    userQueries.updateProfile(userId, null, profileEntity?.background_id)
-                }
-                RevoltServerApiEvent.UserUpdate.Field.ProfileBackground -> {
-                    userQueries.updateProfile(userId, profileEntity?.content, null)
-                }
-                RevoltServerApiEvent.UserUpdate.Field.StatusText -> {
-                    updatedUserEntity = updatedUserEntity.copy(status_presence = null)
-                }
-                RevoltServerApiEvent.UserUpdate.Field.Avatar -> {
-                    userEntity.avatar_id?.let { fileQueries.deleteFile(it) }
-                    updatedUserEntity = updatedUserEntity.copy(avatar_id = null)
-                }
-            }
-        }
+        shouldInsertNewFile(userEntity.profile_background_id, updatedUser.profile?.background)
+        shouldInsertNewFile(userEntity.avatar_id, updatedUser.avatar)
         userQueries.insertUser(updatedUserEntity)
+    }
+
+    private fun shouldInsertNewFile(oldValueId: String?, newValue: RevoltFileApiModel?) {
+        if(newValue != null && oldValueId != newValue.id) {
+            oldValueId?.let { fileQueries.deleteFile(it) }
+            val fileEntity = fileMapper.mapApiToEntity(newValue)
+            fileQueries.insertFile(fileEntity)
+        }
     }
 }

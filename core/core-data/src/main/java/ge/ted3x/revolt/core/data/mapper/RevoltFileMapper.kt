@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 class RevoltFileMapper @Inject constructor(){
 
-    fun mapEntityToDomain(autumnUrl: String, entityModel: FileEntity): RevoltFile {
+    fun mapEntityToDomain(baseUrl: String, entityModel: FileEntity): RevoltFile {
         return with(entityModel) {
             RevoltFile(
                 id = id,
@@ -25,7 +25,7 @@ class RevoltFileMapper @Inject constructor(){
                 userId = user_id,
                 serverId = server_id,
                 objectId = object_id,
-                url = "$autumnUrl$id"
+                url = "$baseUrl$id"
             )
         }
     }
