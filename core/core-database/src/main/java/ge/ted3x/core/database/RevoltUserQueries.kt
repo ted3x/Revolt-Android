@@ -26,8 +26,20 @@ class RevoltUserQueries @Inject constructor(private val database: RevoltDatabase
         return database.revoltUserQueries.selectUserById(userId).executeAsOne()
     }
 
+    fun getUserOrNull(userId: String): UserEntity? {
+        return database.revoltUserQueries.selectUserById(userId).executeAsOneOrNull()
+    }
+
     fun getProfile(userId: String): ProfileEntity? {
         return database.revoltUserQueries.selectProfileByUserId(userId).executeAsOneOrNull()
+    }
+
+    fun updateProfile(userId: String, content: String?, backgroundId: String?) {
+        database.revoltUserQueries.updateProfileByUserId(content, backgroundId, userId)
+    }
+
+    fun deleteProfile(userId: String) {
+        database.revoltUserQueries.deleteProfileByUserId(userId)
     }
 
     fun getBot(userId: String): BotEntity? {

@@ -12,12 +12,14 @@ import dagger.hilt.components.SingletonComponent
 import ge.ted3x.revolt.FileEntity
 import ge.ted3x.revolt.RevoltDatabase
 import ge.ted3x.revolt.UserEntity
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object RevoltDatabaseModule {
 
     @Provides
+    @Singleton
     fun provideSqliteDriver(@ApplicationContext context: Context): AndroidSqliteDriver {
         return AndroidSqliteDriver(
             schema = RevoltDatabase.Schema,
@@ -39,6 +41,7 @@ object RevoltDatabaseModule {
     }
 
     @Provides
+    @Singleton
     fun provideRevoltDatabase(driver: AndroidSqliteDriver): RevoltDatabase {
         return RevoltDatabase(
             driver,

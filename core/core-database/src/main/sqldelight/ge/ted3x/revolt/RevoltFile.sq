@@ -24,3 +24,6 @@ VALUES ?;
 
 selectFileById:
 SELECT * FROM FileEntity WHERE id = ?;
+
+deleteFileById:
+DELETE FROM FileEntity WHERE id = ?;

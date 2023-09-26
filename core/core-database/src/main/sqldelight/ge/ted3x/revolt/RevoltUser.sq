@@ -74,6 +74,12 @@ VALUES ?;
 selectProfileByUserId:
 SELECT * FROM ProfileEntity WHERE user_id = ?;
 
+updateProfileByUserId:
+UPDATE ProfileEntity SET content = ?, background_id = ? WHERE user_id = ?;
+
+deleteProfileByUserId:
+DELETE FROM ProfileEntity WHERE user_id = ?;
+
 insertBot:
 INSERT OR REPLACE INTO BotEntity (owner, user_id)
 VALUES ?;

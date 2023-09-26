@@ -13,4 +13,8 @@ class RevoltFileQueries @Inject constructor(private val database: RevoltDatabase
     fun getFile(fileId: String): FileEntity? {
         return database.revoltFileQueries.selectFileById(fileId).executeAsOneOrNull()
     }
+
+    fun deleteFile(fileId: String) {
+        return database.revoltFileQueries.deleteFileById(fileId)
+    }
 }
