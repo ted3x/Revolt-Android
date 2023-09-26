@@ -4,7 +4,7 @@ data class RevoltUser(
     val id: String,
     val username: String,
     val discriminator: String,
-    val displayName: String?,
+    val displayName: String,
     val avatar: RevoltFile?,
     val relations: List<Relationship>?,
     val badges: Int?,

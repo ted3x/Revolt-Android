@@ -29,6 +29,7 @@ class SettingsProfileViewModel @Inject constructor(
                 _state.update {
                     it.copy(
                         username = user.username,
+                        displayName = user.displayName,
                         discriminator = user.discriminator,
                         statusMessage = user.status?.text ?: "",
                         content = user.profile?.content ?: "",

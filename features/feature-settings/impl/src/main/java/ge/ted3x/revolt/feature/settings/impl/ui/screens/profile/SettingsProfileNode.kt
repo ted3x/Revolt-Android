@@ -32,6 +32,7 @@ fun SettingsProfileScreen(
         val uiState = viewModel.state.collectAsState()
         val profileData = RevoltProfileData(
             username = uiState.value.username,
+            displayName = uiState.value.displayName,
             discriminator = uiState.value.discriminator,
             statusMessage = uiState.value.statusMessage,
             avatarUrl = uiState.value.avatarUrl,

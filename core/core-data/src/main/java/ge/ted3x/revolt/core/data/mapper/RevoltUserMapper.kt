@@ -33,7 +33,7 @@ class RevoltUserMapper @Inject constructor(private val fileMapper: RevoltFileMap
             id = userEntity.id,
             username = userEntity.username,
             discriminator = userEntity.discriminator,
-            displayName = userEntity.display_name,
+            displayName = userEntity.display_name ?: userEntity.username,
             avatar = avatarEntity?.let { fileMapper.mapEntityToDomain(avatarBaseUrl, it) },
             relations = relationsEntity?.map { relation ->
                 RevoltUser.Relationship(

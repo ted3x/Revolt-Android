@@ -108,7 +108,7 @@ private fun Profile(uiState: State<SettingsMainUiState>) {
                     .clip(CircleShape)
             )
             Column {
-                Text(text = uiState.value.username)
+                Text(text = uiState.value.displayName)
                 Text(text = "${uiState.value.username}#${uiState.value.discriminator}")
                 Text(text = "Offline")
             }

@@ -59,7 +59,7 @@ fun RevoltProfileCard(
                 Box(
                     modifier = Modifier
                         .matchParentSize()
-                        .background(Color.Black.copy(alpha = 0.2f))
+                        .background(Color.Black.copy(alpha = 0.6f))
                 )
                 Column(
                     modifier = Modifier
@@ -77,9 +77,9 @@ fun RevoltProfileCard(
                         )
                         Spacer(modifier = Modifier.padding(8.dp))
                         Column {
-                            Text(text = data.username)
-                            Text(text = data.usernameWithDiscriminator)
-                            Text(text = data.statusMessage)
+                            Text(text = data.displayName, color = Color.White)
+                            Text(text = data.usernameWithDiscriminator, color = Color.LightGray)
+                            Text(text = data.statusMessage, color = Color.LightGray)
                         }
                         Spacer(modifier = Modifier.weight(1f))
                         IconButton(onClick = onAddClick) {
@@ -146,6 +146,7 @@ private fun ProfileTabButton(
 
 data class RevoltProfileData(
     val username: String,
+    val displayName: String,
     val discriminator: String,
     val statusMessage: String,
     val avatarUrl: String?,
