@@ -9,5 +9,6 @@ android {
 }
 
 dependencies {
-    ksp(libs.compose.destinations.ksp)
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
 }

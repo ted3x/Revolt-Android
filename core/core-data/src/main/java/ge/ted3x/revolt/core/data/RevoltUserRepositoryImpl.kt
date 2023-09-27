@@ -2,14 +2,17 @@ package ge.ted3x.revolt.core.data
 
 import app.revolt.RevoltApi
 import app.revolt.model.user.RevoltUserApiModel
-import app.revolt.model.user.RevoltUserChangeUsernameApiRequest
+import app.revolt.model.user.request.RevoltUserChangeUsernameApiRequest
+import app.revolt.model.user.request.RevoltUserEditApiRequest
 import ge.ted3x.core.database.RevoltFileQueries
 import ge.ted3x.core.database.RevoltUserQueries
 import ge.ted3x.revolt.core.data.mapper.RevoltFileMapper
 import ge.ted3x.revolt.core.data.mapper.RevoltUserMapper
+import ge.ted3x.revolt.core.data.mapper.RevoltUserStatusMapper
 import ge.ted3x.revolt.core.domain.core.RevoltConfigurationRepository
 import ge.ted3x.revolt.core.domain.core.RevoltFileDomain
 import ge.ted3x.revolt.core.domain.models.RevoltUser
+import ge.ted3x.revolt.core.domain.models.request.RevoltUserEditRequest
 import ge.ted3x.revolt.core.domain.user.RevoltUserRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.mapLatest
@@ -21,7 +24,8 @@ class RevoltUserRepositoryImpl @Inject constructor(
     private val userQueries: RevoltUserQueries,
     private val fileQueries: RevoltFileQueries,
     private val fileMapper: RevoltFileMapper,
-    private val userMapper: RevoltUserMapper
+    private val userMapper: RevoltUserMapper,
+    private val userStatusMapper: RevoltUserStatusMapper
 ) : RevoltUserRepository {
 
     override suspend fun observeSelf(): Flow<RevoltUser> {
@@ -35,7 +39,11 @@ class RevoltUserRepositoryImpl @Inject constructor(
                     backgroundBaseUrl = backgroundBaseUrl,
                     userEntity = userEntity,
                     avatarEntity = userEntity.avatar_id?.let { fileQueries.getFile(it) },
-                    backgroundEntity = userEntity.profile_background_id?.let { fileQueries.getFile(it) },
+                    backgroundEntity = userEntity.profile_background_id?.let {
+                        fileQueries.getFile(
+                            it
+                        )
+                    },
                     relationsEntity = userQueries.getRelations(userEntity.id),
                 )
             }
@@ -51,8 +59,33 @@ class RevoltUserRepositoryImpl @Inject constructor(
         return updateAndGetUser(user = user, isCurrentUser = false)
     }
 
-    override suspend fun editUser() {
-        TODO("Not yet implemented")
+    override suspend fun editUser(request: RevoltUserEditRequest) {
+        val currentUserId = userQueries.getCurrentUser().id
+        val removeListApi = request.remove?.map {
+            when(it) {
+                RevoltUserEditRequest.FieldsUser.Avatar -> RevoltUserEditApiRequest.FieldsUser.Avatar
+                RevoltUserEditRequest.FieldsUser.StatusText -> RevoltUserEditApiRequest.FieldsUser.StatusText
+                RevoltUserEditRequest.FieldsUser.StatusPresence -> RevoltUserEditApiRequest.FieldsUser.StatusPresence
+                RevoltUserEditRequest.FieldsUser.ProfileContent -> RevoltUserEditApiRequest.FieldsUser.ProfileContent
+                RevoltUserEditRequest.FieldsUser.ProfileBackground -> RevoltUserEditApiRequest.FieldsUser.ProfileBackground
+                RevoltUserEditRequest.FieldsUser.DisplayName -> RevoltUserEditApiRequest.FieldsUser.DisplayName
+            }
+        }
+        revoltApi.users.editUser(
+            currentUserId, with(request) {
+                RevoltUserEditApiRequest(
+                    displayName,
+                    avatarId,
+                    request.status?.let { userStatusMapper.mapDomainToApi(it) },
+                    RevoltUserEditApiRequest.Profile(request.profile?.content, request.profile?.background),
+                    badges,
+                    flags,
+                    removeListApi
+                )
+            }
+        )
+        // Current does not return anything because API does not fetch updated profile with UserEntity
+        // return updateAndGetUser(response, true)
     }
 
     override suspend fun fetchUserFlags() {

@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ge.ted3x.revolt.core.arch.RevoltViewModel
+import ge.ted3x.revolt.core.domain.interactor.RevoltUpdateUserBackgroundInteractor
 import ge.ted3x.revolt.core.domain.user.RevoltUserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,7 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingsProfileViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val userRepository: RevoltUserRepository
+    private val userRepository: RevoltUserRepository,
+    private val updateUserBackgroundInteractor: RevoltUpdateUserBackgroundInteractor
 ) :
     RevoltViewModel(savedStateHandle) {
 
@@ -38,6 +40,12 @@ class SettingsProfileViewModel @Inject constructor(
                     )
                 }
             }
+        }
+    }
+
+    fun onImageSelected(bytes: ByteArray) {
+        viewModelScope.launch {
+            updateUserBackgroundInteractor.execute(RevoltUpdateUserBackgroundInteractor.Input(bytes))
         }
     }
 }

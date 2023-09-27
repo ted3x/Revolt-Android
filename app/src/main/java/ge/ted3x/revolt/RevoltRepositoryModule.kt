@@ -11,11 +11,13 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import ge.ted3x.revolt.core.data.RevoltAccountRepositoryImpl
 import ge.ted3x.revolt.core.data.RevoltConfigurationRepositoryImpl
+import ge.ted3x.revolt.core.data.RevoltFileRepositoryImpl
 import ge.ted3x.revolt.core.data.RevoltGatewayRepositoryImpl
 import ge.ted3x.revolt.core.data.RevoltUserRepositoryImpl
 import ge.ted3x.revolt.core.data.RevoltUserTokenRepositoryImpl
 import ge.ted3x.revolt.core.domain.core.RevoltConfigurationRepository
 import ge.ted3x.revolt.core.domain.user.RevoltAccountRepository
+import ge.ted3x.revolt.core.domain.user.RevoltFileRepository
 import ge.ted3x.revolt.core.domain.user.RevoltGatewayRepository
 import ge.ted3x.revolt.core.domain.user.RevoltUserRepository
 import ge.ted3x.revolt.core.domain.user.RevoltUserTokenRepository
@@ -56,5 +58,9 @@ object RevoltRepositoryModule {
         @Binds
         @Singleton
         abstract fun bindsRevoltGatewayRepository(impl: RevoltGatewayRepositoryImpl): RevoltGatewayRepository
+
+        @Binds
+        @Singleton
+        abstract fun bindsFileRepository(impl: RevoltFileRepositoryImpl): RevoltFileRepository
     }
 }
