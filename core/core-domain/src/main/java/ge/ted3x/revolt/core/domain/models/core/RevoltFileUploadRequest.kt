@@ -1,9 +1,12 @@
 package ge.ted3x.revolt.core.domain.models.core
 
+import ge.ted3x.revolt.core.domain.core.RevoltFileDomain
+
 data class RevoltFileUploadRequest(
     val fileName: String,
     val bytes: ByteArray,
-    val contentType: ContentType
+    val contentType: ContentType,
+    val domain: RevoltFileDomain
 ) {
     enum class ContentType {
         JPEG,

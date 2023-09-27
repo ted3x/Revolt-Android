@@ -48,7 +48,6 @@ fun RevoltProfileCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
-                    .weight(1f, false)
             ) {
                 AsyncImage(
                     modifier = Modifier.matchParentSize(),

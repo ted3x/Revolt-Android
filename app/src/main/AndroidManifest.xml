@@ -19,6 +19,7 @@
         <activity
             android:name=".RevoltActivity"
             android:exported="true"
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/Theme.Revolt">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -60,9 +60,8 @@ class RevoltUserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun editUser(request: RevoltUserEditRequest) {
-        val currentUserId = userQueries.getCurrentUser().id
         val removeListApi = request.remove?.map {
-            when(it) {
+            when (it) {
                 RevoltUserEditRequest.FieldsUser.Avatar -> RevoltUserEditApiRequest.FieldsUser.Avatar
                 RevoltUserEditRequest.FieldsUser.StatusText -> RevoltUserEditApiRequest.FieldsUser.StatusText
                 RevoltUserEditRequest.FieldsUser.StatusPresence -> RevoltUserEditApiRequest.FieldsUser.StatusPresence
@@ -71,18 +70,22 @@ class RevoltUserRepositoryImpl @Inject constructor(
                 RevoltUserEditRequest.FieldsUser.DisplayName -> RevoltUserEditApiRequest.FieldsUser.DisplayName
             }
         }
-        revoltApi.users.editUser(
-            currentUserId, with(request) {
-                RevoltUserEditApiRequest(
-                    displayName,
-                    avatarId,
-                    request.status?.let { userStatusMapper.mapDomainToApi(it) },
-                    RevoltUserEditApiRequest.Profile(request.profile?.content, request.profile?.background),
-                    badges,
-                    flags,
-                    removeListApi
-                )
-            }
+        revoltApi.users.editUser(with(request) {
+            RevoltUserEditApiRequest(
+                displayName = displayName,
+                avatarId = avatarId,
+                status = request.status?.let { userStatusMapper.mapDomainToApi(it) },
+                profile = request.profile?.let {
+                    RevoltUserEditApiRequest.Profile(
+                        it.content,
+                        it.background
+                    )
+                },
+                badges = badges,
+                flags = flags,
+                remove = removeListApi
+            )
+        }
         )
         // Current does not return anything because API does not fetch updated profile with UserEntity
         // return updateAndGetUser(response, true)

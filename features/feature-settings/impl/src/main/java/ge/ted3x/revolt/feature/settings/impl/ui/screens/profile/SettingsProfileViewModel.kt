@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ge.ted3x.revolt.core.arch.RevoltViewModel
+import ge.ted3x.revolt.core.domain.core.RevoltFileDomain
 import ge.ted3x.revolt.core.domain.interactor.RevoltUpdateUserBackgroundInteractor
 import ge.ted3x.revolt.core.domain.models.request.RevoltUserEditRequest
 import ge.ted3x.revolt.core.domain.user.RevoltUserRepository
@@ -48,9 +49,9 @@ class SettingsProfileViewModel @Inject constructor(
         _state.update { it.copy(showChangeDisplayNameDialog = show) }
     }
 
-    fun onImageSelected(bytes: ByteArray) {
+    fun onImageSelected(bytes: ByteArray, fileDomain: RevoltFileDomain) {
         viewModelScope.launch {
-            updateUserBackgroundInteractor.execute(RevoltUpdateUserBackgroundInteractor.Input(bytes))
+            updateUserBackgroundInteractor.execute(RevoltUpdateUserBackgroundInteractor.Input(bytes, fileDomain))
         }
     }
 
@@ -58,6 +59,34 @@ class SettingsProfileViewModel @Inject constructor(
         viewModelScope.launch {
             userRepository.editUser(RevoltUserEditRequest(displayName = displayName))
             controlDisplayNameDialogVisibility(false)
+        }
+    }
+
+    fun updateProfileContent(value: String) {
+        viewModelScope.launch {
+            userRepository.editUser(
+                RevoltUserEditRequest(
+                    profile = RevoltUserEditRequest.Profile(
+                        content = value
+                    )
+                )
+            )
+        }
+    }
+
+    fun removeImage(domain: RevoltFileDomain) {
+        val request =
+            RevoltUserEditRequest(
+                remove = listOf(
+                    if (domain == RevoltFileDomain.Background) {
+                        RevoltUserEditRequest.FieldsUser.ProfileBackground
+                    } else {
+                        RevoltUserEditRequest.FieldsUser.Avatar
+                    }
+                )
+            )
+        viewModelScope.launch {
+            userRepository.editUser(request)
         }
     }
 }

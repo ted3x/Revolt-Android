@@ -15,7 +15,7 @@ class RevoltFileRepositoryImpl @Inject constructor(
     RevoltFileRepository {
     override suspend fun uploadFile(request: RevoltFileUploadRequest): RevoltFileUploadResponse {
         val apiResponse = revoltApi.fileApi.uploadFile(
-            url = configurationRepository.getConfiguration().features.autumn.url + "/backgrounds",
+            url = configurationRepository.getConfiguration().features.autumn.url + request.domain.withoutLastSlash(),
             RevoltFileUploadApiRequest(
                 fileName = request.fileName,
                 bytes = request.bytes,
