@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ge.ted3x.revolt.core.arch.RevoltViewModel
 import ge.ted3x.revolt.core.domain.interactor.RevoltUpdateUserBackgroundInteractor
+import ge.ted3x.revolt.core.domain.models.request.RevoltUserEditRequest
 import ge.ted3x.revolt.core.domain.user.RevoltUserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -43,9 +44,20 @@ class SettingsProfileViewModel @Inject constructor(
         }
     }
 
+    fun controlDisplayNameDialogVisibility(show: Boolean) {
+        _state.update { it.copy(showChangeDisplayNameDialog = show) }
+    }
+
     fun onImageSelected(bytes: ByteArray) {
         viewModelScope.launch {
             updateUserBackgroundInteractor.execute(RevoltUpdateUserBackgroundInteractor.Input(bytes))
+        }
+    }
+
+    fun changeDisplayName(displayName: String) {
+        viewModelScope.launch {
+            userRepository.editUser(RevoltUserEditRequest(displayName = displayName))
+            controlDisplayNameDialogVisibility(false)
         }
     }
 }

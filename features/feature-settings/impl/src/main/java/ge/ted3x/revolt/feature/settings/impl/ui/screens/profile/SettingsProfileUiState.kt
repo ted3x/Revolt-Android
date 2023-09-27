@@ -7,5 +7,6 @@ data class SettingsProfileUiState(
     val statusMessage: String = "",
     val content: String = "",
     val avatarUrl: String? = null,
-    val backgroundUrl: String? = null
+    val backgroundUrl: String? = null,
+    val showChangeDisplayNameDialog: Boolean = false
 )
