@@ -33,7 +33,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.compose.AsyncImage
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import ge.ted3x.revolt.core.designsystem.dialog.RevoltDialog
@@ -42,8 +41,6 @@ import ge.ted3x.revolt.core.designsystem.textfield.RevoltTextField
 import ge.ted3x.revolt.feature.settings.impl.R
 import ge.ted3x.revolt.feature.settings.impl.ui.screens.destinations.SettingsAccountScreenDestination
 import ge.ted3x.revolt.feature.settings.impl.ui.screens.destinations.SettingsProfileScreenDestination
-import ge.ted3x.revolt.feature.settings.impl.ui.screens.root.SettingsRootUiState
-import ge.ted3x.revolt.feature.settings.impl.ui.screens.root.SettingsRootViewModel
 
 @Destination(start = true)
 @Composable
