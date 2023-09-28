@@ -60,9 +60,10 @@ fun SettingsProfileScreen(
         val launcher = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.PickVisualMedia()
         ) { uri ->
-            val stream =
-                uri?.let { currentContext.contentResolver.openInputStream(it) }?.readBytes()
-            viewModel.onImageSelected(stream!!, showImagePicker.value!!)
+            uri?.let { currentContext.contentResolver.openInputStream(it) }?.let { stream ->
+                viewModel.onImageSelected(stream.readBytes(), showImagePicker.value!!)
+                stream.close()
+            }
             showImagePicker.value = null
         }
         when {

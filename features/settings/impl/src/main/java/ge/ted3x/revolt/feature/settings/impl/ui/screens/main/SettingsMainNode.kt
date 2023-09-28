@@ -34,6 +34,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import ge.ted3x.revolt.core.designsystem.gif.RevoltGifImage
 import ge.ted3x.revolt.feature.settings.impl.R
 import ge.ted3x.revolt.feature.settings.impl.ui.screens.destinations.SettingsAccountScreenDestination
 import ge.ted3x.revolt.feature.settings.impl.ui.screens.destinations.SettingsProfileScreenDestination
@@ -100,7 +101,7 @@ private fun Profile(uiState: State<SettingsMainUiState>) {
             .wrapContentHeight()
     ) {
         Row(modifier = Modifier.padding(12.dp)) {
-            AsyncImage(
+            RevoltGifImage(
                 model = uiState.value.profileImage,
                 contentDescription = "profile image",
                 modifier = Modifier

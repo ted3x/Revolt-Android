@@ -31,6 +31,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import ge.ted3x.revolt.core.designsystem.gif.RevoltGifImage
 
 @Composable
 fun RevoltProfileCard(
@@ -66,7 +67,7 @@ fun RevoltProfileCard(
                         .padding(top = 16.dp, end = 16.dp, start = 16.dp),
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        AsyncImage(
+                        RevoltGifImage(
                             modifier = Modifier
                                 .clip(CircleShape)
                                 .size(96.dp),
