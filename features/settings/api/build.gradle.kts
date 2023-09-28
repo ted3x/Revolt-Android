@@ -8,5 +8,5 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:core-arch"))
+    implementation(projects.core.arch)
 }

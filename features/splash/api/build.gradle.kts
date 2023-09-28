@@ -4,9 +4,9 @@ plugins {
 }
 
 android {
-    namespace = "ge.ted3x.revolt.features.dashboard.api"
+    namespace = "ge.ted3x.revolt.feature.splash.api"
 }
 
 dependencies {
-    implementation(project(":core:core-arch"))
+    implementation(projects.core.arch)
 }

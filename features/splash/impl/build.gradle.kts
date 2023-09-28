@@ -11,10 +11,10 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:core-designsystem"))
-    implementation(project(":core:core-arch"))
-    implementation(project(":core:core-domain"))
-    implementation(project(":features:feature-settings:api"))
+    implementation(projects.core.designsystem)
+    implementation(projects.core.arch)
+    implementation(projects.core.domain)
+    implementation(projects.features.settings.api)
     implementation(libs.compose.destinations.core)
     ksp(libs.compose.destinations.ksp)
     implementation(libs.ui)

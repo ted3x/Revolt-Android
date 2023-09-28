@@ -39,16 +39,16 @@ android {
 
 dependencies {
 
-    implementation(project(":core:core-data"))
-    implementation(project(":core:core-domain"))
-    implementation(project(":core:core-database"))
-    implementation(project(":core:core-designsystem"))
-    implementation(project(":core:core-arch"))
+    implementation(projects.core.data)
+    implementation(projects.core.domain)
+    implementation(projects.core.database)
+    implementation(projects.core.designsystem)
+    implementation(projects.core.arch)
 //    implementation(project(":features:feature-dashboard"))
-    implementation(project(":features:feature-settings:api"))
-    implementation(project(":features:feature-settings:impl"))
-    implementation(project(":features:feature-splash:api"))
-    implementation(project(":features:feature-splash:impl"))
+    implementation(projects.features.settings.api)
+    implementation(projects.features.settings.impl)
+    implementation(projects.features.splash.api)
+    implementation(projects.features.splash.impl)
 
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)

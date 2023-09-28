@@ -11,9 +11,10 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:core-designsystem"))
-    implementation(project(":core:core-domain"))
-    implementation(project(":features:feature-settings:api"))
+    implementation(projects.core.arch)
+    implementation(projects.core.designsystem)
+    implementation(projects.core.domain)
+    implementation(projects.features.settings.api)
     implementation(libs.compose.destinations.core)
     ksp(libs.compose.destinations.ksp)
     implementation(libs.ui)
@@ -23,6 +24,5 @@ dependencies {
     implementation(libs.coil)
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation)
-    implementation(project(mapOf("path" to ":core:core-arch")))
     ksp(libs.hilt.compiler)
 }

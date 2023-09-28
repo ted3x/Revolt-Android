@@ -9,8 +9,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:core-domain"))
-    implementation(project(":core:core-database"))
+    implementation(projects.core.domain)
+    implementation(projects.core.database)
     implementation(libs.revolt.api)
     implementation(libs.androidx.security.crypto)
     implementation(libs.hilt.android)

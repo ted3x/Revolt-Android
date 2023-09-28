@@ -16,23 +16,26 @@ dependencyResolutionManagement {
     }
 }
 
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 rootProject.name = "Revolt"
 
 include(":app")
 
-// Core
-include(":core:core-designsystem")
-include(":core:core-database")
-include(":core:core-arch")
+fun includeProjects(directory: File, path: String, maxDepth: Int = 1) {
+    directory.listFiles().orEmpty().also { it.sort() }.forEach { file ->
+        if (file.isDirectory) {
+            val newPath = "$path:${file.name}"
+            val buildFile = File(file, "build.gradle.kts")
+            if (buildFile.exists()) {
+                include(newPath)
+                logger.lifecycle("Included project: $newPath")
+            } else if (maxDepth > 0) {
+                includeProjects(file, newPath, maxDepth - 1)
+            }
+        }
+    }
+}
 
-// Feature
-include(":features:feature-settings:api")
-include(":features:feature-settings:impl")
-
-include(":features:feature-splash:api")
-include(":features:feature-splash:impl")
-
-include(":features:feature-dashboard:impl")
-include(":features:feature-dashboard:api")
-include(":core:core-domain")
-include(":core:core-data")
+includeProjects(File(rootDir, "core"), ":core")
+includeProjects(File(rootDir, "features"), ":features")
