@@ -13,12 +13,14 @@ import ge.ted3x.revolt.core.data.RevoltAccountRepositoryImpl
 import ge.ted3x.revolt.core.data.RevoltConfigurationRepositoryImpl
 import ge.ted3x.revolt.core.data.RevoltFileRepositoryImpl
 import ge.ted3x.revolt.core.data.RevoltGatewayRepositoryImpl
+import ge.ted3x.revolt.core.data.RevoltSessionsRepositoryImpl
 import ge.ted3x.revolt.core.data.RevoltUserRepositoryImpl
 import ge.ted3x.revolt.core.data.RevoltUserTokenRepositoryImpl
 import ge.ted3x.revolt.core.domain.core.RevoltConfigurationRepository
 import ge.ted3x.revolt.core.domain.user.RevoltAccountRepository
 import ge.ted3x.revolt.core.domain.user.RevoltFileRepository
 import ge.ted3x.revolt.core.domain.user.RevoltGatewayRepository
+import ge.ted3x.revolt.core.domain.user.RevoltSessionsRepository
 import ge.ted3x.revolt.core.domain.user.RevoltUserRepository
 import ge.ted3x.revolt.core.domain.user.RevoltUserTokenRepository
 import javax.inject.Singleton
@@ -62,5 +64,10 @@ object RevoltRepositoryModule {
         @Binds
         @Singleton
         abstract fun bindsFileRepository(impl: RevoltFileRepositoryImpl): RevoltFileRepository
+
+
+        @Binds
+        @Singleton
+        abstract fun bindsRevoltSessionsRepository(impl: RevoltSessionsRepositoryImpl): RevoltSessionsRepository
     }
 }

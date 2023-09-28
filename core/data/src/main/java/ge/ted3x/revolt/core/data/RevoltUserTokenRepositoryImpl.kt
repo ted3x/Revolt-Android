@@ -9,7 +9,7 @@ class RevoltUserTokenRepositoryImpl @Inject constructor(
 ) : RevoltUserTokenRepository {
 
     override fun retrieveToken(): String? {
-        return sharedPreferences.getString(TOKEN_KEY, "KKx3FtQQlg4z5h3O7tzUZ9yyxD12r2ZWkLO47JtkD3WN0sqPHXOwQV3Fch6b2IzV")
+        return sharedPreferences.getString(TOKEN_KEY, "n0_vYtkgvN0v3ZCGwyTeJ_r5Z6nRrM72sOgskbnFHAFLyPANChlC7jv5SVXEZmHf")
     }
 
     override fun saveToken(token: String) {

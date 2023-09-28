@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="date_today_at">Today at %s</string>
+    <string name="date_yesterday_at">Yesterday at %s</string>
+    <string name="date_last_day_at">Last %s</string>
+</resources>

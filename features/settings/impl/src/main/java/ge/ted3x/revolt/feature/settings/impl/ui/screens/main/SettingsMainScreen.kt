@@ -41,6 +41,7 @@ import ge.ted3x.revolt.core.designsystem.textfield.RevoltTextField
 import ge.ted3x.revolt.feature.settings.impl.R
 import ge.ted3x.revolt.feature.settings.impl.ui.screens.destinations.SettingsAccountScreenDestination
 import ge.ted3x.revolt.feature.settings.impl.ui.screens.destinations.SettingsProfileScreenDestination
+import ge.ted3x.revolt.feature.settings.impl.ui.screens.destinations.SettingsSessionsScreenDestination
 
 @Destination(start = true)
 @Composable
@@ -68,6 +69,7 @@ fun SettingsMainScreen(
                         navigator.navigate(SettingsProfileScreenDestination)
                     },
                     SettingItem(SettingType.SESSIONS) {
+                        navigator.navigate(SettingsSessionsScreenDestination)
                     }
                 ),
                 stringResource(id = R.string.settings_client_settings) to listOf(

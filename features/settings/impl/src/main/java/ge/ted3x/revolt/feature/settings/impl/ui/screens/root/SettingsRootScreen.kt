@@ -18,6 +18,8 @@ import ge.ted3x.revolt.feature.settings.impl.ui.screens.destinations.SettingsPro
 import ge.ted3x.revolt.feature.settings.impl.ui.screens.main.SettingsMainScreen
 import ge.ted3x.revolt.feature.settings.impl.ui.screens.profile.SettingsProfileScreen
 import ge.ted3x.revolt.feature.settings.api.SETTINGS_ROOT_SCREEN_ROUTE
+import ge.ted3x.revolt.feature.settings.impl.ui.screens.destinations.SettingsSessionsScreenDestination
+import ge.ted3x.revolt.feature.settings.impl.ui.screens.sessions.SettingsSessionsScreen
 
 sealed class SettingsTarget {
 
@@ -114,6 +116,9 @@ fun SettingsRootScreen(
             }
             composable(SettingsProfileScreenDestination) {
                 SettingsProfileScreen()
+            }
+            composable(SettingsSessionsScreenDestination) {
+                SettingsSessionsScreen()
             }
         }
     }
