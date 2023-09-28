@@ -5,5 +5,6 @@ data class SettingsMainUiState(
     val displayName: String = "",
     val discriminator: String = "",
     val status: String = "",
-    val profileImage: String? = null
+    val profileImage: String? = null,
+    val showStatusChangeDialog: Boolean = false
 )

@@ -22,6 +22,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,7 +36,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import ge.ted3x.revolt.core.designsystem.dialog.RevoltDialog
 import ge.ted3x.revolt.core.designsystem.gif.RevoltGifImage
+import ge.ted3x.revolt.core.designsystem.textfield.RevoltTextField
 import ge.ted3x.revolt.feature.settings.impl.R
 import ge.ted3x.revolt.feature.settings.impl.ui.screens.destinations.SettingsAccountScreenDestination
 import ge.ted3x.revolt.feature.settings.impl.ui.screens.destinations.SettingsProfileScreenDestination
@@ -55,7 +59,7 @@ fun SettingsMainScreen(
             .padding(12.dp),
         horizontalAlignment = Alignment.Start
     ) {
-        Profile(uiState)
+        Profile(viewModel, uiState)
         SettingOptions(
             itemsWithTitle = mapOf(
                 stringResource(id = R.string.settings_user_settings) to listOf(
@@ -92,7 +96,20 @@ fun SettingsMainScreen(
 }
 
 @Composable
-private fun Profile(uiState: State<SettingsMainUiState>) {
+private fun Profile(
+    viewModel: SettingsMainViewModel,
+    uiState: State<SettingsMainUiState>
+) {
+    if (uiState.value.showStatusChangeDialog) {
+        ChangeStatusDialog(
+            status = uiState.value.status,
+            onDismissRequest = { viewModel.controlStatusChangeDialog(false) },
+            onConfirmation = {
+                viewModel.changeStatus(it)
+                viewModel.controlStatusChangeDialog(false)
+            }
+        )
+    }
     Column(
         modifier = Modifier
             .clip(RoundedCornerShape(8.dp))
@@ -120,8 +137,16 @@ private fun Profile(uiState: State<SettingsMainUiState>) {
                 .wrapContentHeight()
                 .background(Color.Gray)
         ) {
-            TextButton(onClick = { /*TODO*/ }) {
-                Text(text = uiState.value.status)
+            TextButton(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = {
+                    viewModel.controlStatusChangeDialog(true)
+                }) {
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = uiState.value.status,
+                    textAlign = TextAlign.Start
+                )
             }
         }
     }
@@ -182,6 +207,31 @@ private fun SettingItemButton(item: SettingItem) {
             Text(text = stringResource(id = item.type.textRes), textAlign = TextAlign.Start)
         }
     }
+}
+
+@Composable
+fun ChangeStatusDialog(
+    status: String,
+    onDismissRequest: () -> Unit,
+    onConfirmation: (displayName: String) -> Unit
+) {
+    val statusValue = remember { mutableStateOf(status) }
+    RevoltDialog(
+        onDismissRequest = onDismissRequest,
+        onConfirmation = { onConfirmation.invoke(statusValue.value) },
+        content = {
+            RevoltTextField(
+                modifier = Modifier.fillMaxWidth(),
+                onValueChange = { statusValue.value = it },
+                value = statusValue.value,
+                hint = "Enter your new status",
+                title = "Status"
+            )
+        },
+        title = "Change your status",
+        negativeText = "Cancel",
+        positiveText = "Save"
+    )
 }
 
 enum class SettingType(
