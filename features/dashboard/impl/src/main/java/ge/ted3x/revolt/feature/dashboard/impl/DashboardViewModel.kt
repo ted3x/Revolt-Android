@@ -2,6 +2,7 @@ package ge.ted3x.revolt.feature.dashboard.impl
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -33,22 +34,12 @@ class DashboardViewModel @Inject constructor(
     private val _initialKey: MutableStateFlow<String?> = MutableStateFlow(null)
     val state: StateFlow<DashboardScreenUiState> get() = _state
     private val _state = MutableStateFlow(DashboardScreenUiState())
-    var source: MessagingPagingSource? = null
-    val messages: Flow<PagingData<RevoltMessage>> = Pager(
-        pagingSourceFactory = {
-            MessagingPagingSource(
-                initialKey.value,
-                repository
-            ).also { source = it }
-        },
-        config = PagingConfig(pageSize = 30, enablePlaceholders = false),
-        initialKey = initialKey.value
-    ).flow.cachedIn(viewModelScope)
+    val messages = repository.getMessages("01FYM6FCJ6NEN8ZR1P11J23D04")
 
     fun setInitialKey(initialKey: String?) {
         _initialKey.value = initialKey
         if (initialKey != null) {
-            source?.invalidate()
+//            source?.invalidate()
         }
     }
 }

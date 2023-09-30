@@ -9,6 +9,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.paging.common)
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
 }

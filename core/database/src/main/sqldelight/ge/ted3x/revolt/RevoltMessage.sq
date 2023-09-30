@@ -26,6 +26,7 @@ CREATE TABLE MessageEntity (
     masquerade_name TEXT,
     masquerade_avatar TEXT,
     masquerade_color TEXT,
+    timestamp INTEGER NOT NULL,
     FOREIGN KEY (channel) REFERENCES RevoltChannel(id) ON DELETE CASCADE
 );
 
@@ -52,11 +53,23 @@ INSERT OR REPLACE INTO MessageEntity (
     interactions_restrictReactions,
     masquerade_name,
     masquerade_avatar,
-    masquerade_color)
+    masquerade_color,
+    timestamp)
 VALUES ?;
 
 selectMessagesByChannel:
 SELECT * FROM MessageEntity WHERE channel = ?;
+
+countMessages:
+SELECT COUNT(*) FROM MessageEntity WHERE channel = :channel;
+
+messages:
+SELECT MessageEntity.*, FileEntity.id AS file_id
+FROM MessageEntity
+LEFT JOIN FileEntity ON FileEntity.message_id = MessageEntity.id
+WHERE channel = :channel
+ORDER BY MessageEntity.timestamp DESC
+LIMIT :limit OFFSET :offset;
 
 CREATE TABLE EmbedEntity (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,

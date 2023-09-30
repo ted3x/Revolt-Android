@@ -2,6 +2,7 @@ package ge.ted3x.core.database
 
 import android.content.Context
 import androidx.sqlite.db.SupportSQLiteDatabase
+import io.requery.android.database.sqlite.SQLiteOpenHelper
 import app.cash.sqldelight.ColumnAdapter
 import app.cash.sqldelight.adapter.primitive.IntColumnAdapter
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
@@ -15,6 +16,7 @@ import ge.ted3x.revolt.MessageEntity
 import ge.ted3x.revolt.ReactionsEntity
 import ge.ted3x.revolt.RevoltDatabase
 import ge.ted3x.revolt.UserEntity
+import io.requery.android.database.sqlite.RequerySQLiteOpenHelperFactory
 import javax.inject.Singleton
 
 @Module
@@ -28,6 +30,7 @@ object RevoltDatabaseModule {
             schema = RevoltDatabase.Schema,
             context = context,
             name = DATABASE,
+            factory = RequerySQLiteOpenHelperFactory(),
             callback = object : AndroidSqliteDriver.Callback(RevoltDatabase.Schema) {
                 override fun onConfigure(db: SupportSQLiteDatabase) {
                     super.onConfigure(db)

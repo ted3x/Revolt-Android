@@ -7,6 +7,7 @@ import ge.ted3x.revolt.EmbedEntity
 import ge.ted3x.revolt.FileEntity
 import ge.ted3x.revolt.MessageEntity
 import ge.ted3x.revolt.core.data.mapper.RevoltFileMapper
+import ge.ted3x.revolt.core.domain.UlidTimeDecoder
 import ge.ted3x.revolt.core.domain.models.RevoltFetchMessagesRequest
 import ge.ted3x.revolt.core.domain.models.RevoltMasquerade
 import ge.ted3x.revolt.core.domain.models.RevoltMessage
@@ -103,7 +104,8 @@ class RevoltFetchMessagesMapper @Inject constructor(
                 interactions_restrictReactions = interactions?.restrictReactions,
                 masquerade_name = masquerade?.name,
                 masquerade_avatar = masquerade?.avatar,
-                masquerade_color = masquerade?.color
+                masquerade_color = masquerade?.color,
+                timestamp = UlidTimeDecoder.getTimestamp(id)
             )
         }
     }

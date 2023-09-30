@@ -13,6 +13,7 @@ dependencies {
     implementation(projects.core.database)
     implementation(libs.revolt.api)
     implementation(libs.androidx.security.crypto)
+    implementation(libs.androidx.paging.common)
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     ksp(libs.compose.destinations.ksp)

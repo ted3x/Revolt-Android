@@ -11,8 +11,10 @@ android {
 }
 
 dependencies {
+    implementation(libs.requery.sqlite)
     implementation(libs.sqldelight.driver)
     implementation(libs.sqldelight.coroutines)
+    implementation(libs.sqldelight.paging)
     implementation(libs.sqldelight.primitives.adapter)
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
@@ -22,6 +24,7 @@ sqldelight {
     databases {
         create("RevoltDatabase") {
             packageName.set("ge.ted3x.revolt")
+            dialect(libs.sqldelight.dialect)
         }
     }
 }
