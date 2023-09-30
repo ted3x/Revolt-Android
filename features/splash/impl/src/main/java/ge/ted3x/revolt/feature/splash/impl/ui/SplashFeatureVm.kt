@@ -8,6 +8,7 @@ import ge.ted3x.revolt.core.arch.RevoltViewModel
 import ge.ted3x.revolt.core.domain.core.RevoltConfigurationRepository
 import ge.ted3x.revolt.core.domain.user.RevoltGatewayRepository
 import ge.ted3x.revolt.core.domain.user.RevoltUserRepository
+import ge.ted3x.revolt.feature.dashboard.api.DashboardFeatureScreen
 import ge.ted3x.revolt.feature.settings.api.SettingsFeatureScreen
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -27,7 +28,8 @@ class SplashFeatureVm @Inject constructor(
             configurationRepository.fetchConfiguration()
             gatewayRepository.initialize()
             userRepository.getSelf()
-            navigator.newRoot(SettingsFeatureScreen)
+            //navigator.newRoot(SettingsFeatureScreen)
+            navigator.newRoot(DashboardFeatureScreen)
         }
     }
 }

@@ -17,6 +17,8 @@ import ge.ted3x.revolt.core.arch.navigation.RevoltNavigationCommand
 import ge.ted3x.revolt.core.arch.navigation.RevoltNavigator
 import ge.ted3x.revolt.core.arch.navigation.RevoltScreen
 import ge.ted3x.revolt.core.arch.collectAsEffect
+import ge.ted3x.revolt.feature.dashboard.impl.DashboardScreen
+import ge.ted3x.revolt.feature.dashboard.impl.destinations.DashboardScreenDestination
 import ge.ted3x.revolt.feature.settings.impl.ui.screens.destinations.SettingsRootScreenDestination
 import ge.ted3x.revolt.feature.settings.impl.ui.screens.root.SettingsRootScreen
 import ge.ted3x.revolt.feature.splash.api.SplashFeatureScreenRoute
@@ -40,6 +42,9 @@ class RevoltActivity : ComponentActivity() {
                     }
                     composable(SettingsRootScreenDestination.route) {
                         SettingsRootScreen()
+                    }
+                    composable(DashboardScreenDestination.route) {
+                        DashboardScreen()
                     }
                 }
             }

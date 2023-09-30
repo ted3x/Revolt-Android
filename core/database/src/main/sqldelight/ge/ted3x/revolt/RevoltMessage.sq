@@ -1,0 +1,100 @@
+import kotlin.Boolean;
+import kotlin.String;
+import kotlin.collections.List;
+import kotlin.collections.Map;
+
+CREATE TABLE MessageEntity (
+    id TEXT NOT NULL PRIMARY KEY,
+    channel TEXT NOT NULL,
+    nonce TEXT,
+    author TEXT NOT NULL,
+    webhook_name TEXT,
+    webhook_avatar TEXT,
+    content TEXT,
+    system_type TEXT, -- Used to identify which type of System is stored
+    system_content TEXT, -- To store data of System
+    system_content_id TEXT,
+    system_content_by TEXT,
+    system_content_name TEXT,
+    system_content_from TEXT,
+    system_content_to TEXT,
+    edited TEXT,
+    mentions TEXT AS List<String>,
+    replies TEXT AS List<String>,
+    interactions_reactions TEXT AS List<String>,
+    interactions_restrictReactions INTEGER AS Boolean,
+    masquerade_name TEXT,
+    masquerade_avatar TEXT,
+    masquerade_color TEXT,
+    FOREIGN KEY (channel) REFERENCES RevoltChannel(id) ON DELETE CASCADE
+);
+
+insertMessages:
+INSERT OR REPLACE INTO MessageEntity (
+    id,
+    channel,
+    nonce,
+    author,
+    webhook_name,
+    webhook_avatar,
+    content,
+    system_type,
+    system_content,
+    system_content_id,
+    system_content_by,
+    system_content_name,
+    system_content_from,
+    system_content_to,
+    edited,
+    mentions,
+    replies,
+    interactions_reactions,
+    interactions_restrictReactions,
+    masquerade_name,
+    masquerade_avatar,
+    masquerade_color)
+VALUES ?;
+
+selectMessagesByChannel:
+SELECT * FROM MessageEntity WHERE channel = ?;
+
+CREATE TABLE EmbedEntity (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    message_id TEXT NOT NULL,
+    type TEXT NOT NULL, -- 'None', 'Website', 'Image', 'Video', 'TextEmbed'
+    url TEXT DEFAULT NULL,
+    original_url TEXT DEFAULT NULL,
+    special_type TEXT DEFAULT NULL,
+    special_type_id TEXT DEFAULT NULL,
+    special_type_timestamp TEXT DEFAULT NULL,
+    special_type_content_type TEXT DEFAULT NULL,
+    title TEXT DEFAULT NULL,
+    description TEXT DEFAULT NULL,
+    site_name TEXT DEFAULT NULL,
+    icon_url TEXT DEFAULT NULL,
+    color TEXT DEFAULT NULL,
+    image_url TEXT DEFAULT NULL,
+    image_width INTEGER DEFAULT NULL,
+    image_height INTEGER DEFAULT NULL,
+    image_size TEXT DEFAULT NULL,
+    video_url TEXT DEFAULT NULL,
+    video_width INTEGER DEFAULT NULL,
+    video_height INTEGER DEFAULT NULL,
+    FOREIGN KEY (message_id) REFERENCES MessageEntity(id) ON DELETE CASCADE
+);
+
+CREATE TABLE ReactionsEntity (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    message_id TEXT NOT NULL,
+    reaction_id TEXT NOT NULL,
+    users TEXT AS List<String> NOT NULL,
+    FOREIGN KEY (message_id) REFERENCES MessageEntity(id) ON DELETE CASCADE
+);
+
+insertReactions:
+INSERT OR REPLACE INTO ReactionsEntity (
+    id,
+    message_id,
+    reaction_id,
+    users )
+VALUES ?;

@@ -12,8 +12,8 @@ CREATE TABLE FileEntity (
     size INTEGER AS Int NOT NULL,
     deleted INTEGER AS Boolean,
     reported INTEGER AS Boolean,
-    message_id TEXT,
-    user_id TEXT REFERENCES UserEntity(id),
+    message_id TEXT REFERENCES MessageEntity(id) ON DELETE CASCADE ,
+    user_id TEXT REFERENCES UserEntity(id) ON DELETE CASCADE,
     server_id TEXT,
     object_id TEXT
 );
@@ -24,6 +24,9 @@ VALUES ?;
 
 selectFileById:
 SELECT * FROM FileEntity WHERE id = ?;
+
+selectFileByMessageId:
+SELECT * FROM FileEntity WHERE message_id = ?;
 
 deleteFileById:
 DELETE FROM FileEntity WHERE id = ?;

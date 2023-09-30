@@ -2,6 +2,7 @@ package ge.ted3x.core.database
 
 import android.content.Context
 import androidx.sqlite.db.SupportSQLiteDatabase
+import app.cash.sqldelight.ColumnAdapter
 import app.cash.sqldelight.adapter.primitive.IntColumnAdapter
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import dagger.Module
@@ -10,6 +11,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import ge.ted3x.revolt.FileEntity
+import ge.ted3x.revolt.MessageEntity
+import ge.ted3x.revolt.ReactionsEntity
 import ge.ted3x.revolt.RevoltDatabase
 import ge.ted3x.revolt.UserEntity
 import javax.inject.Singleton
@@ -53,8 +56,27 @@ object RevoltDatabaseModule {
             UserEntityAdapter = UserEntity.Adapter(
                 badgesAdapter = IntColumnAdapter,
                 flagsAdapter = IntColumnAdapter
+            ),
+            MessageEntityAdapter = MessageEntity.Adapter(
+                mentionsAdapter = listOfStringsAdapter,
+                repliesAdapter = listOfStringsAdapter,
+                interactions_reactionsAdapter = listOfStringsAdapter
+            ),
+            ReactionsEntityAdapter = ReactionsEntity.Adapter(
+                usersAdapter = listOfStringsAdapter
             )
         )
+    }
+
+    private val listOfStringsAdapter = object : ColumnAdapter<List<String>, String> {
+        override fun decode(databaseValue: String) =
+            if (databaseValue.isEmpty()) {
+                listOf()
+            } else {
+                databaseValue.split(",")
+            }
+
+        override fun encode(value: List<String>) = value.joinToString(separator = ",")
     }
 
     private const val DATABASE = "revolt.db"
