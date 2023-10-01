@@ -4,7 +4,7 @@ data class RevoltMessage(
     val id: String,
     val nonce: String? = null,
     val channel: String,
-    val author: String,
+    val author: Author,
     val webhook: Webhook? = null,
     val content: String? = null,
     val system: System? = null,
@@ -17,6 +17,14 @@ data class RevoltMessage(
     val interactions: Interactions? = null,
     val masquerade: RevoltMasquerade? = null
 ) {
+
+    data class Author(
+        val id: String,
+        val username: String,
+        val displayName: String? = null,
+        val nickname: String? = null,
+        val avatar: RevoltFile? = null
+    )
 
 //    data class MentionUserData(
 //        val userId: String,

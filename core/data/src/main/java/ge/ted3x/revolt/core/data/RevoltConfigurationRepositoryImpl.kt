@@ -31,6 +31,6 @@ class RevoltConfigurationRepositoryImpl @Inject constructor(
         } else {
             configurationEntity.january_url
         }
-        return "$baseUrl${domain.path}"
+        return "$baseUrl${domain.withoutLastSlash()}"
     }
 }

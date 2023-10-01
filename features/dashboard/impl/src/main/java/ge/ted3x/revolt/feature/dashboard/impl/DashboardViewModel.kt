@@ -34,7 +34,7 @@ class DashboardViewModel @Inject constructor(
     private val _initialKey: MutableStateFlow<String?> = MutableStateFlow(null)
     val state: StateFlow<DashboardScreenUiState> get() = _state
     private val _state = MutableStateFlow(DashboardScreenUiState())
-    val messages = repository.getMessages("01FYM6FCJ6NEN8ZR1P11J23D04")
+    val messages = repository.getMessages("01H7WNWGEXZM77E6YN88TCTBTC")
 
     fun setInitialKey(initialKey: String?) {
         _initialKey.value = initialKey

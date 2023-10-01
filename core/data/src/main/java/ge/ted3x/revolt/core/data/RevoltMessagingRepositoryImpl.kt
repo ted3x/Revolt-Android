@@ -36,10 +36,27 @@ class RevoltMessagingRepositoryImpl @Inject constructor(
 ) : RevoltMessagingRepository {
 
     override suspend fun fetchMessages(request: RevoltFetchMessagesRequest): Int {
-        val response = revoltApi.channels.messaging.fetchMessagesWithUsers(fetchMessagesMapper.mapDomainToApi(request))
+        val response = revoltApi.channels.messaging.fetchMessagesWithUsers(
+            fetchMessagesMapper.mapDomainToApi(request)
+        )
         val entities = response.messages.map { fetchMessagesMapper.mapApiToEntity(it) }
-        response.users.forEach { userRepository.saveUser(userMapper.mapApiToDomain(it, null, null)) }
-        response.members?.forEach { serverRepository.insertMember(memberMapper.mapApiToDomain(it, null)) }
+        response.users.forEach {
+            userRepository.saveUser(
+                userMapper.mapApiToDomain(
+                    it,
+                    null,
+                    null
+                )
+            )
+        }
+        response.members?.forEach {
+            serverRepository.insertMember(
+                memberMapper.mapApiToDomain(
+                    it,
+                    null
+                )
+            )
+        }
         messageQueries.insertMessages(entities)
         return response.messages.size
     }
@@ -81,26 +98,38 @@ class RevoltMessagingRepositoryImpl @Inject constructor(
                 }
                 val attachments =
                     keyedQuery.file_id?.split(",")?.mapNotNull { fileQueries.getFile(it) }
+
+                val avatarId = keyedQuery.member_avatar_id ?: keyedQuery.user_avatar_id
+                ?: keyedQuery.masquerade_avatar
                 fetchMessagesMapper.mapEntityToDomain(
-                    message,
-                    attachments,
-                    configurationRepository.getFileUrlWithDomain(RevoltFileDomain.Attachments),
-                    null
+                    username = keyedQuery.member_nickname ?: keyedQuery.user_display_name ?: keyedQuery.user_username!!,
+                    entityModel = message,
+                    attachments = attachments,
+                    baseUrl = configurationRepository.getFileUrlWithDomain(RevoltFileDomain.Attachments),
+                    embeds = null,
+                    displayName = keyedQuery.user_display_name,
+                    nickname = keyedQuery.member_nickname,
+                    authorAvatar = avatarId?.let { fileQueries.getFile(it) },
+                    avatarBaseUrl = configurationRepository.getFileUrlWithDomain(RevoltFileDomain.Avatar)
                 )
             }
         }
     }
 
     override fun messagesFlow(channel: String): Flow<List<RevoltMessage>> {
-        return messageQueries.messagesFlow(channel).mapLatest { msg ->
-            msg.map {
-                fetchMessagesMapper.mapEntityToDomain(
-                    it.message,
-                    it.attachments,
-                    configurationRepository.getFileUrlWithDomain(RevoltFileDomain.Attachments),
-                    null
-                )
-            }
-        }
+        TODO()
+//        return messageQueries.messagesFlow(channel).mapLatest { msg ->
+//            msg.map {
+//                fetchMessagesMapper.mapEntityToDomain(
+//                    it.message,
+//                    it.attachments,
+//                    configurationRepository.getFileUrlWithDomain(RevoltFileDomain.Attachments),
+//                    null,
+//                    displayName = keyedQuery.user_display_name,
+//                    nickname = keyedQuery.member_nickname,
+//                    authorAvatar = avatarId?.let { fileQueries.getFile(it) },
+//                    avatarBaseUrl = configurationRepository.getFileUrlWithDomain(RevoltFileDomain.Avatar)
+//                )
+//            }
     }
 }

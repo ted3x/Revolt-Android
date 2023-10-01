@@ -110,17 +110,28 @@ class RevoltFetchMessagesMapper @Inject constructor(
     }
 
     fun mapEntityToDomain(
+        username: String,
         entityModel: MessageEntity,
         attachments: List<FileEntity>?,
         baseUrl: String,
-        embeds: List<EmbedEntity>?
+        embeds: List<EmbedEntity>?,
+        avatarBaseUrl: String,
+        displayName: String? = null,
+        nickname: String? = null,
+        authorAvatar: FileEntity? = null
     ): RevoltMessage {
         return with(entityModel) {
             RevoltMessage(
                 id = id,
                 nonce = nonce,
                 channel = channel,
-                author = author,
+                author = RevoltMessage.Author(
+                    id = author,
+                    username = username,
+                    displayName = displayName,
+                    nickname = nickname,
+                    avatar = authorAvatar?.let { fileMapper.mapEntityToDomain(it, avatarBaseUrl) }
+                ),
                 webhook = webhook_name?.let { RevoltMessage.Webhook(it, webhook_avatar) },
                 content = content,
                 system = entityModel.toDomainSystem(),

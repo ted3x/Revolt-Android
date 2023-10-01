@@ -64,8 +64,13 @@ countMessages:
 SELECT COUNT(*) FROM MessageEntity WHERE channel = :channel;
 
 messages:
-SELECT MessageEntity.*, FileEntity.id AS file_id
+SELECT MessageEntity.*,
+FileEntity.id AS file_id,
+UserEntity.avatar_id AS user_avatar_id, UserEntity.username AS user_username, UserEntity.display_name AS user_display_name,
+MemberEntity.avatar_id AS member_avatar_id, MemberEntity.nickname AS member_nickname
 FROM MessageEntity
+LEFT JOIN UserEntity ON UserEntity.id = MessageEntity.author
+LEFT JOIN MemberEntity ON MemberEntity.user_id = MessageEntity.author
 LEFT JOIN FileEntity ON FileEntity.message_id = MessageEntity.id
 WHERE channel = :channel
 ORDER BY MessageEntity.timestamp DESC
