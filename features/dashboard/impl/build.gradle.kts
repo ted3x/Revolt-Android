@@ -27,5 +27,6 @@ dependencies {
     implementation(libs.androidx.paging.compose)
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation)
+    implementation("com.mohamedrejeb.richeditor:richeditor-compose:1.0.0-beta03")
     ksp(libs.hilt.compiler)
 }

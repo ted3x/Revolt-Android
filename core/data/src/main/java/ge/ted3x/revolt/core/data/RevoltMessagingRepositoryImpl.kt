@@ -7,6 +7,7 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import app.revolt.RevoltApi
 import ge.ted3x.core.database.RevoltFileQueries
+import ge.ted3x.core.database.RevoltMemberQueries
 import ge.ted3x.core.database.RevoltMessageQueries
 import ge.ted3x.revolt.MessageEntity
 import ge.ted3x.revolt.core.arch.notNullOrBlank
@@ -30,6 +31,7 @@ class RevoltMessagingRepositoryImpl @Inject constructor(
     private val userRepository: RevoltUserRepository,
     private val serverRepository: RevoltServerRepository,
     private val fileQueries: RevoltFileQueries,
+    private val membersQueries: RevoltMemberQueries,
     private val messageQueries: RevoltMessageQueries,
     private val fetchMessagesMapper: RevoltFetchMessagesMapper,
     private val userMapper: RevoltUserMapper,
@@ -123,6 +125,13 @@ class RevoltMessagingRepositoryImpl @Inject constructor(
                 fetchMessage(channel, it)
             }
             localMessage = messageQueries.getMessage(it) ?: return null
+            var content: String? = localMessage.content
+            localMessage.mentions?.let { it1 -> membersQueries.getMembers(it1) }?.forEach {
+                content = content?.replace(
+                    it.user_id,
+                    notNullOrBlank(it.nickname, it.display_name, it.username)!!
+                )
+            }
             val messageEntity = with(localMessage) {
                 MessageEntity(
                     id = id,
@@ -177,13 +186,20 @@ class RevoltMessagingRepositoryImpl @Inject constructor(
         username: String?,
         replies: List<RevoltMessage>?
     ): RevoltMessage {
+        var content: String? = message.content
+        message.mentions?.let { it1 -> membersQueries.getMembers(it1) }?.forEach {
+            content = content?.replace(
+                "<@${it.user_id}>",
+                "[@${notNullOrBlank(it.nickname, it.display_name, it.username)!!}](revolt://profile/${it.user_id})"
+            )
+        }
         val attachments =
             fileIds?.split(",")?.mapNotNull { fileQueries.getFile(it) }
 
         val avatarId = notNullOrBlank(memberAvatarId, masquaradeAvatar, userAvatarId)
         return fetchMessagesMapper.mapEntityToDomain(
             username = notNullOrBlank(memberNickname, userDisplayName, username)!!,
-            entityModel = message,
+            entityModel = message.copy(content = content),
             attachments = attachments,
             baseUrl = configurationRepository.getFileUrlWithDomain(RevoltFileDomain.Attachments),
             embeds = null,

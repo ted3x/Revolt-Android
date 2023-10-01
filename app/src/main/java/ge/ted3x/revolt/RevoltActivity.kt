@@ -1,5 +1,6 @@
 package ge.ted3x.revolt
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
@@ -11,12 +12,14 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
+import ge.ted3x.revolt.core.arch.OpenProfileEvent
+import ge.ted3x.revolt.core.arch.RevoltEventBus
+import ge.ted3x.revolt.core.arch.collectAsEffect
 import ge.ted3x.revolt.core.arch.navigation.LocalAppNavController
 import ge.ted3x.revolt.core.arch.navigation.RevoltNavHost
 import ge.ted3x.revolt.core.arch.navigation.RevoltNavigationCommand
 import ge.ted3x.revolt.core.arch.navigation.RevoltNavigator
 import ge.ted3x.revolt.core.arch.navigation.RevoltScreen
-import ge.ted3x.revolt.core.arch.collectAsEffect
 import ge.ted3x.revolt.feature.dashboard.impl.DashboardScreen
 import ge.ted3x.revolt.feature.dashboard.impl.destinations.DashboardScreenDestination
 import ge.ted3x.revolt.feature.settings.impl.ui.screens.destinations.SettingsRootScreenDestination
@@ -32,11 +35,13 @@ class RevoltActivity : ComponentActivity() {
     @Inject
     lateinit var navigator: RevoltNavigator
 
+    @Inject lateinit var eventBus: RevoltEventBus
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             RevoltTheme {
-                setupAppNavHost(navigator = navigator, SplashFeatureScreenRoute) {
+                SetupAppNavHost(navigator = navigator, SplashFeatureScreenRoute) {
                     composable(SplashFeatureScreenRoute.route) {
                         SplashFeatureScreen()
                     }
@@ -51,8 +56,17 @@ class RevoltActivity : ComponentActivity() {
         }
     }
 
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        if(intent?.data != null) {
+            val parameters: List<String> = intent.data!!.pathSegments
+            val param = parameters[parameters.size - 1]
+            eventBus.sendEvent(OpenProfileEvent(param))
+        }
+    }
+
     @Composable
-    private fun ComponentActivity.setupAppNavHost(
+    private fun ComponentActivity.SetupAppNavHost(
         navigator: RevoltNavigator,
         destination: RevoltScreen,
         builder: NavGraphBuilder.() -> Unit

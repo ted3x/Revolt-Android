@@ -24,3 +24,9 @@ INSERT OR REPLACE INTO MemberEntity (
     roles,
     timeout
 ) VALUES ?;
+
+selectMembers:
+SELECT MemberEntity.*, UserEntity.display_name, UserEntity.username
+FROM MemberEntity
+LEFT JOIN UserEntity ON UserEntity.id = MemberEntity.user_id
+WHERE MemberEntity.user_id IN ?;

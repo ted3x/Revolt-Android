@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -18,6 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.mohamedrejeb.richeditor.model.rememberRichTextState
+import com.mohamedrejeb.richeditor.ui.material3.RichText
 import com.ramcosta.composedestinations.annotation.Destination
 import ge.ted3x.revolt.core.designsystem.gif.RevoltGifImage
 import ge.ted3x.revolt.feature.dashboard.api.DASHBOARD_ROOT_SCREEN_ROUTE
@@ -31,11 +34,13 @@ fun DashboardScreen(
     val messages = viewModel.messages.collectAsLazyPagingItems()
     LazyColumn(modifier = modifier, reverseLayout = true) {
         items(messages.itemCount) { index ->
+            val richTextState = rememberRichTextState()
             val message = messages[index] ?: return@items
             val nextMessage = if (index + 1 < messages.itemCount) messages[index + 1] else null
             val isNextMessageSameAuthorAsCurrentOne = nextMessage?.author?.id == message.author.id
             Column {
                 message.replies?.forEach { reply ->
+                    val replyRichTextState = rememberRichTextState()
                     Row {
                         RevoltGifImage(
                             modifier = Modifier
@@ -49,7 +54,11 @@ fun DashboardScreen(
                             modifier = Modifier.background(Color.Cyan),
                             fontSize = 12.sp
                         )
-                        Text(text = reply.content)
+                        replyRichTextState.setMarkdown(reply.content)
+                        RichText(
+                            state = replyRichTextState,
+                            style = MaterialTheme.typography.displaySmall
+                        )
                     }
                 }
                 Row {
@@ -72,7 +81,13 @@ fun DashboardScreen(
                                 fontSize = 14.sp
                             )
                         }
-                        message.content?.let { Text(text = it) }
+                        message.content?.let {
+                            richTextState.setMarkdown(it)
+                            RichText(
+                                state = richTextState,
+                                style = MaterialTheme.typography.displaySmall
+                            )
+                        }
                     }
                 }
                 Spacer(modifier = Modifier.height(8.dp))
