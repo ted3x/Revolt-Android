@@ -33,21 +33,28 @@ fun DashboardScreen(
     LazyColumn(modifier = modifier, reverseLayout = true) {
         items(messages.itemCount) { index ->
             val message = messages[index] ?: return@items
+            val nextMessage = if(index + 1 < messages.itemCount) messages[index + 1] else null
+            val isNextMessageSameAuthorAsCurrentOne = nextMessage?.author?.id == message.author.id
             Row {
-                RevoltGifImage(
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clip(CircleShape),
-                    model = message.author.avatar?.url,
-                    contentDescription = "${message.author.username} avatar image"
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Column {
-                    Text(
-                        text = message.author.username,
-                        modifier = Modifier.background(Color.Cyan),
-                        fontSize = 14.sp
+                if(!isNextMessageSameAuthorAsCurrentOne) {
+                    RevoltGifImage(
+                        modifier = Modifier
+                            .size(40.dp)
+                            .clip(CircleShape),
+                        model = message.author.avatar?.url,
+                        contentDescription = "${message.author.username} avatar image"
                     )
+                }
+                val spacerWidth = if(isNextMessageSameAuthorAsCurrentOne) 48.dp else 8.dp
+                Spacer(modifier = Modifier.width(spacerWidth))
+                Column {
+                    if(!isNextMessageSameAuthorAsCurrentOne) {
+                        Text(
+                            text = message.author.username,
+                            modifier = Modifier.background(Color.Cyan),
+                            fontSize = 14.sp
+                        )
+                    }
                     message.content?.let { Text(text = it) }
                 }
             }
