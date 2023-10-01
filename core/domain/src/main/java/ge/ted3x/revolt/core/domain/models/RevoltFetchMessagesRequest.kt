@@ -6,8 +6,7 @@ data class RevoltFetchMessagesRequest(
     val before: String? = null,
     val after: String? = null,
     val sort: Sort = Sort.Latest,
-    val nearby: String? = null,
-    val includeUsers: Boolean? = null
+    val nearby: String? = null
 ) {
 
     enum class Sort {

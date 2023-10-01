@@ -26,8 +26,7 @@ class RevoltFetchMessagesMapper @Inject constructor(
                 before = before,
                 after = after,
                 sort = sort.toApiModel(),
-                nearby = nearby,
-                includeUsers = includeUsers
+                nearby = nearby
             )
         }
     }
@@ -125,7 +124,7 @@ class RevoltFetchMessagesMapper @Inject constructor(
                 webhook = webhook_name?.let { RevoltMessage.Webhook(it, webhook_avatar) },
                 content = content,
                 system = entityModel.toDomainSystem(),
-                attachments = attachments?.map { fileMapper.mapEntityToDomain(baseUrl, it) },
+                attachments = attachments?.map { fileMapper.mapEntityToDomain(it, baseUrl) },
                 edited = edited,
                 embeds = embeds?.map { embedMapper.mapEntityToDomain(it) },
                 mentions = mentions,

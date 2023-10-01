@@ -52,6 +52,11 @@ UPDATE UserEntity SET username = ? WHERE is_current_user = 1;
 selectUserById:
 SELECT * FROM UserEntity WHERE id = ?;
 
+selectCurrentUserId:
+SELECT UserEntity.id
+FROM UserEntity
+WHERE UserEntity.is_current_user = 1;
+
 selectCurrentUser:
 SELECT UserEntity.*
 FROM UserEntity

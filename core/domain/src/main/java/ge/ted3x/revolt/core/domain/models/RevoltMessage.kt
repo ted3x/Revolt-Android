@@ -18,6 +18,19 @@ data class RevoltMessage(
     val masquerade: RevoltMasquerade? = null
 ) {
 
+//    data class MentionUserData(
+//        val userId: String,
+//        val username: String,
+//        val avatarUrl: String?
+//    )
+//
+//    data class ReplyUserData(
+//        val userId: String,
+//        val username: String,
+//        val avatarUrl: String?,
+//        val content: String
+//    )
+
     data class Webhook(
         val name: String,
         val avatar: String? = null

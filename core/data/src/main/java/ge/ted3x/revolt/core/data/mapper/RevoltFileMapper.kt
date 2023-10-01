@@ -10,9 +10,74 @@ import javax.inject.Inject
 
 class RevoltFileMapper @Inject constructor(){
 
-    fun mapEntityToDomain(baseUrl: String, entityModel: FileEntity): RevoltFile {
-        return with(entityModel) {
+    // API To Domain
+    fun mapApiToDomain(apiModel: RevoltFileApiModel, baseUrl: String?): RevoltFile {
+        return with(apiModel) {
             RevoltFile(
+                id = id,
+                tag = tag,
+                filename = filename,
+                metadata = metadata.toDomain(),
+                contentType = contentType,
+                size = size,
+                deleted = deleted,
+                reported = reported,
+                messageId = messageId,
+                userId = userId,
+                serverId = serverId,
+                objectId = objectId,
+                url = "$baseUrl$id"
+            )
+        }
+    }
+
+    private fun RevoltMetadataApiModel.toDomain(): RevoltMetadata {
+        return when(this) {
+            RevoltMetadataApiModel.Audio -> RevoltMetadata.Audio
+            RevoltMetadataApiModel.File -> RevoltMetadata.File
+            is RevoltMetadataApiModel.Image -> RevoltMetadata.Image(width = width, height = height)
+            RevoltMetadataApiModel.Text -> RevoltMetadata.Text
+            is RevoltMetadataApiModel.Video -> RevoltMetadata.Video(width = width, height = height)
+        }
+    }
+
+    // Domain To Entity
+    fun mapDomainToEntity(domainModel: RevoltFile): FileEntity {
+        with(domainModel) {
+            val entityMetadata = metadata.toEntityMetadata()
+            return FileEntity(
+                id = id,
+                tag = tag,
+                filename = filename,
+                metadata_type = entityMetadata.first,
+                metadata_width = entityMetadata.second,
+                metadata_height = entityMetadata.third,
+                content_type = contentType,
+                size = size,
+                deleted = deleted,
+                reported = reported,
+                message_id = messageId,
+                user_id = userId,
+                server_id = serverId,
+                object_id = objectId
+            )
+        }
+    }
+
+    private fun RevoltMetadata.toEntityMetadata(): Triple<String, Int?, Int?> {
+        return when(this) {
+            RevoltMetadata.Audio -> Triple("Audio", null, null)
+            RevoltMetadata.File -> Triple("File", null, null)
+            RevoltMetadata.Text -> Triple("Text", null, null)
+            is RevoltMetadata.Image -> Triple("Image", width, height)
+            is RevoltMetadata.Video -> Triple("Video", width, height)
+        }
+    }
+
+    // Entity To Domain
+    fun mapEntityToDomain(entityModel: FileEntity, url: String): RevoltFile {
+        with(entityModel) {
+            return RevoltFile(
                 id = id,
                 tag = tag,
                 filename = filename,
@@ -25,47 +90,7 @@ class RevoltFileMapper @Inject constructor(){
                 userId = user_id,
                 serverId = server_id,
                 objectId = object_id,
-                url = "$baseUrl$id"
-            )
-        }
-    }
-
-    fun mapApiToEntity(apiModel: RevoltFileApiModel): FileEntity {
-        return with(apiModel) {
-            val metadataEntity = apiModel.metadata.toEntity()
-            FileEntity(
-                id = id,
-                tag = tag,
-                filename = filename,
-                metadata_type = metadataEntity.type,
-                metadata_height = metadataEntity.height,
-                metadata_width = metadataEntity.width,
-                content_type = contentType,
-                size = size,
-                deleted = deleted,
-                reported = reported,
-                message_id = messageId,
-                user_id = userId,
-                server_id = serverId,
-                object_id = objectId
-            )
-        }
-    }
-    private fun RevoltMetadataApiModel.toEntity(): RevoltMetadataEntity {
-        return when (this) {
-            RevoltMetadataApiModel.Audio -> RevoltMetadataEntity(type = "Audio")
-            RevoltMetadataApiModel.File -> RevoltMetadataEntity(type = "File")
-            RevoltMetadataApiModel.Text -> RevoltMetadataEntity(type = "Text")
-            is RevoltMetadataApiModel.Image -> RevoltMetadataEntity(
-                type = "Image",
-                height = height,
-                width = width
-            )
-
-            is RevoltMetadataApiModel.Video -> RevoltMetadataEntity(
-                type = "Video",
-                height = height,
-                width = width
+                url = "$url/$id"
             )
         }
     }
@@ -81,9 +106,7 @@ class RevoltFileMapper @Inject constructor(){
         }
     }
 
-    data class RevoltMetadataEntity(
-        val type: String,
-        val height: Int? = null,
-        val width: Int? = null
-    )
+    fun mapApiToEntity(apiModel: RevoltFileApiModel): FileEntity {
+        return mapDomainToEntity(mapApiToDomain(apiModel, null))
+    }
 }

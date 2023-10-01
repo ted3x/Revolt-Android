@@ -19,6 +19,10 @@ class RevoltUserQueries @Inject constructor(private val database: RevoltDatabase
         database.revoltUserQueries.insertUser(user)
     }
 
+    fun getCurrentUserId(): String? {
+        return database.revoltUserQueries.selectCurrentUserId().executeAsOneOrNull()
+    }
+
     fun getCurrentUser(): UserEntity {
         return database.revoltUserQueries.selectCurrentUser().executeAsOne()
     }

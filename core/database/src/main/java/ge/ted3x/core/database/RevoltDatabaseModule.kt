@@ -30,7 +30,6 @@ object RevoltDatabaseModule {
             schema = RevoltDatabase.Schema,
             context = context,
             name = DATABASE,
-            factory = RequerySQLiteOpenHelperFactory(),
             callback = object : AndroidSqliteDriver.Callback(RevoltDatabase.Schema) {
                 override fun onConfigure(db: SupportSQLiteDatabase) {
                     super.onConfigure(db)

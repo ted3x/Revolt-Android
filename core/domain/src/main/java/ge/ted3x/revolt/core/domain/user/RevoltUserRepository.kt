@@ -10,6 +10,7 @@ interface RevoltUserRepository {
     suspend fun getSelf(): RevoltUser
     suspend fun getUser(userId: String): RevoltUser
     suspend fun editUser(request: RevoltUserEditRequest)
+    suspend fun saveUser(user: RevoltUser)
     suspend fun fetchUserFlags()
     suspend fun changeUsername(username: String, password: String)
     suspend fun fetchDefaultAvatar()
