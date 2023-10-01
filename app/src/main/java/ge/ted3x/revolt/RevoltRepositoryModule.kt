@@ -14,6 +14,7 @@ import ge.ted3x.revolt.core.data.RevoltConfigurationRepositoryImpl
 import ge.ted3x.revolt.core.data.RevoltFileRepositoryImpl
 import ge.ted3x.revolt.core.data.RevoltGatewayRepositoryImpl
 import ge.ted3x.revolt.core.data.RevoltMessagingRepositoryImpl
+import ge.ted3x.revolt.core.data.RevoltServerRepositoryImpl
 import ge.ted3x.revolt.core.data.RevoltSessionsRepositoryImpl
 import ge.ted3x.revolt.core.data.RevoltUserRepositoryImpl
 import ge.ted3x.revolt.core.data.RevoltUserTokenRepositoryImpl
@@ -22,6 +23,7 @@ import ge.ted3x.revolt.core.domain.user.RevoltAccountRepository
 import ge.ted3x.revolt.core.domain.user.RevoltFileRepository
 import ge.ted3x.revolt.core.domain.user.RevoltGatewayRepository
 import ge.ted3x.revolt.core.domain.user.RevoltMessagingRepository
+import ge.ted3x.revolt.core.domain.user.RevoltServerRepository
 import ge.ted3x.revolt.core.domain.user.RevoltSessionsRepository
 import ge.ted3x.revolt.core.domain.user.RevoltUserRepository
 import ge.ted3x.revolt.core.domain.user.RevoltUserTokenRepository
@@ -75,5 +77,9 @@ object RevoltRepositoryModule {
         @Binds
         @Singleton
         abstract fun bindsRevoltMessagingRepository(impl: RevoltMessagingRepositoryImpl): RevoltMessagingRepository
+
+        @Binds
+        @Singleton
+        abstract fun bindsRevoltServerRepository(impl: RevoltServerRepositoryImpl): RevoltServerRepository
     }
 }

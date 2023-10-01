@@ -12,6 +12,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import ge.ted3x.revolt.FileEntity
+import ge.ted3x.revolt.MemberEntity
 import ge.ted3x.revolt.MessageEntity
 import ge.ted3x.revolt.ReactionsEntity
 import ge.ted3x.revolt.RevoltDatabase
@@ -66,6 +67,9 @@ object RevoltDatabaseModule {
             ),
             ReactionsEntityAdapter = ReactionsEntity.Adapter(
                 usersAdapter = listOfStringsAdapter
+            ),
+            MemberEntityAdapter = MemberEntity.Adapter(
+                rolesAdapter = listOfStringsAdapter
             )
         )
     }

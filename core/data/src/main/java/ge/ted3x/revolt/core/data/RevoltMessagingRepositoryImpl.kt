@@ -11,11 +11,13 @@ import ge.ted3x.core.database.RevoltMessageQueries
 import ge.ted3x.revolt.MessageEntity
 import ge.ted3x.revolt.core.data.mapper.RevoltUserMapper
 import ge.ted3x.revolt.core.data.mapper.channel.messaging.RevoltFetchMessagesMapper
+import ge.ted3x.revolt.core.data.mapper.server.RevoltMemberMapper
 import ge.ted3x.revolt.core.domain.core.RevoltConfigurationRepository
 import ge.ted3x.revolt.core.domain.core.RevoltFileDomain
 import ge.ted3x.revolt.core.domain.models.RevoltFetchMessagesRequest
 import ge.ted3x.revolt.core.domain.models.RevoltMessage
 import ge.ted3x.revolt.core.domain.user.RevoltMessagingRepository
+import ge.ted3x.revolt.core.domain.user.RevoltServerRepository
 import ge.ted3x.revolt.core.domain.user.RevoltUserRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.mapLatest
@@ -25,16 +27,19 @@ class RevoltMessagingRepositoryImpl @Inject constructor(
     private val revoltApi: RevoltApi,
     private val configurationRepository: RevoltConfigurationRepository,
     private val userRepository: RevoltUserRepository,
+    private val serverRepository: RevoltServerRepository,
     private val fileQueries: RevoltFileQueries,
     private val messageQueries: RevoltMessageQueries,
     private val fetchMessagesMapper: RevoltFetchMessagesMapper,
     private val userMapper: RevoltUserMapper,
+    private val memberMapper: RevoltMemberMapper
 ) : RevoltMessagingRepository {
 
     override suspend fun fetchMessages(request: RevoltFetchMessagesRequest): Int {
         val response = revoltApi.channels.messaging.fetchMessagesWithUsers(fetchMessagesMapper.mapDomainToApi(request))
         val entities = response.messages.map { fetchMessagesMapper.mapApiToEntity(it) }
-        response.users.map { userRepository.saveUser(userMapper.mapApiToDomain(it, null, null)) }
+        response.users.forEach { userRepository.saveUser(userMapper.mapApiToDomain(it, null, null)) }
+        response.members?.forEach { serverRepository.insertMember(memberMapper.mapApiToDomain(it, null)) }
         messageQueries.insertMessages(entities)
         return response.messages.size
     }

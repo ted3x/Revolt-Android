@@ -1,0 +1,26 @@
+import kotlin.String;
+import kotlin.collections.List;
+
+CREATE TABLE MemberEntity (
+    user_id TEXT NOT NULL,
+    server_id TEXT NOT NULL,
+    joined_at TEXT NOT NULL,
+    nickname TEXT,
+    avatar_id TEXT,
+    roles TEXT AS List<String>,
+    timeout TEXT,
+    FOREIGN KEY (user_id) REFERENCES UserEntity (id) ON DELETE CASCADE,
+    FOREIGN KEY (avatar_id) REFERENCES FileEntity (id) ON DELETE CASCADE,
+    PRIMARY KEY(user_id, server_id)
+);
+
+insertMember:
+INSERT OR REPLACE INTO MemberEntity (
+    user_id,
+    server_id,
+    joined_at,
+    nickname,
+    avatar_id,
+    roles,
+    timeout
+) VALUES ?;
