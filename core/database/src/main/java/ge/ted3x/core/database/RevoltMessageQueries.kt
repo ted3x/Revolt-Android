@@ -8,6 +8,7 @@ import ge.ted3x.core.database.models.MessageWithAttachments
 import ge.ted3x.revolt.MessageEntity
 import ge.ted3x.revolt.Messages
 import ge.ted3x.revolt.RevoltDatabase
+import ge.ted3x.revolt.SelectMessageById
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -18,9 +19,13 @@ class RevoltMessageQueries @Inject constructor(private val database: RevoltDatab
     fun insertMessages(messages: List<MessageEntity>) {
         database.transaction {
             messages.forEach {
-                database.revoltMessageQueries.insertMessages(it)
+                database.revoltMessageQueries.insertMessage(it)
             }
         }
+    }
+
+    fun insertMessage(message: MessageEntity) {
+        database.revoltMessageQueries.insertMessage(message)
     }
 
     fun getMessages(channel: String): PagingSource<Int, Messages> {
@@ -32,6 +37,10 @@ class RevoltMessageQueries @Inject constructor(private val database: RevoltDatab
                 database.revoltMessageQueries.messages(channel, limit, offset)
             }
         )
+    }
+
+    fun getMessage(id: String): SelectMessageById? {
+        return database.revoltMessageQueries.selectMessageById(id).executeAsOneOrNull()
     }
 
     fun messagesFlow(channel: String): Flow<List<MessageWithAttachments>> {

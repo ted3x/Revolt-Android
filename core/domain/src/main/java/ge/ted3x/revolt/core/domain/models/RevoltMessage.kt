@@ -11,8 +11,8 @@ data class RevoltMessage(
     val attachments: List<RevoltFile>? = null,
     val edited: String? = null,
     val embeds: List<RevoltEmbed>? = null,
-    val mentions: List<String>? = null,
-    val replies: List<String>? = null,
+    val mentions: List<Mention>? = null,
+    val replies: List<Reply>? = null,
     val reactions: Map<String, List<String>>? = null,
     val interactions: Interactions? = null,
     val masquerade: RevoltMasquerade? = null
@@ -21,23 +21,21 @@ data class RevoltMessage(
     data class Author(
         val id: String,
         val username: String,
-        val displayName: String? = null,
-        val nickname: String? = null,
         val avatar: RevoltFile? = null
     )
 
-//    data class MentionUserData(
-//        val userId: String,
-//        val username: String,
-//        val avatarUrl: String?
-//    )
-//
-//    data class ReplyUserData(
-//        val userId: String,
-//        val username: String,
-//        val avatarUrl: String?,
-//        val content: String
-//    )
+    data class Mention(
+        val userId: String,
+        val username: String,
+        val avatar: RevoltFile?
+    )
+
+    data class Reply(
+        val userId: String,
+        val username: String,
+        val avatarUrl: RevoltFile?,
+        val content: String
+    )
 
     data class Webhook(
         val name: String,

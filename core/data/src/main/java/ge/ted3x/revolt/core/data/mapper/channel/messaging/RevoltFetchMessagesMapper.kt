@@ -116,8 +116,7 @@ class RevoltFetchMessagesMapper @Inject constructor(
         baseUrl: String,
         embeds: List<EmbedEntity>?,
         avatarBaseUrl: String,
-        displayName: String? = null,
-        nickname: String? = null,
+        replies: List<RevoltMessage>?,
         authorAvatar: FileEntity? = null
     ): RevoltMessage {
         return with(entityModel) {
@@ -128,8 +127,6 @@ class RevoltFetchMessagesMapper @Inject constructor(
                 author = RevoltMessage.Author(
                     id = author,
                     username = username,
-                    displayName = displayName,
-                    nickname = nickname,
                     avatar = authorAvatar?.let { fileMapper.mapEntityToDomain(it, avatarBaseUrl) }
                 ),
                 webhook = webhook_name?.let { RevoltMessage.Webhook(it, webhook_avatar) },
@@ -138,8 +135,8 @@ class RevoltFetchMessagesMapper @Inject constructor(
                 attachments = attachments?.map { fileMapper.mapEntityToDomain(it, baseUrl) },
                 edited = edited,
                 embeds = embeds?.map { embedMapper.mapEntityToDomain(it) },
-                mentions = mentions,
-                replies = replies,
+//                mentions = mentions?.map { RevoltMessage.Mention(it.author.id, it.author.username, it.author.avatar) },
+                replies = replies?.map { RevoltMessage.Reply(it.author.id, it.author.username, it.author.avatar, it.content!!) },
                 reactions = null,
                 interactions = if(interactions_reactions != null || interactions_restrictReactions != null) {
                     RevoltMessage.Interactions(

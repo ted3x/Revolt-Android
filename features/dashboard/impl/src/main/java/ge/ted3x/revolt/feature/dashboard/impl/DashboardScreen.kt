@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -33,32 +32,51 @@ fun DashboardScreen(
     LazyColumn(modifier = modifier, reverseLayout = true) {
         items(messages.itemCount) { index ->
             val message = messages[index] ?: return@items
-            val nextMessage = if(index + 1 < messages.itemCount) messages[index + 1] else null
+            val nextMessage = if (index + 1 < messages.itemCount) messages[index + 1] else null
             val isNextMessageSameAuthorAsCurrentOne = nextMessage?.author?.id == message.author.id
-            Row {
-                if(!isNextMessageSameAuthorAsCurrentOne) {
-                    RevoltGifImage(
-                        modifier = Modifier
-                            .size(40.dp)
-                            .clip(CircleShape),
-                        model = message.author.avatar?.url,
-                        contentDescription = "${message.author.username} avatar image"
-                    )
-                }
-                val spacerWidth = if(isNextMessageSameAuthorAsCurrentOne) 48.dp else 8.dp
-                Spacer(modifier = Modifier.width(spacerWidth))
-                Column {
-                    if(!isNextMessageSameAuthorAsCurrentOne) {
+            Column {
+                message.replies?.forEach { reply ->
+                    Row {
+                        RevoltGifImage(
+                            modifier = Modifier
+                                .size(16.dp)
+                                .clip(CircleShape),
+                            model = reply.avatarUrl?.url,
+                            contentDescription = "${reply.username} avatar image"
+                        )
                         Text(
-                            text = message.author.username,
+                            text = reply.username,
                             modifier = Modifier.background(Color.Cyan),
-                            fontSize = 14.sp
+                            fontSize = 12.sp
+                        )
+                        Text(text = reply.content)
+                    }
+                }
+                Row {
+                    if (!isNextMessageSameAuthorAsCurrentOne) {
+                        RevoltGifImage(
+                            modifier = Modifier
+                                .size(40.dp)
+                                .clip(CircleShape),
+                            model = message.author.avatar?.url,
+                            contentDescription = "${message.author.username} avatar image"
                         )
                     }
-                    message.content?.let { Text(text = it) }
+                    val spacerWidth = if (isNextMessageSameAuthorAsCurrentOne) 48.dp else 8.dp
+                    Spacer(modifier = Modifier.width(spacerWidth))
+                    Column {
+                        if (!isNextMessageSameAuthorAsCurrentOne) {
+                            Text(
+                                text = message.author.username,
+                                modifier = Modifier.background(Color.Cyan),
+                                fontSize = 14.sp
+                            )
+                        }
+                        message.content?.let { Text(text = it) }
+                    }
                 }
+                Spacer(modifier = Modifier.height(8.dp))
             }
-            Spacer(modifier = Modifier.height(8.dp))
         }
     }
 }
