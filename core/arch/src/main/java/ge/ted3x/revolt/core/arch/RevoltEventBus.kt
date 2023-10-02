@@ -15,7 +15,7 @@ class RevoltEventBus @Inject constructor() {
         channel.trySend(event)
     }
 
-    suspend inline fun <reified Event: RevoltEvent> listen(crossinline onReceive: (Event) -> Unit) {
+    suspend inline fun <reified Event: RevoltEvent> listen(crossinline onReceive: suspend (Event) -> Unit) {
         channel.consumeAsFlow().filter { it is Event }.collect {
             onReceive.invoke(it as Event)
         }

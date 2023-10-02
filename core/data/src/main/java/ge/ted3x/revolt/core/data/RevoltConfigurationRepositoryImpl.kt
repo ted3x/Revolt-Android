@@ -25,12 +25,23 @@ class RevoltConfigurationRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getFileUrlWithDomain(domain: RevoltFileDomain): String {
+        return getUrlWithDomain(domain)
+    }
+
+    override suspend fun getFileUrl(id: String, domain: RevoltFileDomain): String {
+        return getUrlWithDomain(domain, withSlash = true) + id
+    }
+
+    private suspend fun getUrlWithDomain(
+        domain: RevoltFileDomain,
+        withSlash: Boolean = false
+    ): String {
         val configurationEntity = configurationQueries.getConfiguration()
         val baseUrl = if (configurationEntity.autumn_enabled) {
             configurationEntity.autumn_url
         } else {
             configurationEntity.january_url
         }
-        return "$baseUrl${domain.withoutLastSlash()}"
+        return "$baseUrl${if (withSlash) domain.path else domain.withoutLastSlash()}"
     }
 }

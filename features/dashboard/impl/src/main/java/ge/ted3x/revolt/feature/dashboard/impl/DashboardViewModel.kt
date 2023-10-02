@@ -17,6 +17,7 @@ import ge.ted3x.revolt.core.arch.RevoltViewModel
 import ge.ted3x.revolt.core.domain.models.RevoltFetchMessagesRequest
 import ge.ted3x.revolt.core.domain.models.RevoltMessage
 import ge.ted3x.revolt.core.domain.user.RevoltMessagingRepository
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,6 +35,7 @@ class DashboardViewModel @Inject constructor(
     private val eventBus: RevoltEventBus
 ) : RevoltViewModel(savedStateHandle) {
 
+    val openBottomSheetDialog = Channel<String>(1)
     val initialKey: StateFlow<String?> get() = _initialKey.asStateFlow()
     private val _initialKey: MutableStateFlow<String?> = MutableStateFlow(null)
     val state: StateFlow<DashboardScreenUiState> get() = _state
@@ -43,7 +45,7 @@ class DashboardViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             eventBus.listen<OpenProfileEvent> {
-                Log.d("OpenProfile", "user id $it")
+                openBottomSheetDialog.send(it.userId)
             }
         }
     }

@@ -21,19 +21,19 @@ data class RevoltMessage(
     data class Author(
         val id: String,
         val username: String,
-        val avatar: RevoltFile? = null
+        val avatarUrl: String? = null
     )
 
     data class Mention(
         val userId: String,
         val username: String,
-        val avatar: RevoltFile?
+        val avatarUrl: String?
     )
 
     data class Reply(
         val userId: String,
         val username: String,
-        val avatarUrl: RevoltFile?,
+        val avatarUrl: String?,
         val content: String
     )
 

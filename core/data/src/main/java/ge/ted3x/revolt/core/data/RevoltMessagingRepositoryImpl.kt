@@ -11,8 +11,10 @@ import ge.ted3x.core.database.RevoltMemberQueries
 import ge.ted3x.core.database.RevoltMessageQueries
 import ge.ted3x.revolt.MessageEntity
 import ge.ted3x.revolt.core.arch.notNullOrBlank
+import ge.ted3x.revolt.core.data.mapper.RevoltFileMapper
 import ge.ted3x.revolt.core.data.mapper.RevoltUserMapper
 import ge.ted3x.revolt.core.data.mapper.channel.messaging.RevoltFetchMessagesMapper
+import ge.ted3x.revolt.core.data.mapper.channel.messaging.RevoltMessagesPagingMapper
 import ge.ted3x.revolt.core.data.mapper.server.RevoltMemberMapper
 import ge.ted3x.revolt.core.domain.core.RevoltConfigurationRepository
 import ge.ted3x.revolt.core.domain.core.RevoltFileDomain
@@ -35,7 +37,9 @@ class RevoltMessagingRepositoryImpl @Inject constructor(
     private val messageQueries: RevoltMessageQueries,
     private val fetchMessagesMapper: RevoltFetchMessagesMapper,
     private val userMapper: RevoltUserMapper,
-    private val memberMapper: RevoltMemberMapper
+    private val memberMapper: RevoltMemberMapper,
+    private val fileMapper: RevoltFileMapper,
+    private val pagingMapper: RevoltMessagesPagingMapper
 ) : RevoltMessagingRepository {
 
     override suspend fun fetchMessages(request: RevoltFetchMessagesRequest): Int {
@@ -71,142 +75,29 @@ class RevoltMessagingRepositoryImpl @Inject constructor(
             remoteMediator = MessagingMediator(channel, this),
             config = PagingConfig(pageSize = 50, enablePlaceholders = false, initialLoadSize = 50),
         ).flow.mapLatest {
-            it.map { keyedQuery ->
-                val message = with(keyedQuery) {
-                    MessageEntity(
-                        id = id,
-                        channel = channel,
-                        nonce = nonce,
-                        author = author,
-                        webhook_name = webhook_name,
-                        webhook_avatar = webhook_avatar,
-                        content = content,
-                        system_type = system_type,
-                        system_content = system_content,
-                        system_content_id = system_content_id,
-                        system_content_by = system_content_by,
-                        system_content_name = system_content_name,
-                        system_content_from = system_content_from,
-                        system_content_to = system_content_to,
-                        edited = edited,
-                        mentions = mentions,
-                        replies = replies,
-                        interactions_reactions = interactions_reactions,
-                        interactions_restrictReactions = interactions_restrictReactions,
-                        masquerade_name = masquerade_name,
-                        masquerade_avatar = masquerade_avatar,
-                        masquerade_color = masquerade_color,
-                        timestamp = timestamp
-                    )
-                }
-
-                val replies = keyedQuery.replies?.let { replies -> getReplies(channel, replies) }
-                with(keyedQuery) {
-                    getMappedMessage(
-                        message,
-                        file_id,
-                        member_avatar_id,
-                        user_avatar_id,
-                        masquerade_avatar,
-                        member_nickname,
-                        user_display_name,
-                        user_username,
-                        replies
-                    )
-                }
-            }
-        }
-    }
-
-    private suspend fun getReplies(channel: String, replies: List<String>): List<RevoltMessage>? {
-        return replies.map {
-            var localMessage = messageQueries.getMessage(it)
-            if (localMessage == null) {
-                fetchMessage(channel, it)
-            }
-            localMessage = messageQueries.getMessage(it) ?: return null
-            var content: String? = localMessage.content
-            localMessage.mentions?.let { it1 -> membersQueries.getMembers(it1) }?.forEach {
-                content = content?.replace(
-                    it.user_id,
-                    notNullOrBlank(it.nickname, it.display_name, it.username)!!
-                )
-            }
-            val messageEntity = with(localMessage) {
-                MessageEntity(
-                    id = id,
-                    channel = channel,
-                    nonce = nonce,
-                    author = author,
-                    webhook_name = webhook_name,
-                    webhook_avatar = webhook_avatar,
-                    content = content,
-                    system_type = system_type,
-                    system_content = system_content,
-                    system_content_id = system_content_id,
-                    system_content_by = system_content_by,
-                    system_content_name = system_content_name,
-                    system_content_from = system_content_from,
-                    system_content_to = system_content_to,
-                    edited = edited,
-                    mentions = mentions,
-                    replies = this.replies,
-                    interactions_reactions = interactions_reactions,
-                    interactions_restrictReactions = interactions_restrictReactions,
-                    masquerade_name = masquerade_name,
-                    masquerade_avatar = masquerade_avatar,
-                    masquerade_color = masquerade_color,
-                    timestamp = timestamp
-                )
-            }
-            with(localMessage) {
-                getMappedMessage(
-                    messageEntity,
-                    file_id,
-                    member_avatar_id,
-                    user_avatar_id,
-                    masquerade_avatar,
-                    member_nickname,
-                    user_display_name,
-                    user_username,
-                    if(messageEntity.replies.isNullOrEmpty()) null else getReplies(channel, messageEntity.replies!!)
+            it.map { message ->
+                pagingMapper.mapToDomain(
+                    baseUrl = configurationRepository.getFileUrlWithDomain(RevoltFileDomain.Attachments),
+                    message = message,
+                    onGetMessage = { id ->
+                        val localMessage = messageQueries.getMessage(id)
+                        if(localMessage == null) {
+                            fetchMessage(channel, id)
+                        }
+                        messageQueries.getMessage(id)!!
+                    },
+                    onGetMembers = { ids ->
+                        membersQueries.getMembers(ids)
+                    },
+                    onGetFileUrl = { id ,domain ->
+                        configurationRepository.getFileUrl(id, domain)
+                    },
+                    onGetFile = { id ->
+                        fileQueries.getFile(id)
+                    }
                 )
             }
         }
-    }
-
-    private suspend fun getMappedMessage(
-        message: MessageEntity,
-        fileIds: String?,
-        memberAvatarId: String?,
-        userAvatarId: String?,
-        masquaradeAvatar: String?,
-        memberNickname: String?,
-        userDisplayName: String?,
-        username: String?,
-        replies: List<RevoltMessage>?
-    ): RevoltMessage {
-        var content: String? = message.content
-        message.mentions?.let { it1 -> membersQueries.getMembers(it1) }?.forEach {
-            content = content?.replace(
-                "<@${it.user_id}>",
-                "[@${notNullOrBlank(it.nickname, it.display_name, it.username)!!}](revolt://profile/${it.user_id})"
-            )
-        }
-        val attachments =
-            fileIds?.split(",")?.mapNotNull { fileQueries.getFile(it) }
-
-        val avatarId = notNullOrBlank(memberAvatarId, masquaradeAvatar, userAvatarId)
-        return fetchMessagesMapper.mapEntityToDomain(
-            username = notNullOrBlank(memberNickname, userDisplayName, username)!!,
-            entityModel = message.copy(content = content),
-            attachments = attachments,
-            baseUrl = configurationRepository.getFileUrlWithDomain(RevoltFileDomain.Attachments),
-            embeds = null,
-            replies = replies,
-            authorAvatar = avatarId?.let { fileQueries.getFile(it) },
-            avatarBaseUrl = configurationRepository.getFileUrlWithDomain(RevoltFileDomain.Avatar)
-        )
     }
 
     private suspend fun fetchMessage(channelId: String, messageId: String) {
