@@ -36,7 +36,9 @@ android {
         }
     }
 }
-
+ksp {
+    arg("compose-destinations.generateNavGraphs", "false")
+}
 dependencies {
 
     implementation(projects.core.data)
@@ -48,8 +50,6 @@ dependencies {
     implementation(projects.features.dashboard.impl)
     implementation(projects.features.settings.api)
     implementation(projects.features.settings.impl)
-    implementation(projects.features.splash.api)
-    implementation(projects.features.splash.impl)
 
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
@@ -60,6 +60,7 @@ dependencies {
     implementation(libs.material3)
     implementation(libs.revolt.api)
     implementation(libs.androidx.security.crypto)
+    implementation(libs.androidx.splash.screen)
     implementation(libs.compose.destinations.core)
     ksp(libs.compose.destinations.ksp)
     implementation(libs.hilt.android)

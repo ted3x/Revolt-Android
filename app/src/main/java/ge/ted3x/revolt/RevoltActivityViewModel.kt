@@ -1,4 +1,4 @@
-package ge.ted3x.revolt.feature.splash.impl.ui
+package ge.ted3x.revolt
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -9,11 +9,13 @@ import ge.ted3x.revolt.core.domain.repository.general.RevoltConfigurationReposit
 import ge.ted3x.revolt.core.domain.repository.general.RevoltGatewayRepository
 import ge.ted3x.revolt.core.domain.repository.user.RevoltUserRepository
 import ge.ted3x.revolt.feature.dashboard.api.DashboardFeatureScreen
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SplashFeatureVm @Inject constructor(
+class RevoltActivityViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val navigator: RevoltNavigator,
     private val configurationRepository: RevoltConfigurationRepository,
@@ -21,12 +23,15 @@ class SplashFeatureVm @Inject constructor(
     private val gatewayRepository: RevoltGatewayRepository
 ) : RevoltViewModel(savedStateHandle) {
 
+    val loading: StateFlow<Boolean> get() = _loading
+    private val _loading = MutableStateFlow(true)
+
     init {
         viewModelScope.launch {
             configurationRepository.fetchConfiguration()
             gatewayRepository.initialize()
             userRepository.getSelf()
-            //navigator.newRoot(SettingsFeatureScreen)
+            _loading.value = false
             navigator.newRoot(DashboardFeatureScreen)
         }
     }

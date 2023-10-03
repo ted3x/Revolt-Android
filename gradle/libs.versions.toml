@@ -21,6 +21,7 @@ datastore-preferences = "1.0.0"
 security-crypto = "1.1.0-alpha06"
 paging = "3.2.1"
 requery = "3.43.0"
+splash-screen = "1.0.1"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -58,6 +59,7 @@ androidx-security-crypto = { group = "androidx.security", name = "security-crypt
 androidx-paging-runtime = { group = "androidx.paging", name = "paging-runtime", version.ref = "paging" }
 androidx-paging-common = { group = "androidx.paging", name = "paging-common", version.ref = "paging" }
 androidx-paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "paging" }
+androidx-splash-screen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splash-screen" }
 
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }

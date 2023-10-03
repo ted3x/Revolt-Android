@@ -5,8 +5,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -20,12 +22,11 @@ import ge.ted3x.revolt.core.arch.navigation.RevoltNavHost
 import ge.ted3x.revolt.core.arch.navigation.RevoltNavigationCommand
 import ge.ted3x.revolt.core.arch.navigation.RevoltNavigator
 import ge.ted3x.revolt.core.arch.navigation.RevoltScreen
+import ge.ted3x.revolt.destinations.BlankScreenDestination
 import ge.ted3x.revolt.feature.dashboard.impl.DashboardScreen
 import ge.ted3x.revolt.feature.dashboard.impl.destinations.DashboardScreenDestination
 import ge.ted3x.revolt.feature.settings.impl.ui.screens.destinations.SettingsRootScreenDestination
 import ge.ted3x.revolt.feature.settings.impl.ui.screens.root.SettingsRootScreen
-import ge.ted3x.revolt.feature.splash.api.SplashFeatureScreenRoute
-import ge.ted3x.revolt.feature.splash.impl.ui.SplashFeatureScreen
 import ge.ted3x.revolt.ui.theme.RevoltTheme
 import javax.inject.Inject
 
@@ -37,13 +38,20 @@ class RevoltActivity : ComponentActivity() {
 
     @Inject lateinit var eventBus: RevoltEventBus
 
+    private val viewModel: RevoltActivityViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        installSplashScreen().apply {
+            setKeepOnScreenCondition {
+                viewModel.loading.value
+            }
+        }
         setContent {
             RevoltTheme {
-                SetupAppNavHost(navigator = navigator, SplashFeatureScreenRoute) {
-                    composable(SplashFeatureScreenRoute.route) {
-                        SplashFeatureScreen()
+                SetupAppNavHost(navigator = navigator, destination = BlankScreenDestination.route) {
+                    composable(BlankScreenDestination.route) {
+                        BlankScreen()
                     }
                     composable(SettingsRootScreenDestination.route) {
                         SettingsRootScreen()
@@ -68,7 +76,7 @@ class RevoltActivity : ComponentActivity() {
     @Composable
     private fun ComponentActivity.SetupAppNavHost(
         navigator: RevoltNavigator,
-        destination: RevoltScreen,
+        destination: String,
         builder: NavGraphBuilder.() -> Unit
     ) {
         val mainNavController = rememberNavController()
@@ -79,7 +87,7 @@ class RevoltActivity : ComponentActivity() {
             }
             RevoltNavHost(
                 navController = mainNavController,
-                startDestination = destination.route,
+                startDestination = destination,
                 builder = builder
             )
         }
