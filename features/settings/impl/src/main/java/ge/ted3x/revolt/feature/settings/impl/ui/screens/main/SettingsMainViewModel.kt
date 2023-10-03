@@ -4,9 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ge.ted3x.revolt.core.arch.RevoltViewModel
-import ge.ted3x.revolt.core.domain.models.RevoltUserStatus
-import ge.ted3x.revolt.core.domain.models.request.RevoltUserEditRequest
-import ge.ted3x.revolt.core.domain.user.RevoltUserRepository
+import ge.ted3x.revolt.core.domain.models.user.RevoltUserStatus
+import ge.ted3x.revolt.core.domain.models.user.request.RevoltUserEditRequest
+import ge.ted3x.revolt.core.domain.repository.user.RevoltUserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest

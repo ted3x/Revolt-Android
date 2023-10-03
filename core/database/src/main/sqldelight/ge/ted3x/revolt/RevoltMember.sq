@@ -1,7 +1,7 @@
 import kotlin.String;
 import kotlin.collections.List;
 
-CREATE TABLE MemberEntity (
+CREATE TABLE RevoltMemberEntity (
     user_id TEXT NOT NULL,
     server_id TEXT NOT NULL,
     joined_at TEXT NOT NULL,
@@ -9,13 +9,13 @@ CREATE TABLE MemberEntity (
     avatar_id TEXT,
     roles TEXT AS List<String>,
     timeout TEXT,
-    FOREIGN KEY (user_id) REFERENCES UserEntity (id) ON DELETE CASCADE,
-    FOREIGN KEY (avatar_id) REFERENCES FileEntity (id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES RevoltUserEntity (id) ON DELETE CASCADE,
+    FOREIGN KEY (avatar_id) REFERENCES RevoltFileEntity (id) ON DELETE CASCADE,
     PRIMARY KEY(user_id, server_id)
 );
 
 insertMember:
-INSERT OR REPLACE INTO MemberEntity (
+INSERT OR REPLACE INTO RevoltMemberEntity (
     user_id,
     server_id,
     joined_at,
@@ -26,7 +26,7 @@ INSERT OR REPLACE INTO MemberEntity (
 ) VALUES ?;
 
 selectMembers:
-SELECT MemberEntity.*, UserEntity.display_name, UserEntity.username
-FROM MemberEntity
-LEFT JOIN UserEntity ON UserEntity.id = MemberEntity.user_id
-WHERE MemberEntity.user_id IN ?;
+SELECT RevoltMemberEntity.*, RevoltUserEntity.display_name, RevoltUserEntity.username
+FROM RevoltMemberEntity
+LEFT JOIN RevoltUserEntity ON RevoltUserEntity.id = RevoltMemberEntity.user_id
+WHERE RevoltMemberEntity.user_id IN ?;

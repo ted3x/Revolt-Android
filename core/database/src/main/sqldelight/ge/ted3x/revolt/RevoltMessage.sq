@@ -1,9 +1,8 @@
 import kotlin.Boolean;
 import kotlin.String;
 import kotlin.collections.List;
-import kotlin.collections.Map;
 
-CREATE TABLE MessageEntity (
+CREATE TABLE RevoltMessageEntity (
     id TEXT NOT NULL PRIMARY KEY,
     channel TEXT NOT NULL,
     nonce TEXT,
@@ -27,11 +26,11 @@ CREATE TABLE MessageEntity (
     masquerade_avatar TEXT,
     masquerade_color TEXT,
     timestamp INTEGER NOT NULL,
-    FOREIGN KEY (channel) REFERENCES RevoltChannel(id) ON DELETE CASCADE
+    FOREIGN KEY (channel) REFERENCES RevoltChannelEntity(id) ON DELETE CASCADE
 );
 
 insertMessage:
-INSERT OR REPLACE INTO MessageEntity (
+INSERT OR REPLACE INTO RevoltMessageEntity (
     id,
     channel,
     nonce,
@@ -58,36 +57,36 @@ INSERT OR REPLACE INTO MessageEntity (
 VALUES ?;
 
 selectMessageById:
-SELECT MessageEntity.*,
-FileEntity.id AS file_id,
-UserEntity.avatar_id AS user_avatar_id, UserEntity.username AS user_username, UserEntity.display_name AS user_display_name,
-MemberEntity.avatar_id AS member_avatar_id, MemberEntity.nickname AS member_nickname
-FROM MessageEntity
-LEFT JOIN UserEntity ON UserEntity.id = MessageEntity.author
-LEFT JOIN MemberEntity ON MemberEntity.user_id = MessageEntity.author
-LEFT JOIN FileEntity ON FileEntity.message_id = MessageEntity.id
-WHERE MessageEntity.id = :id;
+SELECT RevoltMessageEntity.*,
+RevoltFileEntity.id AS file_id,
+RevoltUserEntity.avatar_id AS user_avatar_id, RevoltUserEntity.username AS user_username, RevoltUserEntity.display_name AS user_display_name,
+RevoltMemberEntity.avatar_id AS member_avatar_id, RevoltMemberEntity.nickname AS member_nickname
+FROM RevoltMessageEntity
+LEFT JOIN RevoltUserEntity ON RevoltUserEntity.id = RevoltMessageEntity.author
+LEFT JOIN RevoltMemberEntity ON RevoltMemberEntity.user_id = RevoltMessageEntity.author
+LEFT JOIN RevoltFileEntity ON RevoltFileEntity.message_id = RevoltMessageEntity.id
+WHERE RevoltMessageEntity.id = :id;
 
 selectMessagesByChannel:
-SELECT * FROM MessageEntity WHERE channel = ?;
+SELECT * FROM RevoltMessageEntity WHERE channel = ?;
 
 countMessages:
-SELECT COUNT(*) FROM MessageEntity WHERE channel = :channel;
+SELECT COUNT(*) FROM RevoltMessageEntity WHERE channel = :channel;
 
 messages:
-SELECT MessageEntity.*,
-FileEntity.id AS file_id,
-UserEntity.avatar_id AS user_avatar_id, UserEntity.username AS user_username, UserEntity.display_name AS user_display_name,
-MemberEntity.avatar_id AS member_avatar_id, MemberEntity.nickname AS member_nickname
-FROM MessageEntity
-LEFT JOIN UserEntity ON UserEntity.id = MessageEntity.author
-LEFT JOIN MemberEntity ON MemberEntity.user_id = MessageEntity.author
-LEFT JOIN FileEntity ON FileEntity.message_id = MessageEntity.id
+SELECT RevoltMessageEntity.*,
+RevoltFileEntity.id AS file_id,
+RevoltUserEntity.avatar_id AS user_avatar_id, RevoltUserEntity.username AS user_username, RevoltUserEntity.display_name AS user_display_name,
+RevoltMemberEntity.avatar_id AS member_avatar_id, RevoltMemberEntity.nickname AS member_nickname
+FROM RevoltMessageEntity
+LEFT JOIN RevoltUserEntity ON RevoltUserEntity.id = RevoltMessageEntity.author
+LEFT JOIN RevoltMemberEntity ON RevoltMemberEntity.user_id = RevoltMessageEntity.author
+LEFT JOIN RevoltFileEntity ON RevoltFileEntity.message_id = RevoltMessageEntity.id
 WHERE channel = :channel
-ORDER BY MessageEntity.timestamp DESC
+ORDER BY RevoltMessageEntity.timestamp DESC
 LIMIT :limit OFFSET :offset;
 
-CREATE TABLE EmbedEntity (
+CREATE TABLE RevoltEmbedEntity (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     message_id TEXT NOT NULL,
     type TEXT NOT NULL, -- 'None', 'Website', 'Image', 'Video', 'TextEmbed'
@@ -109,19 +108,19 @@ CREATE TABLE EmbedEntity (
     video_url TEXT DEFAULT NULL,
     video_width INTEGER DEFAULT NULL,
     video_height INTEGER DEFAULT NULL,
-    FOREIGN KEY (message_id) REFERENCES MessageEntity(id) ON DELETE CASCADE
+    FOREIGN KEY (message_id) REFERENCES RevoltMessageEntity(id) ON DELETE CASCADE
 );
 
-CREATE TABLE ReactionsEntity (
+CREATE TABLE RevoltReactionsEntity (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     message_id TEXT NOT NULL,
     reaction_id TEXT NOT NULL,
     users TEXT AS List<String> NOT NULL,
-    FOREIGN KEY (message_id) REFERENCES MessageEntity(id) ON DELETE CASCADE
+    FOREIGN KEY (message_id) REFERENCES RevoltMessageEntity(id) ON DELETE CASCADE
 );
 
 insertReactions:
-INSERT OR REPLACE INTO ReactionsEntity (
+INSERT OR REPLACE INTO RevoltReactionsEntity (
     id,
     message_id,
     reaction_id,

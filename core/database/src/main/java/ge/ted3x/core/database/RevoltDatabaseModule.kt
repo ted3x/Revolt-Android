@@ -2,7 +2,6 @@ package ge.ted3x.core.database
 
 import android.content.Context
 import androidx.sqlite.db.SupportSQLiteDatabase
-import io.requery.android.database.sqlite.SQLiteOpenHelper
 import app.cash.sqldelight.ColumnAdapter
 import app.cash.sqldelight.adapter.primitive.IntColumnAdapter
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
@@ -11,13 +10,12 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import ge.ted3x.revolt.FileEntity
-import ge.ted3x.revolt.MemberEntity
-import ge.ted3x.revolt.MessageEntity
-import ge.ted3x.revolt.ReactionsEntity
 import ge.ted3x.revolt.RevoltDatabase
-import ge.ted3x.revolt.UserEntity
-import io.requery.android.database.sqlite.RequerySQLiteOpenHelperFactory
+import ge.ted3x.revolt.RevoltFileEntity
+import ge.ted3x.revolt.RevoltMemberEntity
+import ge.ted3x.revolt.RevoltMessageEntity
+import ge.ted3x.revolt.RevoltReactionsEntity
+import ge.ted3x.revolt.RevoltUserEntity
 import javax.inject.Singleton
 
 @Module
@@ -51,24 +49,24 @@ object RevoltDatabaseModule {
     fun provideRevoltDatabase(driver: AndroidSqliteDriver): RevoltDatabase {
         return RevoltDatabase(
             driver,
-            FileEntityAdapter = FileEntity.Adapter(
+            RevoltFileEntityAdapter = RevoltFileEntity.Adapter(
                 sizeAdapter = IntColumnAdapter,
                 metadata_heightAdapter = IntColumnAdapter,
                 metadata_widthAdapter = IntColumnAdapter
             ),
-            UserEntityAdapter = UserEntity.Adapter(
+            RevoltUserEntityAdapter = RevoltUserEntity.Adapter(
                 badgesAdapter = IntColumnAdapter,
                 flagsAdapter = IntColumnAdapter
             ),
-            MessageEntityAdapter = MessageEntity.Adapter(
+            RevoltMessageEntityAdapter = RevoltMessageEntity.Adapter(
                 mentionsAdapter = listOfStringsAdapter,
                 repliesAdapter = listOfStringsAdapter,
                 interactions_reactionsAdapter = listOfStringsAdapter
             ),
-            ReactionsEntityAdapter = ReactionsEntity.Adapter(
+            RevoltReactionsEntityAdapter = RevoltReactionsEntity.Adapter(
                 usersAdapter = listOfStringsAdapter
             ),
-            MemberEntityAdapter = MemberEntity.Adapter(
+            RevoltMemberEntityAdapter = RevoltMemberEntity.Adapter(
                 rolesAdapter = listOfStringsAdapter
             )
         )

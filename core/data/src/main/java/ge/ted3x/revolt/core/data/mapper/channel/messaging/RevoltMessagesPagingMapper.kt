@@ -1,14 +1,14 @@
 package ge.ted3x.revolt.core.data.mapper.channel.messaging
 
-import ge.ted3x.revolt.FileEntity
-import ge.ted3x.revolt.MessageEntity
 import ge.ted3x.revolt.Messages
+import ge.ted3x.revolt.RevoltFileEntity
+import ge.ted3x.revolt.RevoltMessageEntity
 import ge.ted3x.revolt.SelectMembers
 import ge.ted3x.revolt.SelectMessageById
 import ge.ted3x.revolt.core.arch.firstNotNullAndBlankOrNull
 import ge.ted3x.revolt.core.arch.notNullOrBlank
-import ge.ted3x.revolt.core.domain.core.RevoltFileDomain
-import ge.ted3x.revolt.core.domain.models.RevoltMessage
+import ge.ted3x.revolt.core.domain.models.general.RevoltFileDomain
+import ge.ted3x.revolt.core.domain.models.general.RevoltMessage
 import javax.inject.Inject
 
 class RevoltMessagesPagingMapper @Inject constructor(private val fetchMessagesMapper: RevoltFetchMessagesMapper) {
@@ -19,7 +19,7 @@ class RevoltMessagesPagingMapper @Inject constructor(private val fetchMessagesMa
         onGetMessage: suspend (id: String) -> SelectMessageById,
         onGetMembers: (ids: List<String>) -> List<SelectMembers>,
         onGetFileUrl: suspend (id: String, domain: RevoltFileDomain) -> String?,
-        onGetFile: (id: String) -> FileEntity?
+        onGetFile: (id: String) -> RevoltFileEntity?
     ): RevoltMessage {
         return with(message) {
             val messageEntity = message.toMessageEntity()
@@ -35,7 +35,7 @@ class RevoltMessagesPagingMapper @Inject constructor(private val fetchMessagesMa
         }
     }
 
-    private fun Messages.toMessageEntity() = MessageEntity(
+    private fun Messages.toMessageEntity() = RevoltMessageEntity(
         id = id,
         channel = channel,
         nonce = nonce,
@@ -107,7 +107,7 @@ class RevoltMessagesPagingMapper @Inject constructor(private val fetchMessagesMa
     }
 
     private suspend fun getMappedMessage(
-        message: MessageEntity,
+        message: RevoltMessageEntity,
         baseUrl: String,
         fileIds: String?,
         username: String,
@@ -115,7 +115,7 @@ class RevoltMessagesPagingMapper @Inject constructor(private val fetchMessagesMa
         avatarId: String?,
         onGetMembers: (ids: List<String>) -> List<SelectMembers>,
         onGetFileUrl: suspend (id: String, domain: RevoltFileDomain) -> String?,
-        onGetFile: (id: String) -> FileEntity?
+        onGetFile: (id: String) -> RevoltFileEntity?
     ): RevoltMessage {
         val content =
             getContentWithHandledMentions(message.mentions, message.content!!, onGetMembers)

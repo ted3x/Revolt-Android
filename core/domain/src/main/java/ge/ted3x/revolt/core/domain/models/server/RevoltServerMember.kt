@@ -1,6 +1,6 @@
 package ge.ted3x.revolt.core.domain.models.server
 
-import ge.ted3x.revolt.core.domain.models.RevoltFile
+import ge.ted3x.revolt.core.domain.models.general.RevoltFile
 
 data class RevoltServerMember(
     val userId: String,

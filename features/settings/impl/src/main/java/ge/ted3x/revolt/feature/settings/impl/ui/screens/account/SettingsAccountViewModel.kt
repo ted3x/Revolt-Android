@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ge.ted3x.revolt.core.arch.RevoltViewModel
 import ge.ted3x.revolt.core.domain.models.account.request.RevoltChangeEmailRequest
-import ge.ted3x.revolt.core.domain.user.RevoltAccountRepository
-import ge.ted3x.revolt.core.domain.user.RevoltUserRepository
+import ge.ted3x.revolt.core.domain.repository.user.RevoltAccountRepository
+import ge.ted3x.revolt.core.domain.repository.user.RevoltUserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest

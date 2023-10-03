@@ -1,17 +1,17 @@
 import kotlin.Boolean;
 import kotlin.Int;
 
-CREATE TABLE UserEntity (
+CREATE TABLE RevoltUserEntity (
     id TEXT PRIMARY KEY NOT NULL,
     username TEXT NOT NULL,
     discriminator TEXT NOT NULL,
     display_name TEXT,
-    avatar_id TEXT REFERENCES FileEntity(id),
+    avatar_id TEXT REFERENCES RevoltFileEntity(id),
     badges INTEGER AS Int,
     status_text TEXT,
     status_presence TEXT,
     profile_content TEXT,
-    profile_background_id TEXT REFERENCES FileEntity(id),
+    profile_background_id TEXT REFERENCES RevoltFileEntity(id),
     flags INTEGER AS Int,
     privileged INTEGER AS Boolean,
     owner TEXT,
@@ -20,14 +20,14 @@ CREATE TABLE UserEntity (
     is_current_user INTEGER AS Boolean NOT NULL
 );
 
-CREATE TABLE RelationEntity (
+CREATE TABLE RevoltRelationEntity (
     id TEXT PRIMARY KEY NOT NULL,
     status TEXT NOT NULL,
-    user_id TEXT NOT NULL REFERENCES UserEntity(id)
+    user_id TEXT NOT NULL REFERENCES RevoltUserEntity(id)
 );
 
 insertUser:
-INSERT OR REPLACE INTO UserEntity (
+INSERT OR REPLACE INTO RevoltUserEntity (
     id,
     username,
     discriminator,
@@ -47,26 +47,26 @@ INSERT OR REPLACE INTO UserEntity (
 ) VALUES ?;
 
 updateUsername:
-UPDATE UserEntity SET username = ? WHERE is_current_user = 1;
+UPDATE RevoltUserEntity SET username = ? WHERE is_current_user = 1;
 
 selectUserById:
-SELECT * FROM UserEntity WHERE id = ?;
+SELECT * FROM RevoltUserEntity WHERE id = ?;
 
 selectCurrentUserId:
-SELECT UserEntity.id
-FROM UserEntity
-WHERE UserEntity.is_current_user = 1;
+SELECT RevoltUserEntity.id
+FROM RevoltUserEntity
+WHERE RevoltUserEntity.is_current_user = 1;
 
 selectCurrentUser:
-SELECT UserEntity.*
-FROM UserEntity
-LEFT JOIN RelationEntity ON UserEntity.id = RelationEntity.user_id
-WHERE UserEntity.is_current_user = 1;
+SELECT RevoltUserEntity.*
+FROM RevoltUserEntity
+LEFT JOIN RevoltRelationEntity ON RevoltUserEntity.id = RevoltRelationEntity.user_id
+WHERE RevoltUserEntity.is_current_user = 1;
 
 
 inserRelation:
-INSERT OR REPLACE INTO RelationEntity (id, status, user_id)
+INSERT OR REPLACE INTO RevoltRelationEntity (id, status, user_id)
 VALUES ?;
 
 selectRelationsByUserId:
-SELECT * FROM RelationEntity WHERE user_id = ?;
+SELECT * FROM RevoltRelationEntity WHERE user_id = ?;

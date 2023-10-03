@@ -2,11 +2,11 @@ package ge.ted3x.revolt.core.domain.interactor
 
 import ge.ted3x.revolt.core.domain.RevoltBaseInteractor
 import ge.ted3x.revolt.core.domain.RevoltCoroutineDispatchers
-import ge.ted3x.revolt.core.domain.core.RevoltFileDomain
-import ge.ted3x.revolt.core.domain.models.core.RevoltFileUploadRequest
-import ge.ted3x.revolt.core.domain.models.request.RevoltUserEditRequest
-import ge.ted3x.revolt.core.domain.user.RevoltFileRepository
-import ge.ted3x.revolt.core.domain.user.RevoltUserRepository
+import ge.ted3x.revolt.core.domain.models.general.RevoltFileDomain
+import ge.ted3x.revolt.core.domain.models.general.request.RevoltFileUploadRequest
+import ge.ted3x.revolt.core.domain.models.user.request.RevoltUserEditRequest
+import ge.ted3x.revolt.core.domain.repository.general.RevoltFileRepository
+import ge.ted3x.revolt.core.domain.repository.user.RevoltUserRepository
 import java.util.UUID
 import javax.inject.Inject
 

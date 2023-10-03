@@ -8,7 +8,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import ge.ted3x.revolt.core.arch.RevoltViewModel
 import ge.ted3x.revolt.core.arch.toDate
 import ge.ted3x.revolt.core.domain.UlidTimeDecoder
-import ge.ted3x.revolt.core.domain.user.RevoltSessionsRepository
+import ge.ted3x.revolt.core.domain.repository.user.RevoltSessionsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update

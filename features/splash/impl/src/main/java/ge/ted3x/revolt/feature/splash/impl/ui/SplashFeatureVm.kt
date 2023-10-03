@@ -5,12 +5,10 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ge.ted3x.revolt.core.arch.navigation.RevoltNavigator
 import ge.ted3x.revolt.core.arch.RevoltViewModel
-import ge.ted3x.revolt.core.domain.core.RevoltConfigurationRepository
-import ge.ted3x.revolt.core.domain.user.RevoltGatewayRepository
-import ge.ted3x.revolt.core.domain.user.RevoltUserRepository
+import ge.ted3x.revolt.core.domain.repository.general.RevoltConfigurationRepository
+import ge.ted3x.revolt.core.domain.repository.general.RevoltGatewayRepository
+import ge.ted3x.revolt.core.domain.repository.user.RevoltUserRepository
 import ge.ted3x.revolt.feature.dashboard.api.DashboardFeatureScreen
-import ge.ted3x.revolt.feature.settings.api.SettingsFeatureScreen
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

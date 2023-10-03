@@ -1,7 +1,7 @@
 import kotlin.Boolean;
 import kotlin.Int;
 
-CREATE TABLE FileEntity (
+CREATE TABLE RevoltFileEntity (
     id TEXT PRIMARY KEY NOT NULL ,
     tag TEXT NOT NULL,
     filename TEXT NOT NULL,
@@ -12,21 +12,21 @@ CREATE TABLE FileEntity (
     size INTEGER AS Int NOT NULL,
     deleted INTEGER AS Boolean,
     reported INTEGER AS Boolean,
-    message_id TEXT REFERENCES MessageEntity(id) ON DELETE CASCADE ,
-    user_id TEXT REFERENCES UserEntity(id) ON DELETE CASCADE,
+    message_id TEXT REFERENCES RevoltMessageEntity(id) ON DELETE CASCADE ,
+    user_id TEXT REFERENCES RevoltUserEntity(id) ON DELETE CASCADE,
     server_id TEXT,
     object_id TEXT
 );
 
 insertFile:
-INSERT OR REPLACE INTO FileEntity (id, tag, filename, metadata_type, metadata_width, metadata_height, content_type, size, deleted, reported, message_id, user_id, server_id, object_id)
+INSERT OR REPLACE INTO RevoltFileEntity (id, tag, filename, metadata_type, metadata_width, metadata_height, content_type, size, deleted, reported, message_id, user_id, server_id, object_id)
 VALUES ?;
 
 selectFileById:
-SELECT * FROM FileEntity WHERE id = ?;
+SELECT * FROM RevoltFileEntity WHERE id = ?;
 
 selectFileByMessageId:
-SELECT * FROM FileEntity WHERE message_id = ?;
+SELECT * FROM RevoltFileEntity WHERE message_id = ?;
 
 deleteFileById:
-DELETE FROM FileEntity WHERE id = ?;
+DELETE FROM RevoltFileEntity WHERE id = ?;

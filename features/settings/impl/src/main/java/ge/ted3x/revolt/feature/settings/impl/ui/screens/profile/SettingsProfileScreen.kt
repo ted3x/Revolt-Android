@@ -26,7 +26,7 @@ import ge.ted3x.revolt.core.designsystem.profile.RevoltProfileCard
 import ge.ted3x.revolt.core.designsystem.profile.RevoltProfileData
 import ge.ted3x.revolt.core.designsystem.profile.RevoltProfileTab
 import ge.ted3x.revolt.core.designsystem.textfield.RevoltTextField
-import ge.ted3x.revolt.core.domain.core.RevoltFileDomain
+import ge.ted3x.revolt.core.domain.models.general.RevoltFileDomain
 
 
 private val tabs = listOf<RevoltProfileTab>(

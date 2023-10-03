@@ -1,9 +1,9 @@
 package ge.ted3x.revolt.core.data.mapper.server
 
 import app.revolt.model.server.RevoltServerMemberApiModel
-import ge.ted3x.revolt.FileEntity
-import ge.ted3x.revolt.MemberEntity
-import ge.ted3x.revolt.core.data.mapper.RevoltFileMapper
+import ge.ted3x.revolt.RevoltFileEntity
+import ge.ted3x.revolt.RevoltMemberEntity
+import ge.ted3x.revolt.core.data.mapper.general.RevoltFileMapper
 import ge.ted3x.revolt.core.domain.models.server.RevoltServerMember
 import javax.inject.Inject
 
@@ -25,9 +25,9 @@ class RevoltMemberMapper @Inject constructor(private val fileMapper: RevoltFileM
     }
 
     // Domain To Entity
-    fun mapDomainToEntity(domainModel: RevoltServerMember): MemberEntity {
+    fun mapDomainToEntity(domainModel: RevoltServerMember): RevoltMemberEntity {
         return with(domainModel) {
-            MemberEntity(
+            RevoltMemberEntity(
                 user_id = userId,
                 server_id = serverId,
                 joined_at = joinedAt,
@@ -40,7 +40,7 @@ class RevoltMemberMapper @Inject constructor(private val fileMapper: RevoltFileM
     }
 
     // Entity To Domain
-    fun mapDomainToEntity(entityModel: MemberEntity, avatarEntity: FileEntity?, avatarBaseUrl: String): RevoltServerMember {
+    fun mapDomainToEntity(entityModel: RevoltMemberEntity, avatarEntity: RevoltFileEntity?, avatarBaseUrl: String): RevoltServerMember {
         return with(entityModel) {
             RevoltServerMember(
                 userId = user_id,
@@ -54,7 +54,7 @@ class RevoltMemberMapper @Inject constructor(private val fileMapper: RevoltFileM
         }
     }
 
-    fun mapApiToEntity(apiModel: RevoltServerMemberApiModel, avatarBaseUrl: String?): MemberEntity {
+    fun mapApiToEntity(apiModel: RevoltServerMemberApiModel, avatarBaseUrl: String?): RevoltMemberEntity {
         return mapDomainToEntity(mapApiToDomain(apiModel, avatarBaseUrl))
     }
 }

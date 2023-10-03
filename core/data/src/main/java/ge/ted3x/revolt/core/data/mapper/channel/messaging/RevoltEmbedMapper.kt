@@ -1,12 +1,12 @@
 package ge.ted3x.revolt.core.data.mapper.channel.messaging
 
-import ge.ted3x.revolt.EmbedEntity
-import ge.ted3x.revolt.core.domain.models.RevoltEmbed
+import ge.ted3x.revolt.RevoltEmbedEntity
+import ge.ted3x.revolt.core.domain.models.general.RevoltEmbed
 import javax.inject.Inject
 
 class RevoltEmbedMapper @Inject constructor() {
 
-    fun mapEntityToDomain(entityModel: EmbedEntity): RevoltEmbed {
+    fun mapEntityToDomain(entityModel: RevoltEmbedEntity): RevoltEmbed {
         return with(entityModel) {
             when (entityModel.type) {
                 "Website" -> {
@@ -99,7 +99,7 @@ class RevoltEmbedMapper @Inject constructor() {
         }
     }
 
-    fun mapDomainToEntity(messageId: String, domainModel: RevoltEmbed): EmbedEntity {
+    fun mapDomainToEntity(messageId: String, domainModel: RevoltEmbed): RevoltEmbedEntity {
         return with(domainModel) {
             when (this) {
                 is RevoltEmbed.None -> getEmptyEmbedEntity(messageId, "None")
@@ -215,8 +215,8 @@ class RevoltEmbedMapper @Inject constructor() {
         }
     }
 
-    private fun getEmptyEmbedEntity(messageId: String, type: String): EmbedEntity {
-        return EmbedEntity(
+    private fun getEmptyEmbedEntity(messageId: String, type: String): RevoltEmbedEntity {
+        return RevoltEmbedEntity(
             id = 0,
             message_id = messageId,
             type = type,

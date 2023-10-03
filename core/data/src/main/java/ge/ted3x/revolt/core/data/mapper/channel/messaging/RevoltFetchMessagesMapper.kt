@@ -3,14 +3,15 @@ package ge.ted3x.revolt.core.data.mapper.channel.messaging
 import app.revolt.model.RevoltMessageApiModel
 import app.revolt.model.RevoltMessageApiModel.*
 import app.revolt.model.channel.messaging.RevoltFetchMessagesRequestApiModel
-import ge.ted3x.revolt.EmbedEntity
-import ge.ted3x.revolt.FileEntity
-import ge.ted3x.revolt.MessageEntity
-import ge.ted3x.revolt.core.data.mapper.RevoltFileMapper
+import ge.ted3x.revolt.RevoltEmbedEntity
+import ge.ted3x.revolt.RevoltFileEntity
+import ge.ted3x.revolt.RevoltMessageEntity
+import ge.ted3x.revolt.core.data.mapper.general.RevoltFileMapper
 import ge.ted3x.revolt.core.domain.UlidTimeDecoder
-import ge.ted3x.revolt.core.domain.models.RevoltFetchMessagesRequest
-import ge.ted3x.revolt.core.domain.models.RevoltMasquerade
-import ge.ted3x.revolt.core.domain.models.RevoltMessage
+import ge.ted3x.revolt.core.domain.models.channel.request.RevoltFetchMessagesRequest
+import ge.ted3x.revolt.core.domain.models.general.RevoltFile
+import ge.ted3x.revolt.core.domain.models.general.RevoltMasquerade
+import ge.ted3x.revolt.core.domain.models.general.RevoltMessage
 import javax.inject.Inject
 
 class RevoltFetchMessagesMapper @Inject constructor(
@@ -37,9 +38,9 @@ class RevoltFetchMessagesMapper @Inject constructor(
         RevoltFetchMessagesRequest.Sort.Oldest -> RevoltFetchMessagesRequestApiModel.Sort.Oldest
     }
 
-    fun mapApiToEntity(apiModel: RevoltMessageApiModel): MessageEntity {
+    fun mapApiToEntity(apiModel: RevoltMessageApiModel): RevoltMessageEntity {
         return with(apiModel) {
-            MessageEntity(
+            RevoltMessageEntity(
                 id = id,
                 channel = channel,
                 nonce = nonce,
@@ -111,10 +112,10 @@ class RevoltFetchMessagesMapper @Inject constructor(
 
     fun mapEntityToDomain(
         username: String,
-        entityModel: MessageEntity,
-        attachments: List<FileEntity>?,
+        entityModel: RevoltMessageEntity,
+        attachments: List<RevoltFileEntity>?,
         baseUrl: String,
-        embeds: List<EmbedEntity>?,
+        embeds: List<RevoltEmbedEntity>?,
         replies: List<RevoltMessage.Reply>?,
         avatarUrl: String?
     ): RevoltMessage {
@@ -154,7 +155,7 @@ class RevoltFetchMessagesMapper @Inject constructor(
         }
     }
 
-    private fun MessageEntity.toDomainSystem() = when (this.system_type) {
+    private fun RevoltMessageEntity.toDomainSystem() = when (this.system_type) {
         "Text" -> RevoltMessage.System.Text(this.system_content!!)
         "UserAdded" -> RevoltMessage.System.UserAdded(
             id = system_content_id!!,
