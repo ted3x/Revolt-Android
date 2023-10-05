@@ -22,6 +22,7 @@ security-crypto = "1.1.0-alpha06"
 paging = "3.2.1"
 requery = "3.43.0"
 splash-screen = "1.0.1"
+richeditor-compose = "1.0.0-beta03"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -73,6 +74,8 @@ sqldelight-paging = { group = "app.cash.sqldelight", name = "androidx-paging3-ex
 sqldelight-dialect = { group = "app.cash.sqldelight", name = "sqlite-3-25-dialect", version.ref = "sqldelight" }
 
 requery-sqlite = { "group" = "com.github.requery", name = "sqlite-android", version.ref = "requery" }
+
+richeditor-compose = { group = "com.mohamedrejeb.richeditor", name = "richeditor-compose", version = "richeditor-compose" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }

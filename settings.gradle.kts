@@ -39,3 +39,6 @@ fun includeProjects(directory: File, path: String, maxDepth: Int = 1) {
 
 includeProjects(File(rootDir, "core"), ":core")
 includeProjects(File(rootDir, "features"), ":features")
+include(":features:auth:signin:impl")
+include(":features:auth:onboarding")
+include(":features:auth:onboarding:impl")

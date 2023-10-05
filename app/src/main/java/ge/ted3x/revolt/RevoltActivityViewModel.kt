@@ -32,7 +32,7 @@ class RevoltActivityViewModel @Inject constructor(
             gatewayRepository.initialize()
             userRepository.getSelf()
             _loading.value = false
-            navigator.newRoot(DashboardFeatureScreen)
+//            navigator.newRoot(DashboardFeatureScreen)
         }
     }
 }

@@ -50,6 +50,7 @@ dependencies {
     implementation(projects.features.dashboard.impl)
     implementation(projects.features.settings.api)
     implementation(projects.features.settings.impl)
+    implementation(projects.features.auth.signin.impl)
 
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)

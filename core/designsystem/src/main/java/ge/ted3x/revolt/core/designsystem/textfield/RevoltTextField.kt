@@ -14,17 +14,13 @@ fun RevoltTextField(
     hint: String? = null,
     singleLine: Boolean = true,
 ) {
+    title?.let { Text(text = it) }
     TextField(
         value = value,
         onValueChange = onValueChange,
         placeholder = {
             if (hint != null) {
                 Text(text = hint)
-            }
-        },
-        label = {
-            if (title != null) {
-                Text(text = title)
             }
         },
         singleLine = singleLine,
