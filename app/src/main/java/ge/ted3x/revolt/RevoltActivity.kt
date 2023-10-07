@@ -50,7 +50,7 @@ class RevoltActivity : ComponentActivity() {
         }
         setContent {
             RevoltTheme {
-                SetupAppNavHost(navigator = navigator, destination = RevoltSignInScreenDestination.route) {
+                SetupAppNavHost(navigator = navigator, destination = BlankScreenDestination.route) {
                     composable(BlankScreenDestination.route) {
                         BlankScreen()
                     }

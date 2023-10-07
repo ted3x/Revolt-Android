@@ -28,6 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -35,12 +36,14 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
+import ge.ted3x.feature.auth.signin.api.SIGN_IN_FEATURE_SCREEN_ROUTE
+import ge.ted3x.feature.auth.signin.api.SignInFeatureScreen
 import ge.ted3x.revolt.core.designsystem.DesignSystemDrawable
 import ge.ted3x.revolt.core.designsystem.text.SpannedText
 import ge.ted3x.revolt.core.designsystem.textfield.RevoltTextField
 import kotlinx.coroutines.launch
 
-@Destination(start = true)
+@Destination(start = true, route = SIGN_IN_FEATURE_SCREEN_ROUTE)
 @Composable
 fun RevoltSignInScreen(
     modifier: Modifier = Modifier,
@@ -60,7 +63,8 @@ fun RevoltSignInScreen(
                 Image(
                     modifier = Modifier.height(30.dp),
                     painter = painterResource(id = DesignSystemDrawable.ic_revolt_logo_text),
-                    contentDescription = "logo text"
+                    contentDescription = "logo text",
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
                 )
             }
             Text(text = "\uD83D\uDC4B Welcome!")
@@ -92,7 +96,7 @@ fun RevoltSignInScreen(
                 hint = "Enter your password",
                 isError = uiState.passwordError,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                visualTransformation = if(passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
                     val image = if (passwordVisible) DesignSystemDrawable.ic_visibility_off
                     else DesignSystemDrawable.ic_visibility

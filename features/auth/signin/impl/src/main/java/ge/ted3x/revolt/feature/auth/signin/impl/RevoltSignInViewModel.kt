@@ -65,7 +65,7 @@ class RevoltSignInViewModel @Inject constructor(
                     UiMessage(result.message)
                 )
 
-                RevoltSignInInteractor.Output.Success -> revoltNavigator.navigate(
+                RevoltSignInInteractor.Output.Success -> revoltNavigator.newRoot(
                     DashboardFeatureScreen
                 )
             }
