@@ -23,7 +23,7 @@ import ge.ted3x.revolt.core.domain.repository.general.RevoltFileRepository
 import ge.ted3x.revolt.core.domain.repository.general.RevoltGatewayRepository
 import ge.ted3x.revolt.core.domain.repository.channel.RevoltMessagingRepository
 import ge.ted3x.revolt.core.domain.repository.server.RevoltServerRepository
-import ge.ted3x.revolt.core.domain.repository.user.RevoltSessionsRepository
+import ge.ted3x.revolt.core.domain.repository.session.RevoltSessionsRepository
 import ge.ted3x.revolt.core.domain.repository.user.RevoltUserRepository
 import ge.ted3x.revolt.core.domain.repository.user.RevoltUserTokenRepository
 import javax.inject.Singleton

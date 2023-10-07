@@ -30,7 +30,7 @@ class RevoltActivityViewModel @Inject constructor(
         viewModelScope.launch {
             configurationRepository.fetchConfiguration()
             gatewayRepository.initialize()
-            userRepository.getSelf()
+//            userRepository.getSelf()
             _loading.value = false
 //            navigator.newRoot(DashboardFeatureScreen)
         }
