@@ -37,6 +37,7 @@ class RevoltGatewayRepositoryImpl @Inject constructor(
         revoltApi.ws.initialize(configurationRepository.getConfiguration().ws)
         handleEvents()
         val token = tokenRepository.retrieveToken() ?: return
+        revoltApi.updateToken(token)
         revoltApi.ws.sendEvent(RevoltClientApiEvent.Authenticate(token))
     }
 
