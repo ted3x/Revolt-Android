@@ -5,13 +5,15 @@ import ge.ted3x.revolt.core.domain.RevoltBaseInteractor
 import ge.ted3x.revolt.core.domain.RevoltCoroutineDispatchers
 import ge.ted3x.revolt.core.domain.models.session.RevoltLoginResponse
 import ge.ted3x.revolt.core.domain.repository.session.RevoltSessionsRepository
+import ge.ted3x.revolt.core.domain.repository.user.RevoltUserRepository
 import ge.ted3x.revolt.core.domain.repository.user.RevoltUserTokenRepository
 import javax.inject.Inject
 
 class RevoltSignInInteractor @Inject constructor(
     dispatchers: RevoltCoroutineDispatchers,
     private val sessionsRepository: RevoltSessionsRepository,
-    private val tokenRepository: RevoltUserTokenRepository
+    private val tokenRepository: RevoltUserTokenRepository,
+    private val userRepository: RevoltUserRepository
 ) :
     RevoltBaseInteractor<RevoltSignInInteractor.Input, RevoltSignInInteractor.Output>(dispatchers) {
 
@@ -28,6 +30,7 @@ class RevoltSignInInteractor @Inject constructor(
                 is RevoltLoginResponse.MFA -> TODO()
                 is RevoltLoginResponse.Success -> {
                     tokenRepository.saveToken(response.token)
+                    userRepository.getSelf()
                 }
             }
             Output.Success

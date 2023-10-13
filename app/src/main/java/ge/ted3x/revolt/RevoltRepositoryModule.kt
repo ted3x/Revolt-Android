@@ -34,11 +34,8 @@ object RevoltRepositoryModule {
 
     @Provides
     @Singleton
-    fun providesRevoltApi(tokenRepository: RevoltUserTokenRepository): RevoltApi {
-        val config = RevoltApiConfig(
-            token = tokenRepository.retrieveToken()
-        )
-        return revoltApi(config)
+    fun providesRevoltApi(): RevoltApi {
+        return revoltApi(RevoltApiConfig())
     }
 
     @Module

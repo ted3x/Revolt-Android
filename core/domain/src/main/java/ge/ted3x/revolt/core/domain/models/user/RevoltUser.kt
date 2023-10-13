@@ -24,4 +24,23 @@ data class RevoltUser(
     )
 
     data class Bot(val owner: String)
+
+    companion object {
+        val Empty = RevoltUser(
+            id = "",
+            username = "",
+            discriminator = "",
+            displayName = "",
+            avatar = null,
+            relations = null,
+            badges = null,
+            status = null,
+            profile = null,
+            flags = null,
+            privileged = false,
+            bot = null,
+            relationship = null,
+            online = false
+        )
+    }
 }

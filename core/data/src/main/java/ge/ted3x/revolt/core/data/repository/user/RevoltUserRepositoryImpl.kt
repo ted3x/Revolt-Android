@@ -39,7 +39,11 @@ class RevoltUserRepositoryImpl @Inject constructor(
                     avatarEntity = userEntity.avatar_id?.let { fileQueries.getFile(it) },
                     avatarBaseUrl = avatarBaseUrl,
                     backgroundBaseUrl = backgroundBaseUrl,
-                    backgroundEntity = userEntity.profile_background_id?.let { fileQueries.getFile(it) },
+                    backgroundEntity = userEntity.profile_background_id?.let {
+                        fileQueries.getFile(
+                            it
+                        )
+                    },
                     relationsEntity = userQueries.getRelations(userEntity.id),
                 )
             }
@@ -47,12 +51,12 @@ class RevoltUserRepositoryImpl @Inject constructor(
 
     override suspend fun getSelf(): RevoltUser {
         val user = revoltApi.users.fetchSelf()
-        return updateAndGetUser(user)
+        return updateAndGetUser(user, true)
     }
 
     override suspend fun getUser(userId: String): RevoltUser {
         val user = revoltApi.users.fetchUser(userId)
-        return updateAndGetUser(user)
+        return updateAndGetUser(user, false)
     }
 
     override suspend fun editUser(request: RevoltUserEditRequest) {
@@ -87,8 +91,8 @@ class RevoltUserRepositoryImpl @Inject constructor(
         // return updateAndGetUser(response, true)
     }
 
-    override suspend fun saveUser(user: RevoltUser) {
-        val isCurrentUser = userQueries.getCurrentUserId() == user.id
+    override suspend fun saveUser(user: RevoltUser, isCurrentUser: Boolean?) {
+        val isCurrentUser = isCurrentUser ?: (userQueries.getCurrentUserId() == user.id)
         val userEntityCollection = userMapper.mapDomainToEntity(user, isCurrentUser)
         userQueries.insertUser(userEntityCollection.userEntity)
         userEntityCollection.avatarEntity?.let { avatar ->
@@ -116,8 +120,11 @@ class RevoltUserRepositoryImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    private suspend fun updateAndGetUser(user: RevoltUserApiModel): RevoltUser {
-        saveUser(userMapper.mapApiToDomain(user, null, null))
+    private suspend fun updateAndGetUser(
+        user: RevoltUserApiModel,
+        isCurrentUser: Boolean
+    ): RevoltUser {
+        saveUser(userMapper.mapApiToDomain(user, null, null), isCurrentUser)
         val userId = user.id
         val userEntity = userQueries.getUser(userId)
         val avatarBaseUrl = configurationRepository.getFileUrlWithDomain(RevoltFileDomain.Avatar)

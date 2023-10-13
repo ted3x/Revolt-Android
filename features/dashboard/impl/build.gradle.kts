@@ -15,6 +15,7 @@ dependencies {
     implementation(projects.core.arch)
     implementation(projects.core.domain)
     implementation(projects.features.dashboard.api)
+    implementation(projects.features.settings.api)
     implementation(libs.compose.destinations.core)
     ksp(libs.compose.destinations.ksp)
     implementation(libs.ui)
