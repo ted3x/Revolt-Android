@@ -36,6 +36,10 @@ gradlePlugin {
             id = "revolt.android.library"
             implementationClass = "AndroidLibraryConventionPlugin"
         }
+        register("androidUiLibrary") {
+            id = "revolt.android.ui.library"
+            implementationClass = "AndroidUiLibraryConventionPlugin"
+        }
     }
 }
 

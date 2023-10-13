@@ -83,7 +83,7 @@ sealed class SettingsTarget {
 
 
 @Composable
-@Destination(route = SETTINGS_ROOT_SCREEN_ROUTE)
+@Destination(start = true, route = SETTINGS_ROOT_SCREEN_ROUTE)
 fun SettingsRootScreen(
     viewModel: SettingsRootViewModel = hiltViewModel()
 ) {

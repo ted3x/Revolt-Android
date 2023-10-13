@@ -41,7 +41,6 @@ import ge.ted3x.feature.auth.signin.api.SignInFeatureScreen
 import ge.ted3x.revolt.core.designsystem.DesignSystemDrawable
 import ge.ted3x.revolt.core.designsystem.text.SpannedText
 import ge.ted3x.revolt.core.designsystem.textfield.RevoltTextField
-import kotlinx.coroutines.launch
 
 @Destination(start = true, route = SIGN_IN_FEATURE_SCREEN_ROUTE)
 @Composable

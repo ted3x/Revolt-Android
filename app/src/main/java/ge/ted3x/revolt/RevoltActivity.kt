@@ -24,8 +24,8 @@ import ge.ted3x.revolt.core.arch.navigation.RevoltNavigator
 import ge.ted3x.revolt.destinations.BlankScreenDestination
 import ge.ted3x.revolt.feature.auth.signin.impl.RevoltSignInScreen
 import ge.ted3x.revolt.feature.auth.signin.impl.destinations.RevoltSignInScreenDestination
-import ge.ted3x.revolt.feature.dashboard.impl.DashboardScreen
-import ge.ted3x.revolt.feature.dashboard.impl.destinations.DashboardScreenDestination
+import ge.ted3x.revolt.feature.dashboard.impl.DashboardRootScreen
+import ge.ted3x.revolt.feature.dashboard.impl.destinations.DashboardRootScreenDestination
 import ge.ted3x.revolt.feature.settings.impl.ui.screens.destinations.SettingsRootScreenDestination
 import ge.ted3x.revolt.feature.settings.impl.ui.screens.root.SettingsRootScreen
 import ge.ted3x.revolt.ui.theme.RevoltTheme
@@ -60,8 +60,8 @@ class RevoltActivity : ComponentActivity() {
                     composable(SettingsRootScreenDestination.route) {
                         SettingsRootScreen()
                     }
-                    composable(DashboardScreenDestination.route) {
-                        DashboardScreen()
+                    composable(DashboardRootScreenDestination.route) {
+                        DashboardRootScreen()
                     }
                 }
             }

@@ -10,7 +10,6 @@ activity-compose = "1.7.2"
 compose-bom = "2023.09.02"
 revolt = "0.0.1-beta01"
 appcompat = "1.6.1"
-material = "1.9.0"
 ksp = "1.9.10-1.0.13"
 coil = "2.4.0"
 hilt = "2.48"
@@ -23,6 +22,7 @@ paging = "3.2.1"
 requery = "3.43.0"
 splash-screen = "1.0.1"
 richeditor-compose = "1.0.0-beta03"
+material3 = "1.1.2"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -43,7 +43,6 @@ material3 = { group = "androidx.compose.material3", name = "material3" }
 revolt-api = { group = "com.github.ted3x", name = "revolt-kotlin-api", version.ref = "revolt" }
 
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 coil-gif = { group = "io.coil-kt", name = "coil-gif", version.ref = "coil" }

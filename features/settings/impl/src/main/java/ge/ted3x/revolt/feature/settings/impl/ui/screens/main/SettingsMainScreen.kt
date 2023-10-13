@@ -43,7 +43,7 @@ import ge.ted3x.revolt.feature.settings.impl.ui.screens.destinations.SettingsAcc
 import ge.ted3x.revolt.feature.settings.impl.ui.screens.destinations.SettingsProfileScreenDestination
 import ge.ted3x.revolt.feature.settings.impl.ui.screens.destinations.SettingsSessionsScreenDestination
 
-@Destination(start = true)
+@Destination
 @Composable
 fun SettingsMainScreen(
     navigator: DestinationsNavigator,

@@ -1,6 +1,6 @@
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
-    id("revolt.android.library")
+    id("revolt.android.ui.library")
     id("revolt.android.library.compose")
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
