@@ -1,6 +1,7 @@
 package ge.ted3x.revolt.feature.dashboard.impl
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,7 +16,6 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -27,10 +27,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.mohamedrejeb.richeditor.model.rememberRichTextState
 import com.mohamedrejeb.richeditor.ui.material3.RichText
-import com.ramcosta.composedestinations.annotation.Destination
 import ge.ted3x.revolt.core.designsystem.gif.RevoltGifImage
-import ge.ted3x.revolt.feature.dashboard.api.DASHBOARD_ROOT_SCREEN_ROUTE
-import kotlinx.coroutines.channels.consume
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.consumeAsFlow
 
@@ -54,13 +51,16 @@ fun DashboardScreen(
                         RevoltGifImage(
                             modifier = Modifier
                                 .size(16.dp)
-                                .clip(CircleShape),
+                                .clip(CircleShape)
+                                .clickable { showBottomSheet.value = message.author.id },
                             model = reply.avatarUrl,
                             contentDescription = "${reply.username} avatar image"
                         )
                         Text(
                             text = reply.username,
-                            modifier = Modifier.background(Color.Cyan),
+                            modifier = Modifier
+                                .background(Color.Cyan)
+                                .clickable { showBottomSheet.value = message.author.id },
                             fontSize = 12.sp
                         )
                         replyRichTextState.setMarkdown(reply.content)
@@ -75,7 +75,8 @@ fun DashboardScreen(
                         RevoltGifImage(
                             modifier = Modifier
                                 .size(40.dp)
-                                .clip(CircleShape),
+                                .clip(CircleShape)
+                                .clickable { showBottomSheet.value = message.author.id },
                             model = message.author.avatarUrl,
                             contentDescription = "${message.author.username} avatar image"
                         )
@@ -86,7 +87,9 @@ fun DashboardScreen(
                         if (!isNextMessageSameAuthorAsCurrentOne) {
                             Text(
                                 text = message.author.username,
-                                modifier = Modifier.background(Color.Cyan),
+                                modifier = Modifier
+                                    .background(Color.Cyan)
+                                    .clickable { showBottomSheet.value = message.author.id },
                                 fontSize = 14.sp
                             )
                         }
@@ -108,7 +111,7 @@ fun DashboardScreen(
             showBottomSheet.value = it
         }
     }
-    if(showBottomSheet.value != null) {
+    if (showBottomSheet.value != null) {
         ProfileBottomSheetDialog(userId = showBottomSheet.value!!) {
             showBottomSheet.value = null
         }
