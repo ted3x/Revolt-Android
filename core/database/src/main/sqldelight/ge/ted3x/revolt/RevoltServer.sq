@@ -1,0 +1,94 @@
+import kotlin.Boolean;
+import kotlin.Int;
+import kotlin.String;
+import kotlin.collections.List;
+
+CREATE TABLE RevoltServerEntity (
+    id TEXT PRIMARY KEY NOT NULL,
+    owner TEXT NOT NULL,
+    name TEXT NOT NULL,
+    description TEXT,
+    channels TEXT AS List<String> NOT NULL,
+    categories TEXT AS List<String>,
+    system_message_on_join TEXT,
+    system_message_on_leave TEXT,
+    system_message_on_kicked TEXT,
+    system_message_on_banned TEXT,
+    roles TEXT AS List<String>,
+    default_permissions INTEGER AS Int,
+    icon_id TEXT,
+    banner_id TEXT,
+    flags INTEGER AS Int,
+    nsfw INTEGER AS Boolean,
+    analytics INTEGER AS Boolean,
+    discoverable INTEGER AS Boolean,
+    FOREIGN KEY (icon_id) REFERENCES RevoltFileEntity(id) ON DELETE CASCADE,
+    FOREIGN KEY (banner_id) REFERENCES RevoltFileEntity(id) ON DELETE CASCADE
+);
+
+insertServer:
+INSERT OR REPLACE INTO RevoltServerEntity(
+    id ,
+    owner,
+    name,
+    description,
+    channels,
+    categories,
+    system_message_on_join,
+    system_message_on_leave,
+    system_message_on_kicked,
+    system_message_on_banned,
+    roles,
+    default_permissions,
+    icon_id,
+    banner_id,
+    flags,
+    nsfw,
+    analytics,
+    discoverable
+) VALUES ?;
+
+getServer:
+SELECT Server.*, Category.*, Role.*
+FROM RevoltServerEntity AS Server
+JOIN RevoltServerCategoryEntity AS Category ON Category.server_id = Server.id
+JOIN RevoltServerRoleEntity AS Role ON Role.server_id = Server.id
+WHERE Server.id = :id;
+
+CREATE TABLE RevoltServerCategoryEntity (
+    id TEXT PRIMARY KEY NOT NULL,
+    title TEXT NOT NULL,
+    channels TEXT AS List<String> NOT NULL,
+    server_id TEXT REFERENCES RevoltServerEntity(id) ON DELETE CASCADE
+);
+
+insertCategory:
+INSERT OR REPLACE INTO RevoltServerCategoryEntity(
+    id,
+    title,
+    channels,
+    server_id
+) VALUES ?;
+
+CREATE TABLE RevoltServerRoleEntity (
+    id TEXT NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    permissions_allowed INTEGER AS Int NOT NULL,
+    permissions_disallowed INTEGER AS Int NOT NULL,
+    color TEXT,
+    hoist INTEGER AS Boolean,
+    rank INTEGER AS Int NOT NULL,
+    server_id TEXT REFERENCES RevoltServerEntity(id) ON DELETE CASCADE
+);
+
+insertRole:
+INSERT OR REPLACE INTO RevoltServerRoleEntity(
+    id,
+    name,
+    permissions_allowed,
+    permissions_disallowed,
+    color,
+    hoist,
+    rank,
+    server_id
+) VALUES ?;

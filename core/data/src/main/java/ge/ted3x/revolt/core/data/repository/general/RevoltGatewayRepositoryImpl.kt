@@ -12,8 +12,12 @@ import app.revolt.websocket.server.RevoltServerApiEvent.UserUpdate.Field.StatusT
 import ge.ted3x.core.database.dao.RevoltFileDao
 import ge.ted3x.core.database.dao.RevoltUserDao
 import ge.ted3x.revolt.core.data.mapper.general.RevoltFileMapper
+import ge.ted3x.revolt.core.data.mapper.server.RevoltServerMapper
+import ge.ted3x.revolt.core.data.mapper.user.RevoltUserMapper
+import ge.ted3x.revolt.core.domain.models.general.RevoltFileDomain
 import ge.ted3x.revolt.core.domain.repository.general.RevoltConfigurationRepository
 import ge.ted3x.revolt.core.domain.repository.general.RevoltGatewayRepository
+import ge.ted3x.revolt.core.domain.repository.server.RevoltServerRepository
 import ge.ted3x.revolt.core.domain.repository.user.RevoltUserRepository
 import ge.ted3x.revolt.core.domain.repository.user.RevoltUserTokenRepository
 import kotlinx.coroutines.CoroutineScope
@@ -31,29 +35,65 @@ class RevoltGatewayRepositoryImpl @Inject constructor(
     private val userRepository: RevoltUserRepository,
     private val tokenRepository: RevoltUserTokenRepository,
     private val configurationRepository: RevoltConfigurationRepository,
-    private val fileMapper: RevoltFileMapper
+    private val serverRepository: RevoltServerRepository,
+    private val fileMapper: RevoltFileMapper,
+    private val userMapper: RevoltUserMapper,
+    private val serverMapper: RevoltServerMapper
 ) : RevoltGatewayRepository {
+
     override suspend fun initialize() {
         revoltApi.ws.initialize(configurationRepository.getConfiguration().ws)
         handleEvents()
+        authenticate()
+    }
+
+    override suspend fun authenticate() {
         val token = tokenRepository.retrieveToken() ?: return
-        revoltApi.updateToken(token)
         revoltApi.ws.sendEvent(RevoltClientApiEvent.Authenticate(token))
     }
 
     private fun handleEvents() {
         CoroutineScope(Dispatchers.Default).launch {
-            revoltApi.ws.incomingEvents.consumeAsFlow().buffer(Channel.UNLIMITED).collect {
-                when (it) {
+            revoltApi.ws.incomingEvents.consumeAsFlow().buffer(Channel.UNLIMITED).collect { event ->
+                when (event) {
+                    is RevoltServerApiEvent.Ready -> {
+                        val avatarBaseUrl =
+                            configurationRepository.getFileUrlWithDomain(RevoltFileDomain.Avatar)
+                        val backgroundBaseUrl =
+                            configurationRepository.getFileUrlWithDomain(RevoltFileDomain.Background)
+                        val iconBaseUrl =
+                            configurationRepository.getFileUrlWithDomain(RevoltFileDomain.Icons)
+                        val bannerBaseUrl =
+                            configurationRepository.getFileUrlWithDomain(RevoltFileDomain.Banners)
+                        event.servers.forEach {
+                            serverRepository.insertServer(
+                                serverMapper.mapApiToDomain(
+                                    it,
+                                    iconBaseUrl,
+                                    bannerBaseUrl
+                                )
+                            )
+                        }
+                        event.users.forEach {
+                            userRepository.saveUser(
+                                userMapper.mapApiToDomain(
+                                    apiModel = it,
+                                    avatarBaseUrl = avatarBaseUrl,
+                                    backgroundBaseUrl = backgroundBaseUrl
+                                )
+                            )
+                        }
+                    }
+
                     RevoltServerApiEvent.Authenticated -> {
-                        Log.d("Authenticated", it.toString())
+                        Log.d("Authenticated", event.toString())
                     }
 
                     is RevoltServerApiEvent.Bulk -> TODO()
                     is RevoltServerApiEvent.Error -> TODO()
                     is RevoltServerApiEvent.Pong -> TODO()
                     is RevoltServerApiEvent.UserUpdate -> {
-                        updateUser(it)
+                        updateUser(event)
                     }
                 }
             }
@@ -98,7 +138,7 @@ class RevoltGatewayRepositoryImpl @Inject constructor(
     }
 
     private fun shouldInsertNewFile(oldValueId: String?, newValue: RevoltFileApiModel?) {
-        if(newValue != null && oldValueId != newValue.id) {
+        if (newValue != null && oldValueId != newValue.id) {
             oldValueId?.let { fileQueries.deleteFile(it) }
             val fileEntity = fileMapper.mapApiToEntity(newValue)
             fileQueries.insertFile(fileEntity)

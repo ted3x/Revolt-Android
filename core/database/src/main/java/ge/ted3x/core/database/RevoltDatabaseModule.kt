@@ -15,6 +15,9 @@ import ge.ted3x.revolt.RevoltFileEntity
 import ge.ted3x.revolt.RevoltMemberEntity
 import ge.ted3x.revolt.RevoltMessageEntity
 import ge.ted3x.revolt.RevoltReactionsEntity
+import ge.ted3x.revolt.RevoltServerCategoryEntity
+import ge.ted3x.revolt.RevoltServerEntity
+import ge.ted3x.revolt.RevoltServerRoleEntity
 import ge.ted3x.revolt.RevoltUserEntity
 import javax.inject.Singleton
 
@@ -68,6 +71,21 @@ object RevoltDatabaseModule {
             ),
             RevoltMemberEntityAdapter = RevoltMemberEntity.Adapter(
                 rolesAdapter = listOfStringsAdapter
+            ),
+            RevoltServerCategoryEntityAdapter = RevoltServerCategoryEntity.Adapter(
+                channelsAdapter = listOfStringsAdapter
+            ),
+            RevoltServerRoleEntityAdapter = RevoltServerRoleEntity.Adapter(
+                permissions_allowedAdapter = IntColumnAdapter,
+                permissions_disallowedAdapter = IntColumnAdapter,
+                rankAdapter = IntColumnAdapter,
+            ),
+            RevoltServerEntityAdapter = RevoltServerEntity.Adapter(
+                channelsAdapter = listOfStringsAdapter,
+                categoriesAdapter = listOfStringsAdapter,
+                rolesAdapter = listOfStringsAdapter,
+                default_permissionsAdapter = IntColumnAdapter,
+                flagsAdapter = IntColumnAdapter
             )
         )
     }

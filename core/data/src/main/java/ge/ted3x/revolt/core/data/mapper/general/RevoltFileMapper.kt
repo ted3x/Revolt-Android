@@ -75,7 +75,7 @@ class RevoltFileMapper @Inject constructor(){
     }
 
     // Entity To Domain
-    fun mapEntityToDomain(entityModel: RevoltFileEntity, url: String): RevoltFile {
+    fun mapEntityToDomain(entityModel: RevoltFileEntity, baseUrl: String): RevoltFile {
         with(entityModel) {
             return RevoltFile(
                 id = id,
@@ -90,7 +90,7 @@ class RevoltFileMapper @Inject constructor(){
                 userId = user_id,
                 serverId = server_id,
                 objectId = object_id,
-                url = "$url/$id"
+                url = "$baseUrl/$id"
             )
         }
     }
