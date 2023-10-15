@@ -47,7 +47,7 @@ fun DashboardBottomAppBar(
             Modifier
                 .fillMaxWidth()
                 .windowInsetsPadding(windowInsets)
-                .height(80.dp)
+                .height(60.dp)
                 .padding(contentPadding),
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically,
