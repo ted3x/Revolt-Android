@@ -111,27 +111,28 @@ class RevoltServerMapper @Inject constructor(private val fileMapper: RevoltFileM
                 server_id = domainModel.id
             )
         }
-        return RevoltServerCollection(serverEntity, categoryEntities, roleEntities)
+        return RevoltServerCollection(
+            server = serverEntity,
+            iconEntity = domainModel.icon?.let { fileMapper.mapDomainToEntity(it) },
+            bannerEntity = domainModel.banner?.let { fileMapper.mapDomainToEntity(it) },
+            categories = categoryEntities, roles = roleEntities
+        )
     }
 
     // Entity To Domain
     fun mapEntityToDomain(
-        entityModel: RevoltServerEntity,
-        categoriesEntity: List<RevoltServerCategoryEntity>?,
-        rolesEntity: List<RevoltServerRoleEntity>?,
-        iconEntity: RevoltFileEntity?,
+        entityCollection: RevoltServerCollection,
         iconBaseUrl: String,
-        bannerEntity: RevoltFileEntity?,
         bannerBaseUrl: String,
     ): RevoltServer {
-        return with(entityModel) {
+        return with(entityCollection.server) {
             RevoltServer(
                 id = id,
                 owner = owner,
                 name = name,
                 description = description,
                 channels = channels,
-                categories = categoriesEntity?.map { it.toDomainModel() },
+                categories = entityCollection.categories?.map { it.toDomainModel() },
                 systemMessages = RevoltServer.SystemMessages(
                     userJoined = system_message_on_join,
                     userLeft = system_message_on_leave,
@@ -139,10 +140,20 @@ class RevoltServerMapper @Inject constructor(private val fileMapper: RevoltFileM
                     userBanned = system_message_on_banned
                 ),
 
-                roles = rolesEntity?.associate { it.id to it.toDomainModel() },
+                roles = entityCollection.roles?.associate { it.id to it.toDomainModel() },
                 defaultPermissions = default_permissions,
-                icon = iconEntity?.let { fileMapper.mapEntityToDomain(it, iconBaseUrl) },
-                banner = bannerEntity?.let { fileMapper.mapEntityToDomain(it, bannerBaseUrl) },
+                icon = entityCollection.iconEntity?.let {
+                    fileMapper.mapEntityToDomain(
+                        it,
+                        iconBaseUrl
+                    )
+                },
+                banner = entityCollection.bannerEntity?.let {
+                    fileMapper.mapEntityToDomain(
+                        it,
+                        bannerBaseUrl
+                    )
+                },
                 flags = flags,
                 nsfw = nsfw,
                 analytics = analytics,

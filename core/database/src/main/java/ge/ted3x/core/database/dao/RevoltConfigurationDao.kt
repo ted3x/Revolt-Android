@@ -6,14 +6,14 @@ import javax.inject.Inject
 
 class RevoltConfigurationDao @Inject constructor(private val database: RevoltDatabase) {
 
-    suspend fun insertConfiguration(configurationEntity: RevoltConfigurationEntity) {
+    fun insertConfiguration(configurationEntity: RevoltConfigurationEntity) {
         database.transaction {
             database.revoltConfigurationQueries.nukeConfiguration()
             database.revoltConfigurationQueries.insertConfiguration(configurationEntity)
         }
     }
 
-    suspend fun getConfiguration(): RevoltConfigurationEntity {
+    fun getConfiguration(): RevoltConfigurationEntity {
         return database.revoltConfigurationQueries.selectConfiguration().executeAsOne()
     }
 }

@@ -33,7 +33,8 @@ fun DashboardRootScreen(viewModel: DashboardViewModel = hiltViewModel()) {
     }
     ) {
         DashboardServerScreen(
-            modifier = Modifier.padding(it),
+            modifier = Modifier,
+            paddingValues = it,
             onScroll = { idx, offset ->
                 isBottomAppBarVisible.value = idx == 0 && offset < 0.5f
             })

@@ -19,20 +19,20 @@ class RevoltConfigurationRepositoryImpl @Inject constructor(
         configurationQueries.insertConfiguration(configurationMapper.mapApiToEntity(configuration))
     }
 
-    override suspend fun getConfiguration(): RevoltConfiguration {
+    override fun getConfiguration(): RevoltConfiguration {
         val configurationEntity = configurationQueries.getConfiguration()
         return configurationMapper.mapEntityToDomain(configurationEntity)
     }
 
-    override suspend fun getFileUrlWithDomain(domain: RevoltFileDomain): String {
+    override fun getFileUrlWithDomain(domain: RevoltFileDomain): String {
         return getUrlWithDomain(domain)
     }
 
-    override suspend fun getFileUrl(id: String, domain: RevoltFileDomain): String {
+    override fun getFileUrl(id: String, domain: RevoltFileDomain): String {
         return getUrlWithDomain(domain, withSlash = true) + id
     }
 
-    private suspend fun getUrlWithDomain(
+    private fun getUrlWithDomain(
         domain: RevoltFileDomain,
         withSlash: Boolean = false
     ): String {

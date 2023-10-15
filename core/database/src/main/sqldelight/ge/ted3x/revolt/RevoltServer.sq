@@ -55,6 +55,9 @@ JOIN RevoltServerCategoryEntity AS Category ON Category.server_id = Server.id
 JOIN RevoltServerRoleEntity AS Role ON Role.server_id = Server.id
 WHERE Server.id = :id;
 
+getServers:
+SELECT * FROM RevoltServerEntity;
+
 CREATE TABLE RevoltServerCategoryEntity (
     id TEXT PRIMARY KEY NOT NULL,
     title TEXT NOT NULL,
@@ -69,6 +72,9 @@ INSERT OR REPLACE INTO RevoltServerCategoryEntity(
     channels,
     server_id
 ) VALUES ?;
+
+getCategories:
+SELECT * FROM RevoltServerCategoryEntity WHERE server_id = :id;
 
 CREATE TABLE RevoltServerRoleEntity (
     id TEXT NOT NULL PRIMARY KEY,
@@ -92,3 +98,6 @@ INSERT OR REPLACE INTO RevoltServerRoleEntity(
     rank,
     server_id
 ) VALUES ?;
+
+getRoles:
+SELECT * FROM RevoltServerRoleEntity WHERE server_id = :id;

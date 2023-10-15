@@ -7,9 +7,9 @@ interface RevoltConfigurationRepository {
 
     suspend fun fetchConfiguration()
 
-    suspend fun getConfiguration(): RevoltConfiguration
+    fun getConfiguration(): RevoltConfiguration
 
-    suspend fun getFileUrl(id: String, domain: RevoltFileDomain): String
+    fun getFileUrl(id: String, domain: RevoltFileDomain): String
 
-    suspend fun getFileUrlWithDomain(domain: RevoltFileDomain): String
+    fun getFileUrlWithDomain(domain: RevoltFileDomain): String
 }
