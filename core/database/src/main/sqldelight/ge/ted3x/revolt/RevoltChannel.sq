@@ -1,3 +1,76 @@
+import kotlin.Boolean;
+import kotlin.Int;
+import kotlin.String;
+import kotlin.collections.List;
+
 CREATE TABLE RevoltChannelEntity (
-    id TEXT NOT NULL PRIMARY KEY
+    id TEXT NOT NULL PRIMARY KEY,
+    type TEXT NOT NULL,
+
+--  Notes
+    user TEXT DEFAULT NULL,
+
+--  Direct Message
+    active INTEGER AS Boolean DEFAULT NULL,
+    recipients TEXT AS List<String> DEFAULT NULL,
+    last_message_id TEXT DEFAULT NULL,
+
+--  Group
+    name TEXT DEFAULT NULL,
+    owner TEXT DEFAULT NULL,
+    description TEXT DEFAULT NULL,
+    icon_id TEXT DEFAULT NULL,
+    permissions INTEGER AS Int DEFAULT NULL,
+    nsfw INTEGER AS Boolean DEFAULT NULL,
+
+--  Text/Voice Channel
+    server TEXT DEFAULT NULL,
+    default_permissions_allowed INTEGER AS Int DEFAULT NULL,
+    default_permissions_disallowed INTEGER AS Int DEFAULT NULL
 );
+
+insertChannel:
+INSERT OR REPLACE INTO RevoltChannelEntity(
+    id,
+    type,
+    user,
+    active,
+    recipients,last_message_id,
+    name,
+    owner,
+    description,
+    icon_id,
+    permissions,
+    nsfw,
+    server,
+    default_permissions_allowed,
+    default_permissions_disallowed
+) VALUES ?;
+
+getChannelsByServerId:
+SELECT * FROM RevoltChannelEntity WHERE server = :id;
+
+getChannelsCollectionByServerId:
+SELECT Channel.*, File.*
+FROM RevoltChannelEntity AS Channel
+JOIN RevoltFileEntity AS File ON File.id = Channel.icon_id
+WHERE Channel.server = :id;
+
+CREATE TABLE RevoltChannelRolePermissionsEntity(
+    role TEXT NOT NULL PRIMARY KEY,
+    permissions_allowed INTEGER AS Int NOT NULL,
+    permissions_disallowed INTEGER AS Int NOT NULL,
+    channel_id TEXT NOT NULL,
+    FOREIGN KEY (channel_id) REFERENCES RevoltChannelEntity(id) ON DELETE CASCADE
+);
+
+insertRolePermissions:
+INSERT OR REPLACE INTO RevoltChannelRolePermissionsEntity(
+    role,
+    permissions_allowed,
+    permissions_disallowed,
+    channel_id
+) VALUES ?;
+
+getRolePermissionsByChannelId:
+SELECT * FROM RevoltChannelRolePermissionsEntity WHERE channel_id = :id;

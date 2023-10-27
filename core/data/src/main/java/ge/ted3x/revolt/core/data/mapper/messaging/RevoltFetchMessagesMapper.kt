@@ -1,4 +1,4 @@
-package ge.ted3x.revolt.core.data.mapper.channel.messaging
+package ge.ted3x.revolt.core.data.mapper.messaging
 
 import app.revolt.model.RevoltMessageApiModel
 import app.revolt.model.RevoltMessageApiModel.*
@@ -8,7 +8,7 @@ import ge.ted3x.revolt.RevoltFileEntity
 import ge.ted3x.revolt.RevoltMessageEntity
 import ge.ted3x.revolt.core.data.mapper.general.RevoltFileMapper
 import ge.ted3x.revolt.core.domain.UlidTimeDecoder
-import ge.ted3x.revolt.core.domain.models.channel.request.RevoltFetchMessagesRequest
+import ge.ted3x.revolt.core.domain.models.messaging.request.RevoltFetchMessagesRequest
 import ge.ted3x.revolt.core.domain.models.general.RevoltFile
 import ge.ted3x.revolt.core.domain.models.general.RevoltMasquerade
 import ge.ted3x.revolt.core.domain.models.general.RevoltMessage

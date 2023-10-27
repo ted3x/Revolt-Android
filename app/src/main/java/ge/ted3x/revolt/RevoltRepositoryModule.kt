@@ -8,20 +8,22 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import ge.ted3x.revolt.core.data.repository.channel.RevoltChannelRepositoryImpl
 import ge.ted3x.revolt.core.data.repository.user.RevoltAccountRepositoryImpl
 import ge.ted3x.revolt.core.data.repository.general.RevoltConfigurationRepositoryImpl
 import ge.ted3x.revolt.core.data.repository.general.RevoltFileRepositoryImpl
 import ge.ted3x.revolt.core.data.repository.general.RevoltGatewayRepositoryImpl
-import ge.ted3x.revolt.core.data.repository.channel.RevoltMessagingRepositoryImpl
+import ge.ted3x.revolt.core.data.repository.messaging.RevoltMessagingRepositoryImpl
 import ge.ted3x.revolt.core.data.repository.server.RevoltServerRepositoryImpl
 import ge.ted3x.revolt.core.data.repository.user.RevoltSessionsRepositoryImpl
 import ge.ted3x.revolt.core.data.repository.user.RevoltUserRepositoryImpl
 import ge.ted3x.revolt.core.data.repository.user.RevoltUserTokenRepositoryImpl
+import ge.ted3x.revolt.core.domain.repository.channel.RevoltChannelRepository
 import ge.ted3x.revolt.core.domain.repository.general.RevoltConfigurationRepository
 import ge.ted3x.revolt.core.domain.repository.user.RevoltAccountRepository
 import ge.ted3x.revolt.core.domain.repository.general.RevoltFileRepository
 import ge.ted3x.revolt.core.domain.repository.general.RevoltGatewayRepository
-import ge.ted3x.revolt.core.domain.repository.channel.RevoltMessagingRepository
+import ge.ted3x.revolt.core.domain.repository.messaging.RevoltMessagingRepository
 import ge.ted3x.revolt.core.domain.repository.server.RevoltServerRepository
 import ge.ted3x.revolt.core.domain.repository.session.RevoltSessionsRepository
 import ge.ted3x.revolt.core.domain.repository.user.RevoltUserRepository
@@ -77,5 +79,9 @@ object RevoltRepositoryModule {
         @Binds
         @Singleton
         abstract fun bindsRevoltServerRepository(impl: RevoltServerRepositoryImpl): RevoltServerRepository
+
+        @Binds
+        @Singleton
+        abstract fun bindsRevoltChannelRepository(impl: RevoltChannelRepositoryImpl): RevoltChannelRepository
     }
 }

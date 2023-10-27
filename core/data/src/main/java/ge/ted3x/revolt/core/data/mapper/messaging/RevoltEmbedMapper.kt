@@ -1,4 +1,4 @@
-package ge.ted3x.revolt.core.data.mapper.channel.messaging
+package ge.ted3x.revolt.core.data.mapper.messaging
 
 import ge.ted3x.revolt.RevoltEmbedEntity
 import ge.ted3x.revolt.core.domain.models.general.RevoltEmbed

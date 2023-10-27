@@ -11,10 +11,12 @@ import app.revolt.websocket.server.RevoltServerApiEvent.UserUpdate.Field.Profile
 import app.revolt.websocket.server.RevoltServerApiEvent.UserUpdate.Field.StatusText
 import ge.ted3x.core.database.dao.RevoltFileDao
 import ge.ted3x.core.database.dao.RevoltUserDao
+import ge.ted3x.revolt.core.data.mapper.channel.RevoltChannelMapper
 import ge.ted3x.revolt.core.data.mapper.general.RevoltFileMapper
 import ge.ted3x.revolt.core.data.mapper.server.RevoltServerMapper
 import ge.ted3x.revolt.core.data.mapper.user.RevoltUserMapper
 import ge.ted3x.revolt.core.domain.models.general.RevoltFileDomain
+import ge.ted3x.revolt.core.domain.repository.channel.RevoltChannelRepository
 import ge.ted3x.revolt.core.domain.repository.general.RevoltConfigurationRepository
 import ge.ted3x.revolt.core.domain.repository.general.RevoltGatewayRepository
 import ge.ted3x.revolt.core.domain.repository.server.RevoltServerRepository
@@ -36,9 +38,11 @@ class RevoltGatewayRepositoryImpl @Inject constructor(
     private val tokenRepository: RevoltUserTokenRepository,
     private val configurationRepository: RevoltConfigurationRepository,
     private val serverRepository: RevoltServerRepository,
+    private val channelRepository: RevoltChannelRepository,
     private val fileMapper: RevoltFileMapper,
     private val userMapper: RevoltUserMapper,
-    private val serverMapper: RevoltServerMapper
+    private val serverMapper: RevoltServerMapper,
+    private val channelMapper: RevoltChannelMapper
 ) : RevoltGatewayRepository {
 
     override suspend fun initialize() {
@@ -83,6 +87,9 @@ class RevoltGatewayRepositoryImpl @Inject constructor(
                                 )
                             )
                         }
+                        event.channels.map {
+                            channelMapper.mapApiToDomain(it, iconBaseUrl)
+                        }.also { channelRepository.insertChannels(it) }
                     }
 
                     RevoltServerApiEvent.Authenticated -> {

@@ -10,6 +10,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import ge.ted3x.revolt.RevoltChannelEntity
+import ge.ted3x.revolt.RevoltChannelRolePermissionsEntity
 import ge.ted3x.revolt.RevoltDatabase
 import ge.ted3x.revolt.RevoltFileEntity
 import ge.ted3x.revolt.RevoltMemberEntity
@@ -86,6 +88,16 @@ object RevoltDatabaseModule {
                 rolesAdapter = listOfStringsAdapter,
                 default_permissionsAdapter = IntColumnAdapter,
                 flagsAdapter = IntColumnAdapter
+            ),
+            RevoltChannelEntityAdapter = RevoltChannelEntity.Adapter(
+                recipientsAdapter = listOfStringsAdapter,
+                permissionsAdapter = IntColumnAdapter,
+                default_permissions_allowedAdapter = IntColumnAdapter,
+                default_permissions_disallowedAdapter = IntColumnAdapter
+            ),
+            RevoltChannelRolePermissionsEntityAdapter = RevoltChannelRolePermissionsEntity.Adapter(
+                permissions_allowedAdapter = IntColumnAdapter,
+                permissions_disallowedAdapter = IntColumnAdapter
             )
         )
     }

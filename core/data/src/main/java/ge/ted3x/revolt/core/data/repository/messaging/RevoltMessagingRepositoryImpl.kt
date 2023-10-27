@@ -1,4 +1,4 @@
-package ge.ted3x.revolt.core.data.repository.channel
+package ge.ted3x.revolt.core.data.repository.messaging
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
@@ -10,14 +10,14 @@ import ge.ted3x.core.database.dao.RevoltFileDao
 import ge.ted3x.core.database.dao.RevoltMemberDao
 import ge.ted3x.core.database.dao.RevoltMessageDao
 import ge.ted3x.revolt.core.data.mapper.user.RevoltUserMapper
-import ge.ted3x.revolt.core.data.mapper.channel.messaging.RevoltFetchMessagesMapper
-import ge.ted3x.revolt.core.data.mapper.channel.messaging.RevoltMessagesPagingMapper
+import ge.ted3x.revolt.core.data.mapper.messaging.RevoltFetchMessagesMapper
+import ge.ted3x.revolt.core.data.mapper.messaging.RevoltMessagesPagingMapper
 import ge.ted3x.revolt.core.data.mapper.server.RevoltMemberMapper
 import ge.ted3x.revolt.core.domain.repository.general.RevoltConfigurationRepository
 import ge.ted3x.revolt.core.domain.models.general.RevoltFileDomain
-import ge.ted3x.revolt.core.domain.models.channel.request.RevoltFetchMessagesRequest
+import ge.ted3x.revolt.core.domain.models.messaging.request.RevoltFetchMessagesRequest
 import ge.ted3x.revolt.core.domain.models.general.RevoltMessage
-import ge.ted3x.revolt.core.domain.repository.channel.RevoltMessagingRepository
+import ge.ted3x.revolt.core.domain.repository.messaging.RevoltMessagingRepository
 import ge.ted3x.revolt.core.domain.repository.server.RevoltServerRepository
 import ge.ted3x.revolt.core.domain.repository.user.RevoltUserRepository
 import kotlinx.coroutines.flow.Flow

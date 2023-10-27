@@ -1,4 +1,4 @@
-package ge.ted3x.revolt.core.data.repository.channel
+package ge.ted3x.revolt.core.data.repository.messaging
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
@@ -6,8 +6,8 @@ import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import app.revolt.exception.RevoltApiException
 import ge.ted3x.revolt.Messages
-import ge.ted3x.revolt.core.domain.models.channel.request.RevoltFetchMessagesRequest
-import ge.ted3x.revolt.core.domain.repository.channel.RevoltMessagingRepository
+import ge.ted3x.revolt.core.domain.models.messaging.request.RevoltFetchMessagesRequest
+import ge.ted3x.revolt.core.domain.repository.messaging.RevoltMessagingRepository
 import kotlinx.coroutines.delay
 
 @ExperimentalPagingApi
