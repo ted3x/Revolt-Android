@@ -47,7 +47,7 @@ val projectDependencyGraph by tasks.registering {
             println(dot.parentFile)
 
             val p = ProcessBuilder("dot", "-Tpng", "-O", "project.dot")
-                .directory(project.rootDir)
+                .directory(dot.parentFile)
                 .start()
             p.waitFor()
 
