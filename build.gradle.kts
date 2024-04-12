@@ -8,13 +8,14 @@ plugins {
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.hilt) apply false
 }
+
 val projectDependencyGraph by tasks.registering {
     doLast {
         val queue = subprojects.toMutableList()
         while (queue.isNotEmpty()) {
             val dependencies = linkedMapOf<Pair<Project, Project>, MutableList<String>>()
             val project = queue.removeAt(0)
-            val dot = File(project.buildDir, "reports/dependency-graph/project.dot")
+            val dot = File(project.projectDir, "project.dot")
             dot.parentFile.mkdirs()
             dot.delete()
 
@@ -44,12 +45,12 @@ val projectDependencyGraph by tasks.registering {
 
             dot.appendText("}")
 
-            println(dot.parentFile)
-
             val p = ProcessBuilder("dot", "-Tpng", "-O", "project.dot")
                 .directory(dot.parentFile)
                 .start()
             p.waitFor()
+
+            dot.delete()
 
             if (p.exitValue() != 0) {
                 throw RuntimeException(p.errorStream.bufferedReader().readText())
