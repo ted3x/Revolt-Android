@@ -15,6 +15,8 @@ val projectDependencyGraph by tasks.registering {
         while (queue.isNotEmpty()) {
             val dependencies = linkedMapOf<Pair<Project, Project>, MutableList<String>>()
             val project = queue.removeAt(0)
+            val gradleFile = File(project.projectDir.absolutePath + "/build.gradle.kts")
+            if(!gradleFile.exists()) continue
             val dot = File(project.projectDir, "project.dot")
             dot.parentFile.mkdirs()
             dot.delete()
