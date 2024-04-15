@@ -8,15 +8,16 @@ plugins {
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.hilt) apply false
 }
-
+//apply { from(file("gradle/projectDependencyGraph.gradle.kts")) }
+true // Needed to make the Suppress annotation work for the plugins block
 val projectDependencyGraph by tasks.registering {
     doLast {
         val queue = subprojects.toMutableList()
         while (queue.isNotEmpty()) {
-            val dependencies = linkedMapOf<Pair<Project, Project>, MutableList<String>>()
+            val dependencies = mutableListOf<Pair<String, GraphDependency>>()
             val project = queue.removeAt(0)
             val gradleFile = File(project.projectDir.absolutePath + "/build.gradle.kts")
-            if(!gradleFile.exists()) continue
+            if (!gradleFile.exists()) continue
             val dot = File(project.projectDir, "project.dot")
             dot.parentFile.mkdirs()
             dot.delete()
@@ -30,18 +31,15 @@ val projectDependencyGraph by tasks.registering {
                 config.dependencies
                     .withType(ProjectDependency::class.java)
                     .forEach lit@{ dependency ->
-                        if(dependency.dependencyProject.displayName == project.displayName) return@lit
-
-                        val graphKey = project to dependency.dependencyProject
-                        dependencies.getOrPut(graphKey) { mutableListOf() }
+                        if (dependency.dependencyProject.displayName == project.displayName) return@lit
+                        val graphDependency = GraphDependency(dependency.dependencyProject.displayName, dependency.dependencyProject.path)
+                        dependencies.add(project.path to graphDependency)
                     }
             }
             dot.appendText("\n  # Dependencies\n\n")
-            dependencies.forEach { (key, traits) ->
-                dot.appendText("  \"${key.first.path}\" -> \"${key.second.path}\"")
-                if (traits.isNotEmpty()) {
-                    dot.appendText(" [${traits.joinToString(", ")}]")
-                }
+            dependencies.forEach { (project, dependency) ->
+                dot.appendText("  \"${project}\" -> \"${dependency.path}\"")
+                dot.appendText(" [fillcolor=${dependency.type.color}]")
                 dot.appendText("\n")
             }
 
@@ -62,4 +60,23 @@ val projectDependencyGraph by tasks.registering {
         }
     }
 }
-true // Needed to make the Suppress annotation work for the plugins block
+
+private data class GraphDependency(val name: String, val path: String) {
+    val type = ModuleType.resolveType(path)
+}
+
+private enum class ModuleType(val color: String) {
+    CORE("#1f77b4"),
+    FEATURE("#ff7f0e"),
+    LIBRARY("#2ca02c");
+
+    companion object {
+        fun resolveType(path: String): ModuleType {
+            return when {
+                path.contains("core") -> CORE
+                path.contains("feature") -> FEATURE
+                else -> LIBRARY
+            }
+        }
+    }
+}
