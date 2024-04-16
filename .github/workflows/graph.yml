@@ -39,4 +39,4 @@ jobs:
         git config --local user.name 'ted3x'
         git add .
         git diff --quiet && git diff --staged --quiet || git commit -am 'Update dependency graph'
-        git push --force https://${{ secrets.GIT_TOKEN }}@github.com/${{ github.repository }}.git
+        git push https://${{ secrets.GIT_TOKEN }}@github.com/${{ github.repository }}.git
